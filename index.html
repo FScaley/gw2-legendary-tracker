@@ -521,37 +521,38 @@ const DATA = {
   ],
   // kind: tg = timegate (kaçarsa geri gelmez), bn = darboğaz, n = normal. count: kutu sayısı ("chars" = karakter sayısı).
   // auto: API ile otomatik tik. untilAch: o achievement bitince madde gizlenir. tgt: sadece bu hedefler açıkken göster.
+  // repeat: günlük sandıktan sonra tekrar turlarının ödülü (wiki "Repeatable" ödülleri).
   // needsPart: sadece açık (craft edilen) bir hedef bu parçayı istiyorsa göster. mode/required: mod kapalıysa gizle, required ise yine göster. how: adım adım.
   daily: [
-    { id: "conv_nayos", mode: "open", group: "soto", title: "Convergence: Outer Nayos", sched: "conv_nayos", kind: "tg",
+    { id: "conv_nayos", mode: "open", repeat: "Rift Essence (12-25 Fine, 5-10 Masterwork, 2-5 Rare; Convergence Mastery ile 2 katı)", group: "soto", title: "Convergence: Outer Nayos", sched: "conv_nayos", kind: "tg",
       serves: "Obsidian → Rift Essence", time: "20-30 dk, 50 kişilik public instance", auto: { t: "mapchest", id: "convergence_heros_choice_chest" },
       how: ["Portal açılmadan önce Wizard's Tower → Outer Sanctorium → Rift Hunter Lounge, 2. kat: 'Convergence: Outer Nayos' portalı (Tower Courtyard Waypoint).",
             "Portal 10 dk açık kalır; gir, içerideki başlatıcıyla konuş, Kryptis dalgalarını ve sondaki haftalık bossu birlikte kesin.",
             "Bitince günlük Hero's Choice Chest gelir: 100 Fine / 40 Masterwork / 20 Rare Rift Essence ya da Amalgamated Gemstone seç (Obsidian için Rift Essence).",
             "Günde 1 sandık; aynı gün tekrar girersen sadece normal essence ödülü."],
       wiki: "Convergence:_Outer_Nayos" },
-    { id: "conv_balrior", mode: "open", group: "soto", title: "Convergence: Mount Balrior (Janthir)", sched: "conv_balrior", kind: "tg",
+    { id: "conv_balrior", mode: "open", repeat: "Rift Essence (12-25 Fine, 5-10 Masterwork, 2-5 Rare; Convergence Mastery ile 2 katı)", group: "soto", title: "Convergence: Mount Balrior (Janthir)", sched: "conv_balrior", kind: "tg",
       serves: "Obsidian / Endless Summer → Rift Essence", time: "20-30 dk, public instance",
       how: ["Portal Lowland Shore, Harvest Den'de (Bonfire Lodge yakını).",
             "Kendi günlük Commander's Choice Chest'ini verir. Bu sandık API'de yok, elle tikle."],
       wiki: "Convergence:_Mount_Balrior" },
-    { id: "conv_nexus", mode: "open", group: "soto", title: "Convergence: Nexus of Eternity (VoE)", sched: "conv_nexus", kind: "tg",
+    { id: "conv_nexus", mode: "open", repeat: "Rift Essence (12-25 Fine, 5-10 Masterwork, 2-5 Rare; Convergence Mastery ile 2 katı)", group: "soto", title: "Convergence: Nexus of Eternity (VoE)", sched: "conv_nexus", kind: "tg",
       serves: "Rift Essence", time: "20-30 dk, public instance",
       how: ["Portal Leyspring Hollows, Rooted Sanctuary'de (Cannulae'nin hemen güneyi).",
             "Kendi günlük Wayfinder's Choice Chest'ini verir. API'de yok, elle tikle."],
       wiki: "Convergence:_Nexus_of_Eternity" },
-    { id: "hc_sky", mode: "open", group: "soto", title: "Skywatch meta → Case of Captured Lightning", sched: "skywatch", kind: "tg",
+    { id: "hc_sky", mode: "open", repeat: "Magnificent Chest + 6 sandık + Greater Arcane Chest", group: "soto", title: "Skywatch meta → Case of Captured Lightning", sched: "skywatch", kind: "tg",
       serves: "Obsidian → Gift of Stormy Skies", time: "25 dk, açık dünya grup", auto: { t: "mapchest", id: "skywatch_archipelago_heros_choice_chest" },
       how: ["Skywatch Archipelago, Droknar's Light: 'Unlocking the Wizard's Tower' metası (tek saatlerde UTC, 25 dk).",
             "Son event 'Purge Lyhr's corruption' bitince Hero's Choice Chest: Case of Captured Lightning seç (= 250 Static Charge).",
             "Günde 1."],
       wiki: "Skywatch_Archipelago:_Hero%27s_Choice_Chest" },
-    { id: "hc_amn", mode: "open", group: "soto", title: "Amnytas meta → Pouch of Stardust", sched: "amnytas", kind: "tg",
+    { id: "hc_amn", mode: "open", repeat: "Magnificent Chest + 6 sandık (günde 30'a kadar) + meta ilerlemesinde ~35-85 Pinch of Stardust", group: "soto", title: "Amnytas meta → Pouch of Stardust", sched: "amnytas", kind: "tg",
       serves: "Obsidian → Gift of Stormy Skies", time: "25 dk, açık dünya grup", auto: { t: "mapchest", id: "amnytas_heros_choice_chest" },
       how: ["Amnytas: 'The Defense of Amnytas' metası (çift saatlerde UTC; banner 10 dk önce çıkar).",
             "Sandıktan Pouch of Stardust seç (= 250 Pinch of Stardust). Günde 1."],
       wiki: "Amnytas:_Hero%27s_Choice_Chest" },
-    { id: "hc_nay", mode: "open", group: "soto", title: "Inner Nayos meta → Clot of Congealed Screams", kind: "tg",
+    { id: "hc_nay", mode: "open", repeat: "Magnificent Chest + 6 sandık + 17-36 Calcified Gasp ve 1-2 Large Calcified Gasp", group: "soto", title: "Inner Nayos meta → Clot of Congealed Screams", kind: "tg",
       serves: "Obsidian → Gift of Stormy Skies", time: "25-30 dk, açık dünya grup, saati yok", auto: { t: "mapchest", id: "inner_nayos_heros_choice_chest" },
       how: ["Inner Nayos'ta saat yok: 'The Road to Heitor' (Heitor's Territory) ya da 'The Fangs That Gnash' (Nyedra Surrounds, Forward Bivouac WP) — hangisi önce başlarsa.",
             "Haritada bekleyen squad/LFG'ye bak. Sandıktan Clot of Congealed Screams seç (= 250 Calcified Gasp). Günde 1."],
@@ -837,6 +838,7 @@ const DATA = {
       </div>
       <div class="legend" style="margin-top:8px">İşler gideceğin yere göre gruplu. Sol çizgi:<i style="background:var(--accent)"></i>timegate (kaçarsa geri gelmez)<i style="background:#c46a2a"></i>darboğaz<i style="background:var(--line)"></i>opsiyonel. "API" yazanlar kendiliğinden tiklenir. Saatler senin saatinle.</div>
     </div>
+    <div class="card"><h2>Yaklaşan metalar (3 saat)</h2><div id="upcoming" class="small"></div></div>
     <div class="card"><h2>Günlük</h2><div id="dailyList"></div></div>
     <div class="card"><h2>Haftalık</h2><div id="weeklyList"></div></div>
     <div class="card"><h2>Wizard's Vault (sezon)</h2><div id="vaultBox" class="scroll"></div></div>
@@ -982,7 +984,7 @@ function tick() {
   $("#tDaily").textContent = hms(nd - now);
   $("#tWeekly").textContent = hms(nw - now);
   if (rollPeriods()) renderToday();
-  if (now.getSeconds() === 0) updateScheds();
+  if (now.getSeconds() === 0) { updateScheds(); renderUpcoming(now); }
 }
 
 // =================== API ===================
@@ -1159,6 +1161,35 @@ function schedInfo(key, now = new Date()) {
   const w = Math.round(wait);
   return { now: false, mins: w, text: `sıradaki ${hm} · ${w >= 60 ? Math.floor(w / 60) + " sa " + (w % 60) + " dk" : w + " dk"} sonra` };
 }
+// önümüzdeki 3 saatteki bütün başlangıçlar; günlük sandığı alınmış olanlar "tekrar" diye gösterilir
+function renderUpcoming(now = new Date()) {
+  const el = $("#upcoming"); if (!el) return;
+  const m = now.getUTCHours() * 60 + now.getUTCMinutes() + now.getUTCSeconds() / 60, rows = [];
+  for (const t of DATA.daily) {
+    const sc = t.sched && DATA.schedules[t.sched]; if (!sc) continue;
+    let ph = ((m - sc.start) % sc.every + sc.every) % sc.every, k = 0;
+    let st = ph < sc.dur ? -ph : sc.every - ph;   // dakika: <=0 şu an açık
+    for (; st <= 180; st += sc.every, k++) {
+      const done = isDone(t, "daily");
+      rows.push({ t, sc, st, live: st <= 0, done });
+      if (k > 3) break;
+    }
+  }
+  rows.sort((a, b) => a.st - b.st);
+  let live = null;
+  el.innerHTML = rows.length ? `<table>${rows.map(r => {
+    const at = new Date(now.getTime() + Math.max(0, r.st) * 60000).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+    if (r.live && !live) live = r;
+    const when = r.live ? `<b class="okc">ŞU AN · ${Math.ceil(r.sc.dur + r.st)} dk kaldı</b>` : `${at} <span class="muted">(${Math.round(r.st)} dk)</span>`;
+    const what = r.done ? `<span class="muted">tekrar: ${esc(r.t.repeat || "")}</span>` : `<b class="warnc">günlük sandık bekliyor</b>`;
+    return `<tr><td style="white-space:nowrap">${when}</td><td>${esc(r.t.title)}<div>${what}</div></td></tr>`;
+  }).join("")}</table>` : '<div class="muted">3 saat içinde saatli meta yok.</div>';
+  document.title = live ? `● ${live.t.title.split(" →")[0]} şu an` : "Legendary Hedefler";
+}
+function isDone(t, bucket) {
+  const au = autoState(t), cnt = t.count === "chars" ? (snap && snap.chars || 3) : (t.count || 1);
+  return !!((au && au.done) || (state.checks[bucket].d[t.id] || 0) >= cnt);
+}
 function updateScheds() {
   document.querySelectorAll("[data-sched]").forEach(el => {
     const i = schedInfo(el.dataset.sched); if (!i) return;
@@ -1185,6 +1216,7 @@ function renderTaskList(el, tasks, bucket) {
     const api = t.auto ? ` · <span class="okc" title="API birkaç dakika geç güncellenebilir; o arada elle tikleyebilirsin">API${au && au.text ? " " + esc(au.text) : ""}${au && au.stale ? " (Yenile)" : au && au.done ? " ✓" : " bekliyor"}</span>` : "";
     return `<li class="k-${t.kind}${done ? " done" : ""}"><div class="chk">${boxes}</div><div style="flex:1">
       <div class="tt">${esc(t.title)}${t.sched ? `<span class="sched" data-sched="${t.sched}"></span>` : ""}</div>
+      ${t.repeat ? `<div class="small ${done ? "okc" : "muted"}">${done ? "Günlük sandık alındı — tekrar turu yine değerli: " : "Tekrarlanabilir — günlük sandıktan sonraki her tur: "}${esc(t.repeat)}</div>` : ""}
       <div class="small muted">${esc(t.serves)}${t.time ? " · " + esc(t.time) : ""}${api}${t.uv ? ' · <span style="color:var(--uv)">kısmen doğrulanmadı</span>' : ""}</div>
       ${t.how ? `<details class="how" data-how="${esc(hid)}" ${openHow.has(hid) ? "open" : ""}><summary>Nasıl?</summary><ol>${t.how.map(h => `<li>${esc(h)}</li>`).join("")}</ol>${t.wiki ? `<a class="small" href="${DATA.meta.wiki + t.wiki}" target="_blank" rel="noopener">wiki</a>` : ""}</details>` : ""}
     </div></li>`;
@@ -1218,6 +1250,7 @@ function renderToday() {
   rollPeriods();
   renderTaskList($("#dailyList"), DATA.daily, "daily");
   renderTaskList($("#weeklyList"), DATA.weekly, "weekly");
+  renderUpcoming();
   renderVault();
 }
 document.addEventListener("change", e => {
