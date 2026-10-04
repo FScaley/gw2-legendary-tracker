@@ -1,3 +1,7 @@
+// Checks every ID in DATA against the official GW2 API. Exit code 1 when something is wrong (used by the weekly GitHub Action).
+const _log = console.log; let problems = 0;
+console.log = (...a) => { const t = a.join(' '); if (/^(SYNTAX|missing|hunter bad|rec bad|ITEM|CUR|GATE|ACH|MAPCHEST|CRAFT|GROUP|SCHED|MASTERY|MPA)/.test(t)) problems++; _log(...a); };
+process.on('beforeExit', () => { if (problems) { _log('PROBLEMS', problems); process.exitCode = 1; } });
 const fs = require('fs');
 const html = fs.readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
 const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(m => m[1]);
@@ -20,7 +24,7 @@ const get = async u => (await fetch('https://api.guildwars2.com' + u)).json();
   for (const t of DATA.targets) for (const g of t.gates) if (g.cur && cur[g.cur] !== g.label) console.log('GATE cur', g.cur, g.label, 'api:', cur[g.cur]);
   const achIds = [...new Set([...Object.values(P).filter(p => p.ach).map(p => p.ach), ...DATA.hunter.map(h => h.ach), ...DATA.daily.concat(DATA.weekly).filter(t => t.untilAch).map(t => t.untilAch), ...DATA.targets.flatMap(t => t.gates.flatMap(g => (g.steps || []).map(s => s[0])))])];
   const ach = Object.fromEntries((await get('/v2/achievements?ids=' + achIds.join(','))).map(a => [a.id, a.name]));
-  for (const [n, p] of Object.entries(P)) if (p.ach && ach[p.ach] !== n) console.log('ACH part', p.ach, n, 'api:', ach[p.ach]);
+  for (const [n, p] of Object.entries(P)) if (p.ach && ach[p.ach] !== n.replace(/ \(achievement\)$/, '')) console.log('ACH part', p.ach, n, 'api:', ach[p.ach]);
   for (const h of DATA.hunter) if (!ach[h.ach]) console.log('ACH hunter missing', h.ach); else if (!ach[h.ach].startsWith(h.title.split(' (')[0])) console.log('ACH hunter', h.ach, h.title, 'api:', ach[h.ach]);
   for (const id of achIds) if (!ach[id]) console.log('ACH not found', id);
   const mc = await get('/v2/mapchests'); const dc = await get('/v2/dailycrafting');

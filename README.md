@@ -27,4 +27,5 @@ Guild Wars 2 is a trademark of ArenaNet, LLC. This is a fan-made tool, not affil
 Node 18+ (no dependencies, no API key):
 
 - `node tools/verify.js` checks every item, achievement, currency, map chest, daily craft and Wizard's Vault ID in `DATA` against the official API.
+- A GitHub Action runs `tools/verify.js` on every push and every Monday after the weekly reset; when an ID breaks it opens (or updates) a "Data check failed" issue.
 - `node tools/recipecheck.js` compares every recipe in `DATA` with the API recipe or the wiki's `{{Recipe}}` template and lists the differences (vendor and achievement-reward items show up there by design).
