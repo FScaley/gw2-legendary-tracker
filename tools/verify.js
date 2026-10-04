@@ -33,5 +33,8 @@ const get = async u => (await fetch('https://api.guildwars2.com' + u)).json();
   const mast = Object.fromEntries((await get('/v2/masteries?ids=all')).map(m => [m.id, m]));
   for (const m of DATA.masteries || []) { const d = mast[m.track]; if (!d || !d.levels[m.level]) console.log('MASTERY bad', m.track, m.level); }
   for (const r of Object.keys(DATA.masteryRegions || {})) if (!Object.values(mast).some(m => m.region === r)) console.log('MASTERY region bad', r);
+  { const ids = Object.values(DATA.masteryPointAch || {}).flat(); let found = 0;
+    for (let i = 0; i < ids.length; i += 200) for (const a of await get('/v2/achievements?ids=' + ids.slice(i, i + 200).join(','))) if ((a.rewards || []).some(r => r.type === 'Mastery')) found++;
+    if (found !== ids.length) console.log('MPA mismatch', found, '/', ids.length); }
   console.log('done; ref errors', bad);
 })();
