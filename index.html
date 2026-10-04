@@ -1172,16 +1172,17 @@ function renderTaskList(el, tasks, bucket) {
   for (const tp of craftOnly(tgtPrefs().filter(x => x.enabled))) grossNeed(tp.t.root, tp.count, needed);
   const rows = tasks.filter(t => !(t.needsPart && !needed[t.needsPart]) && !(t.untilAch && achFrac(t.untilAch) >= 1) && !(t.tgt && !t.tgt.some(k => on.has(k))) && (modeOn(t.mode) || t.required)).map(t => {
     const au = autoState(t), cnt = t.count === "chars" ? (snap && snap.chars || 3) : (t.count || 1), val = store[t.id] || 0;
-    const done = au && au.done != null ? au.done : val >= cnt;
+    const done = (au && au.done) || val >= cnt;   // API gördüyse ya da sen tiklediysen
     const si = t.sched ? schedInfo(t.sched) : null;
     return { t, au, cnt, val, done, soon: si ? (si.now ? -1 : si.mins) : 9999 };
   });
   const rowHtml = ({ t, au, cnt, val, done }) => {
     let boxes = "";
-    if (au && au.done != null) boxes = `<input type="checkbox" disabled ${au.done ? "checked" : ""} title="API'den">`;
+    // API onayladıysa kilitli tik; onaylamadıysa elle tiklenebilir (API birkaç dakika gecikebilir)
+    if (au && au.done) boxes = `<input type="checkbox" disabled checked title="API'den onaylandı">`;
     else for (let i = 0; i < cnt; i++) boxes += `<input type="checkbox" data-b="${bucket}" data-id="${esc(t.id)}" data-i="${i}" ${i < val ? "checked" : ""}>`;
     const hid = bucket + ":" + t.id;
-    const api = t.auto ? ` · <span class="okc">API${au && au.text ? " " + esc(au.text) : ""}${au && au.stale ? " (Yenile)" : ""}</span>` : "";
+    const api = t.auto ? ` · <span class="okc" title="API birkaç dakika geç güncellenebilir; o arada elle tikleyebilirsin">API${au && au.text ? " " + esc(au.text) : ""}${au && au.stale ? " (Yenile)" : au && au.done ? " ✓" : " bekliyor"}</span>` : "";
     return `<li class="k-${t.kind}${done ? " done" : ""}"><div class="chk">${boxes}</div><div style="flex:1">
       <div class="tt">${esc(t.title)}${t.sched ? `<span class="sched" data-sched="${t.sched}"></span>` : ""}</div>
       <div class="small muted">${esc(t.serves)}${t.time ? " · " + esc(t.time) : ""}${api}${t.uv ? ' · <span style="color:var(--uv)">kısmen doğrulanmadı</span>' : ""}</div>
