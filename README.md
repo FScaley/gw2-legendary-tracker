@@ -18,7 +18,7 @@ Your API key is stored only in your browser (`localStorage`) and sent only to `h
 
 All game data (recipes, item and achievement IDs, schedules) sits in the `const DATA` block at the top of `index.html`. Mystic Forge recipes are not in the API and come from the [GW2 Wiki](https://wiki.guildwars2.com); the rest was checked against the official API on 4 October 2026. Anything that could not be confirmed is marked "doğrulanmadı" in the page.
 
-The default targets are one player's plan (heavy Obsidian armor, Aurora, Vision, Endless Summer, Coalescence, Ad Infinitum, Legendary Relic, Gen 1 weapons bought on the trading post); turn them on or off in Settings. Settings also has game-mode preferences (open world, strike, raid, fractal, dungeon, WvW, PvP, buying with gold): targets that need a mode you turned off are flagged with the reason and a same-slot alternative, and daily/weekly tasks follow your modes.
+The default targets are one player's plan (heavy Obsidian armor, Aurora, Vision, Endless Summer, Coalescence, Ad Infinitum, Legendary Relic, Gen 1 weapons bought on the trading post); turn them on or off in Settings. Settings also has game-mode preferences (open world, strike, raid, fractal, dungeon, WvW, PvP, buying with gold), each set to No / A little / As much as needed. "A little" accepts one-time work up to an hour budget (e.g. one or two WvW reward tracks) but not week-long grinds; targets that don't fit are flagged with the reason and a same-slot alternative, and daily/weekly tasks follow your modes.
 
 Guild Wars 2 is a trademark of ArenaNet, LLC. This is a fan-made tool, not affiliated with ArenaNet.
 

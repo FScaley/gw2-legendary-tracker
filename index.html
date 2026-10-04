@@ -430,7 +430,9 @@ const DATA = {
   },
 
   // ---------------- Oyun modları ----------------
-  // Hedeflerin modes listesi = o legendary'nin şart koştuğu modlar. "Hazır al" seçilen hedef sadece "gold" ister.
+  // Hedeflerin need listesi: { m: mod, kind: "once" (bir kerelik, h saat) | "grind" (sürekli, haftalarca), why }.
+  // Tercih seviyeleri: 0 Hayır, 1 Biraz (bir kerelik işler, toplam onceMax saate kadar), 2 İstediği kadar.
+  // "Hazır al" seçilen hedef sadece altın farmı ister (gold, sürekli). Saatler tahmindir.
   modes: [
     { key: "open", name: "Açık dünya", hint: "metalar, haritalar, koleksiyonlar, Convergence" },
     { key: "strike", name: "Strike", hint: "raid encounter (eski strike'lar), Legendary Insight, Magnetite" },
@@ -443,10 +445,10 @@ const DATA = {
   ],
 
   // ---------------- Hedefler (sıra = varsayılan öncelik) ----------------
-  // sg: slot grubu (aynı gruptaki hedefler birbirinin alternatifi). modes: şart koşulan oyun modları.
+  // sg: slot grubu (aynı gruptaki hedefler birbirinin alternatifi). need: şart koşulan oyun modları ve ne kadar.
   // count: kaç kopya. gates: kalan gün tahmini. perDay değerleri tahmindir (est: true).
   targets: [
-    { key: "obsidian", sg: "armor", modes: ["open"], name: "Obsidian Armor (heavy, 6 parça)", root: "Obsidian Heavy Set", count: 1, slot: "Armor", mode: "Açık dünya (SotO), solo + meta",
+    { key: "obsidian", sg: "armor", need: [{ m: "open", kind: "grind", why: "Rift Essence ve harita paraları, haftalarca" }], name: "Obsidian Armor (heavy, 6 parça)", root: "Obsidian Heavy Set", count: 1, slot: "Armor", mode: "Açık dünya (SotO), solo + meta",
       gold: "Condensed Might/Magic ×3+3, Research ×6 ve 66 clover için ciddi altın",
       why: "En uzun kapı Rift Essence (21.000 Fine). Ön koşul: SotO mastery 'Obsidian Armor Crafting' ve Convergence Mastery (essence'ı ikiye katlar). Ağaçta Astral Ward + Oneiros-Spun skinlerinin maliyeti (12 Purified Rift Essence, 6.000 Research Note) yok; onlar Arcanum koleksiyonlarında (Achievement avcısı) görünür.",
       gates: [
@@ -458,46 +460,46 @@ const DATA = {
         { label: "Calcified Gasp", cur: 75, need: 10500, perDay: 500, est: true },
         { label: "Provisioner Token", cur: 29, need: 300, perDay: 10, est: true, note: "Kaynaklar: Rend Scorchmaul (Charged Quartz 1/gün, 300 Research Note = 1), şehir provisioner'ları sekme başına haftada 7. Günlük oran takaslarına bağlı." }
       ] },
-    { key: "aurora", sg: "accessory", modes: ["open", "wvw"], modeWhy: { wvw: "1 Gift of Battle (WvW reward track, ~6-8 saat; başka kaynağı yok)" }, name: "Aurora", root: "Aurora", count: 1, slot: "Accessory 1", mode: "Açık dünya (LS3)",
+    { key: "aurora", sg: "accessory", need: [{ m: "open", kind: "grind", why: "koleksiyonlar, metalar, harita işleri" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track; başka kaynağı yok)" }], name: "Aurora", root: "Aurora", count: 1, slot: "Accessory 1", mode: "Açık dünya (LS3)",
       gold: "~1.500-1.700 altın (Mystic Tribute ~1.200-1.400)",
       why: "Ana kapı Druid Runestone (günde 1). Gift of Energy için Artificer 400 lazım.",
       gates: [ { label: "Druid Runestone (günde 1)", steps: [[3447, 5], [3436, 7]], perDay: 1 } ] },
-    { key: "coalescence", sg: "ring", modes: ["raid", "strike"], modeWhy: { raid: "Wing 6 Qadim (Coalescence II) + Wing 7 üç boss (Coalescence III), bir kez", strike: "150 Legendary Insight" }, name: "Coalescence", root: "Coalescence", count: 1, slot: "Ring 2", mode: "Raid (W6 Qadim + W7 bir kez) + strike'larla Legendary Insight",
+    { key: "coalescence", sg: "ring", need: [{ m: "raid", kind: "once", h: 3, why: "Wing 6 Qadim (Coalescence II) + Wing 7 üç boss (Coalescence III), bir kez" }, { m: "strike", kind: "grind", why: "150 Legendary Insight, haftalarca" }], name: "Coalescence", root: "Coalescence", count: 1, slot: "Ring 2", mode: "Raid (W6 Qadim + W7 bir kez) + strike'larla Legendary Insight",
       gold: "~1.300-1.500 altın",
       why: "LI strike'lardan da geliyor (strike-only ~31/hafta; günlük bounty'lerin çoğu raid bossu). Dikkat: Coalescence I için bir raid boss sandığı, III için Wing 7 (Adina, Sabir, Qadim the Peerless) gerekir.",
       gates: [ { label: "Legendary Insight", cur: 70, need: 150, perDay: 4.5, est: true, note: "Strike-only ~31/hafta: 15 encounter + ~10 bounty + 6 quickplay" } ] },
-    { key: "vision", sg: "accessory", modes: ["open", "wvw"], modeWhy: { wvw: "1 Gift of Battle (WvW reward track, ~6-8 saat; başka kaynağı yok)" }, name: "Vision", root: "Vision", count: 1, slot: "Accessory 2", mode: "Açık dünya (LS4)",
+    { key: "vision", sg: "accessory", need: [{ m: "open", kind: "grind", why: "koleksiyonlar, metalar, harita işleri" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track; başka kaynağı yok)" }], name: "Vision", root: "Vision", count: 1, slot: "Accessory 2", mode: "Açık dünya (LS4)",
       gold: "~1.900-2.400 altın",
       why: "Stella Radians ve Strife Unending'den kısa; LS4 haritalarında oynarken koleksiyonlar kendiliğinden ilerler.", gates: [] },
-    { key: "endless", sg: "ring", modes: ["open", "dungeon"], modeWhy: { dungeon: "2 Gift of Ascalon: Ascalonian Catacombs explorable 5 kez + 1.000 Tales of Dungeon Delving" }, name: "Endless Summer", root: "Endless Summer", count: 1, slot: "Ring 1", mode: "Açık dünya (VoE), solo",
+    { key: "endless", sg: "ring", need: [{ m: "open", kind: "grind", why: "koleksiyonlar, metalar, harita işleri" }, { m: "dungeon", kind: "once", h: 5, why: "2 Gift of Ascalon: Ascalonian Catacombs explorable 5 kez + 1.000 Tales (8 farklı path/gün ≈ 950 Tales)" }], name: "Endless Summer", root: "Endless Summer", count: 1, slot: "Ring 1", mode: "Açık dünya (VoE), solo",
       gold: "~1.430 altın + 1.000 Tales + ~1,2M karma",
       why: "Mystic Tribute yok. ~4.000 Rift Essence ister — Obsidian'la çakışır, Obsidian'dan sonra.", gates: [] },
-    { key: "conflux", off: true, sg: "ring", modes: ["wvw"], name: "Conflux", root: "Conflux", count: 1, slot: "Ring", mode: "WvW",
+    { key: "conflux", off: true, sg: "ring", need: [{ m: "wvw", kind: "grind", why: "~1.850 Skirmish Ticket + 750 Castoran Heroics + Legendary Spike, haftalarca" }], name: "Conflux", root: "Conflux", count: 1, slot: "Ring", mode: "WvW",
       gold: "~1.500-1.700 altın (Mystic Tribute dahil)",
       why: "Raid'siz ikinci yüzük (Endless Summer'dan farklı). Kapılar: ~1.850 Skirmish Ticket (haftada en fazla ~455), 750 Testimony of Castoran Heroics, 5 Gift of Battle, şansla düşen Legendary Spike. Mist Band'i fractal relic'le alırsan 350 ticket kazanırsın.",
       gates: [
         { label: "WvW Skirmish Claim Ticket", cur: 26, need: 1850, perDay: 40, est: true, note: "Tam WvW haftası ~455; 40/gün orta tempo tahmini" },
         { label: "Testimony of Castoran Heroics", cur: 82, need: 750, perDay: 15, est: true, note: "Skirmish Chest başına 6; günlük oran WvW süresine bağlı" }
       ] },
-    { key: "adinf", sg: "back", modes: ["fractal"], name: "Ad Infinitum", root: "Ad Infinitum", count: 1, slot: "Sırt", mode: "Fractal",
+    { key: "adinf", sg: "back", need: [{ m: "fractal", kind: "grind", why: "4 Fractal Journal + challenge mote'lar, haftalarca" }], name: "Ad Infinitum", root: "Ad Infinitum", count: 1, slot: "Sırt", mode: "Fractal",
       gold: "~800-1.000 altın",
       why: "Kapı Fractal Journal (28 sayfa her biri). Mai Trin mote'u için fractal 76 gerekir.",
       gates: [ { label: "Fractal Research Page (~4/gün)", steps: [[2351, 28], [2557, 28], [2368, 28], [2295, 28]], perDay: 4, est: true } ] },
-    { key: "relic", sg: "relic", modes: [], name: "Legendary Relic", root: "Legendary Relic", count: 1, slot: "Relic", mode: "Fark etmez",
+    { key: "relic", sg: "relic", need: [], name: "Legendary Relic", root: "Legendary Relic", count: 1, slot: "Relic", mode: "Fark etmez",
       gold: "Condensed Might+Magic + 25 relic + 18.750 Lucent Crystal", why: "Timegate yok; Clover ve Gift of Research'ü Obsidian'la paylaşır, armordan sonra.", gates: [] },
-    { key: "w_sword", buyDefault: true, sg: "sword", modes: ["open", "wvw", "dungeon"], modeWhy: { wvw: "craft için Gift of Battle", dungeon: "craft için 500 Tales + dungeon gift" }, name: "Bolt (sword)", root: "Bolt", count: 1, slot: "Silah", mode: "TP / Starter Key", gold: "TP ~1.390 altın (en ucuz legendary)",
+    { key: "w_sword", buyDefault: true, sg: "sword", need: [{ m: "open", kind: "grind", why: "Gift of Exploration (world completion), malzemeler" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track)" }, { m: "dungeon", kind: "once", h: 3, why: "500 Tales + o dungeon explorable 5 kez" }], name: "Bolt (sword)", root: "Bolt", count: 1, slot: "Silah", mode: "TP / Starter Key", gold: "TP ~1.390 altın (en ucuz legendary)",
       why: "Wizard's Vault Starter Key Set 2 (1.000 AA, 8 Aralık'a kadar) Bolt ya da The Moot kiti verir.", gates: [] },
-    { key: "w_mace", buyDefault: true, sg: "mace", modes: ["open", "wvw", "dungeon"], modeWhy: { wvw: "craft için Gift of Battle", dungeon: "craft için 500 Tales + dungeon gift" }, name: "The Moot (mace)", root: "The Moot", count: 1, slot: "Silah", mode: "TP / craft", gold: "TP ~1.540 altın",
+    { key: "w_mace", buyDefault: true, sg: "mace", need: [{ m: "open", kind: "grind", why: "Gift of Exploration (world completion), malzemeler" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track)" }, { m: "dungeon", kind: "once", h: 3, why: "500 Tales + o dungeon explorable 5 kez" }], name: "The Moot (mace)", root: "The Moot", count: 1, slot: "Silah", mode: "TP / craft", gold: "TP ~1.540 altın",
       why: "Tek kopya: Mace/Mace'te ikinci el legendary olmaz. Craft'ı Weaponsmith + Armorsmith ile yapılabilen Gen 1.", gates: [] },
-    { key: "w_gs", buyDefault: true, sg: "greatsword", modes: ["open", "wvw", "dungeon"], modeWhy: { wvw: "craft için Gift of Battle", dungeon: "craft için 500 Tales + dungeon gift" }, name: "Sunrise (greatsword)", root: "Sunrise", count: 1, slot: "Silah", mode: "TP / craft", gold: "TP ~1.540 altın", why: "Meslek eksiği yok.", gates: [] },
-    { key: "w_staff", buyDefault: true, sg: "staff", modes: ["open", "wvw", "dungeon"], modeWhy: { wvw: "craft için Gift of Battle", dungeon: "craft için 500 Tales + dungeon gift" }, name: "The Bifrost (staff)", root: "The Bifrost", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.500 altın",
+    { key: "w_gs", buyDefault: true, sg: "greatsword", need: [{ m: "open", kind: "grind", why: "Gift of Exploration (world completion), malzemeler" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track)" }, { m: "dungeon", kind: "once", h: 3, why: "500 Tales + o dungeon explorable 5 kez" }], name: "Sunrise (greatsword)", root: "Sunrise", count: 1, slot: "Silah", mode: "TP / craft", gold: "TP ~1.540 altın", why: "Meslek eksiği yok.", gates: [] },
+    { key: "w_staff", buyDefault: true, sg: "staff", need: [{ m: "open", kind: "grind", why: "Gift of Exploration (world completion), malzemeler" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track)" }, { m: "dungeon", kind: "once", h: 3, why: "500 Tales + o dungeon explorable 5 kez" }], name: "The Bifrost (staff)", root: "The Bifrost", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.500 altın",
       why: "Tek staff hem DPS hem healer şablonunda çalışır. Craft için Artificer + Chef gerekir.", gates: [] },
-    { key: "w_spear", buyDefault: true, sg: "spear", modes: ["open", "wvw", "dungeon"], modeWhy: { wvw: "craft için Gift of Battle", dungeon: "craft için 500 Tales + dungeon gift" }, name: "Kamohoali'i Kotaki (spear)", root: "Kamohoali'i Kotaki", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.830 altın", why: "Klobjarne Geirr ~2.540 altın; Ancora VoE + çok pahalı.", gates: [] },
-    { key: "w_axe", buyDefault: true, sg: "axe", modes: ["open", "wvw", "dungeon"], modeWhy: { wvw: "craft için Gift of Battle", dungeon: "craft için 500 Tales + dungeon gift" }, name: "Frostfang (axe)", root: "Frostfang", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.850 altın", why: "Craft için Jeweler 400 gerekir.", gates: [] },
-    { key: "w_dagger", buyDefault: true, sg: "dagger", modes: ["open", "wvw", "dungeon"], modeWhy: { wvw: "craft için Gift of Battle", dungeon: "craft için 500 Tales + dungeon gift" }, name: "Incinerator (dagger)", root: "Incinerator", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.890 altın", why: "Craft için Chef 400 gerekir.", gates: [] },
-    { key: "w_warhorn", buyDefault: true, sg: "warhorn", modes: ["open", "wvw", "dungeon"], modeWhy: { wvw: "craft için Gift of Battle", dungeon: "craft için 500 Tales + dungeon gift" }, name: "Howler (warhorn)", root: "Howler", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.900 altın", why: "Craft için Huntsman + Leatherworker 400 gerekir.", gates: [] },
-    { key: "rune", sg: "rune", modes: [], name: "Legendary Rune", root: "Legendary Rune", count: 1, slot: "Upgrade", mode: "Fark etmez", gold: "~430 altın/adet", why: "En sona. Tek kopya tek rune slotunu karşılar (6 zırh slotu = 6 kopya); varsayılan 1 (Ayarlar'dan değişir).", gates: [] },
-    { key: "sigil", sg: "sigil", modes: [], name: "Legendary Sigil", root: "Legendary Sigil", count: 1, slot: "Upgrade", mode: "Fark etmez", gold: "~530 altın/adet", why: "En sona.", gates: [] }
+    { key: "w_spear", buyDefault: true, sg: "spear", need: [{ m: "open", kind: "grind", why: "Gift of Exploration (world completion), malzemeler" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track)" }, { m: "dungeon", kind: "once", h: 3, why: "500 Tales + o dungeon explorable 5 kez" }], name: "Kamohoali'i Kotaki (spear)", root: "Kamohoali'i Kotaki", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.830 altın", why: "Klobjarne Geirr ~2.540 altın; Ancora VoE + çok pahalı.", gates: [] },
+    { key: "w_axe", buyDefault: true, sg: "axe", need: [{ m: "open", kind: "grind", why: "Gift of Exploration (world completion), malzemeler" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track)" }, { m: "dungeon", kind: "once", h: 3, why: "500 Tales + o dungeon explorable 5 kez" }], name: "Frostfang (axe)", root: "Frostfang", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.850 altın", why: "Craft için Jeweler 400 gerekir.", gates: [] },
+    { key: "w_dagger", buyDefault: true, sg: "dagger", need: [{ m: "open", kind: "grind", why: "Gift of Exploration (world completion), malzemeler" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track)" }, { m: "dungeon", kind: "once", h: 3, why: "500 Tales + o dungeon explorable 5 kez" }], name: "Incinerator (dagger)", root: "Incinerator", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.890 altın", why: "Craft için Chef 400 gerekir.", gates: [] },
+    { key: "w_warhorn", buyDefault: true, sg: "warhorn", need: [{ m: "open", kind: "grind", why: "Gift of Exploration (world completion), malzemeler" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track)" }, { m: "dungeon", kind: "once", h: 3, why: "500 Tales + o dungeon explorable 5 kez" }], name: "Howler (warhorn)", root: "Howler", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.900 altın", why: "Craft için Huntsman + Leatherworker 400 gerekir.", gates: [] },
+    { key: "rune", sg: "rune", need: [], name: "Legendary Rune", root: "Legendary Rune", count: 1, slot: "Upgrade", mode: "Fark etmez", gold: "~430 altın/adet", why: "En sona. Tek kopya tek rune slotunu karşılar (6 zırh slotu = 6 kopya); varsayılan 1 (Ayarlar'dan değişir).", gates: [] },
+    { key: "sigil", sg: "sigil", need: [], name: "Legendary Sigil", root: "Legendary Sigil", count: 1, slot: "Upgrade", mode: "Fark etmez", gold: "~530 altın/adet", why: "En sona.", gates: [] }
   ],
 
   // ---------------- Bugün ----------------
@@ -677,6 +679,7 @@ const DATA = {
   // Saatlik altın varsayımı (Ayarlar'dan değişir). Kaynak: Farming Community meta ölçümlerinden hesaplanan saatlik altın:
   // S >= 15 altın/saat (Convergence Outer Nayos ~6,6g/15 dk, Mount Balrior ~6,3g/20 dk, Dragonstorm ~4,4g/12 dk — günün ilk turu).
   goldPerHour: 15,
+  onceMaxHours: 20,   // "Biraz" seviyesinde bir mod için bir kerelik işlerin toplam sınırı (Ayarlar'dan değişir)
   bestGold: [
     { what: "Convergence: Outer Nayos", pay: "~6,6 altın / ~15 dk (+ haftalık achievement ~6 altın) + Rift Essence", note: "zaten SotO turunda" },
     { what: "Convergence: Mount Balrior", pay: "~6,3 altın / ~20 dk + Rift Essence", note: "zaten SotO turunda" },
@@ -873,8 +876,8 @@ const DATA = {
     </div>
     <div class="card">
       <h2>Oyun modları</h2>
-      <div class="small muted">Yapmaya razı olduğun modlar. Kapalı modu şart koşan legendary'ler işaretlenir ve aynı slottaki uyumlu seçenek önerilir; günlük/haftalık işler de buna göre süzülür (açık bir hedefin şart koştuğu işler yine görünür).</div>
-      <div class="row" id="modeBox" style="margin-top:8px"></div>
+      <div class="small muted">Her mod için ne kadar yapmaya razısın: <b>Hayır</b>, <b>Biraz</b> (bir kerelik işler, toplam sınıra kadar; ör. 1-2 WvW reward track) ya da <b>İstediği kadar</b> (haftalarca süren işler dahil). Uymayan legendary'ler sebebiyle işaretlenir ve aynı slottaki uyumlu seçenek önerilir; "Hayır" olan modun günlük/haftalık işleri gizlenir (açık bir hedefin şart koştuğu işler yine görünür). Saatler tahmindir; WvW'de solo oynayınca biraz uzar.</div>
+      <div class="row" id="modeBox" style="margin-top:8px;align-items:flex-start"></div>
     </div>
     <div class="card">
       <h2>Hedefler</h2>
@@ -915,20 +918,38 @@ let apiKey = lsGet(LS.key, "");
 let busy = false;
 const saveState = () => lsSet(LS.state, state);
 
-const modeOn = m => !m || !state.modes || state.modes[m] !== false;
+// mod seviyesi: 0 Hayır, 1 Biraz, 2 İstediği kadar. Eski kayıt (modes[m] === false) Hayır sayılır.
+const modeLvl = m => { const v = state.modeLvl && state.modeLvl[m]; if (v != null) return v; return state.modes && state.modes[m] === false ? 0 : 2; };
+const modeOn = m => !m || modeLvl(m) > 0;
+const onceMax = () => state.onceMax || DATA.onceMaxHours;
+const LVL = ["Hayır", "Biraz", "İstediği kadar"];
 const modeName = m => (DATA.modes.find(x => x.key === m) || { name: m }).name;
 const craftOnly = tps => tps.filter(x => !x.buy);   // hazır alınacak hedeflerin tarifi hesaplara girmez
 const gph = () => state.gph || DATA.goldPerHour;
 function tgtPrefs() {
-  return DATA.targets.map((t, i) => {
+  const list = DATA.targets.map((t, i) => {
     const p = state.targets[t.key] || {};
     return { t, enabled: p.enabled != null ? p.enabled : !t.off, order: p.order != null ? p.order : i, count: p.count != null ? p.count : t.count,
       buy: !!(P[t.root] && P[t.root].id) && (p.buy != null ? p.buy : !!t.buyDefault) };
   }).map(tp => {
-    tp.need = tp.buy ? ["gold"] : (tp.t.modes || []);
-    tp.missing = tp.need.filter(m => !modeOn(m));   // kapalı ama şart olan modlar
+    tp.need = tp.buy ? [{ m: "gold", kind: "grind", why: "TP'den hazır almak için altın farmı" }] : (tp.t.need || []);
     return tp;
   }).sort((a, b) => a.order - b.order);
+  // "Biraz" modlarda açık hedeflerin bir kerelik saatleri toplanır; hedefin kendisi açık değilse onu da ekleyerek bakılır
+  const onceSum = {};
+  for (const tp of list) if (tp.enabled) for (const n of tp.need) if (n.kind === "once") onceSum[n.m] = (onceSum[n.m] || 0) + (n.h || 0) * tp.count;
+  for (const tp of list) {
+    tp.missing = [];
+    for (const n of tp.need) {
+      const lv = modeLvl(n.m);
+      if (lv >= 2) continue;
+      if (lv === 0) { tp.missing.push(Object.assign({ reason: "kapalı" }, n)); continue; }
+      if (n.kind !== "once") { tp.missing.push(Object.assign({ reason: "sürekli iş; 'Biraz' yetmez" }, n)); continue; }
+      const total = (onceSum[n.m] || 0) + (tp.enabled ? 0 : (n.h || 0) * tp.count);
+      if (total > onceMax()) tp.missing.push(Object.assign({ reason: `bir kerelik toplam ~${total} sa > sınır ${onceMax()} sa` }, n));
+    }
+  }
+  return list;
 }
 
 // =================== Reset zamanları ===================
@@ -1211,7 +1232,7 @@ function renderRecs() {
   const tps = tgtPrefs().filter(x => x.enabled), byKey = Object.fromEntries(tps.map(x => [x.t.key, x]));
   const bad = tps.filter(x => x.missing.length);
   $("#modeWarnCard").style.display = bad.length ? "" : "none";
-  $("#modeWarn").innerHTML = bad.map(x => `<div class="small" style="margin:4px 0"><b>${esc(x.t.name)}</b> — gerekiyor: ${x.missing.map(m => modeName(m) + (x.t.modeWhy && x.t.modeWhy[m] ? " (" + esc(x.t.modeWhy[m]) + ")" : "")).join(", ")}.${altsFor(x)}</div>`).join("");
+  $("#modeWarn").innerHTML = bad.map(x => `<div class="small" style="margin:4px 0"><b>${esc(x.t.name)}</b> — ${missingText(x)}.${altsFor(x)}</div>`).join("");
   const gates = [];
   for (const tp of craftOnly(tps)) { const miss = snap ? missingLeaves(tp.t.root, tp.count, {}, {}) : null; for (const g of (tp.t.gates || [])) gates.push(Object.assign(gateDays(g, miss), { tname: tp.t.name })); }
   gates.sort((a, b) => (b.days || 0) - (a.days || 0));
@@ -1297,7 +1318,7 @@ function renderTargets() {
       <div class="small muted">${esc(t.slot)} · ${esc(t.mode)}</div><div>${modeBadges(tp)}</div></div>
       <div style="min-width:220px;flex:1;max-width:360px"><div class="bar"><i style="width:${pct}%"></i></div>
       <div class="small"><b>%${snap ? pct : "?"}</b> · ${snap ? days : "API verisi yok"}${c.armory ? ` · <span class="okc">Armory'de ${c.armory}</span>` : ""}</div></div></div></summary>
-      ${tp.missing.length ? `<div class="small err" style="margin-top:8px">Kapalı modun gerekiyor: ${tp.missing.map(m => modeName(m) + (tp.t.modeWhy && tp.t.modeWhy[m] ? " (" + esc(tp.t.modeWhy[m]) + ")" : "")).join(", ")}.${altsFor(tp)}</div>` : ""}
+      ${tp.missing.length ? `<div class="small err" style="margin-top:8px">Mod tercihlerine uymuyor: ${missingText(tp)}.${altsFor(tp)}</div>` : ""}
       <div class="small" style="margin-top:8px">${esc(t.why)}</div>
       <div class="small muted">Altın: ${esc(t.gold)}${c.tpPrice ? ` · TP'de hazır: <b>${gold(c.tpPrice)}</b>` : ""}${snap && !c.done ? ` · Eksiklerin TP maliyeti ≈ <b>${gold(c.cost)}</b>${c.unpriced ? ` (+${c.unpriced} satılamayan/fiyatsız kalem)` : ""}` : ""}</div>
       ${c.gates.length ? `<div class="small" style="margin-top:4px">${c.gates.map(g => `${esc(g.label)}: kalan ${fmt(g.rem)} → ~${g.days == null ? "?" : g.days} gün`).join(" · ")}</div>` : ""}
@@ -1420,7 +1441,11 @@ function renderSettings() {
   } else $("#keyInfo").textContent = apiKey ? "Kontrol için Yenile." : "Key yok.";
   const tps = tgtPrefs();
   $("#gphInput").value = gph();
-  $("#modeBox").innerHTML = DATA.modes.map(m => `<label class="small" title="${esc(m.hint)}" style="margin-right:10px"><input type="checkbox" data-mode="${m.key}" ${modeOn(m.key) ? "checked" : ""}> ${esc(m.name)}</label>`).join("");
+  const sums = {}; for (const tp of tps) if (tp.enabled) for (const n of tp.need) if (n.kind === "once") sums[n.m] = (sums[n.m] || 0) + (n.h || 0) * tp.count;
+  $("#modeBox").innerHTML = DATA.modes.map(m => `<label class="small" title="${esc(m.hint)}" style="margin:0 12px 6px 0">${esc(m.name)}
+    <select data-mode="${m.key}">${LVL.map((l, i) => `<option value="${i}" ${modeLvl(m.key) === i ? "selected" : ""}>${l}</option>`).join("")}</select>
+    ${sums[m.key] ? `<span class="${modeLvl(m.key) === 1 && sums[m.key] > onceMax() ? "err" : "muted"}">bir kerelik ~${sums[m.key]} sa</span>` : ""}</label>`).join("") +
+    `<label class="small" style="margin:0 12px 6px 0">"Biraz" sınırı: <input type="number" id="onceMaxInput" min="1" max="500" value="${onceMax()}" style="width:64px"> saat (mod başına)</label>`;
   $("#tgtSettings").innerHTML = tps.map((tp, i) => `<div class="trow">
     <input type="checkbox" data-tk="${tp.t.key}" ${tp.enabled ? "checked" : ""}>
     <div class="nm">${esc(tp.t.name)} <span class="pill">${esc(tp.t.slot)}</span> ${modeBadges(tp)}</div>
@@ -1429,13 +1454,17 @@ function renderSettings() {
     <button class="btn" data-up="${i}" ${i === 0 ? "disabled" : ""}>↑</button><button class="btn" data-down="${i}" ${i === tps.length - 1 ? "disabled" : ""}>↓</button></div>`).join("");
 }
 document.addEventListener("change", e => {
+  if (e.target.id === "onceMaxInput") { state.onceMax = Math.max(1, Math.min(500, +e.target.value || DATA.onceMaxHours)); saveState(); renderAll(); return; }
   const m = e.target.dataset && e.target.dataset.mode; if (!m) return;
-  state.modes = Object.assign({}, state.modes, { [m]: e.target.checked }); saveState(); renderAll();
+  state.modeLvl = Object.assign({}, state.modeLvl, { [m]: +e.target.value }); saveState(); renderAll();
 });
-// hedefin şart koştuğu modlar; kapalı olanlar kırmızı
+// hedefin şart koştuğu modlar ve ne kadar; uymayanlar kırmızı
+const needText = n => modeName(n.m) + (n.kind === "once" ? ` ~${n.h} sa (bir kerelik)` : " (sürekli)");
 function modeBadges(tp) {
-  return tp.need.map(m => `<span class="tag ${modeOn(m) ? "" : "bad"}" title="${modeOn(m) ? "" : "Bu mod Ayarlar'da kapalı"}">${esc(modeName(m))}</span>`).join("");
+  return tp.need.map(n => { const bad = tp.missing.find(x => x.m === n.m);
+    return `<span class="tag ${bad ? "bad" : ""}" title="${esc(n.why || "")}${bad ? " — " + esc(bad.reason) : ""}">${esc(needText(n))}</span>`; }).join("");
 }
+const missingText = tp => tp.missing.map(x => `${esc(needText(x))}: ${esc(x.why || "")} — ${esc(x.reason)}`).join("; ");
 document.addEventListener("change", e => {
   if (e.target.id !== "gphInput") return;
   const v = Math.max(1, Math.min(200, +e.target.value || DATA.goldPerHour)); state.gph = v; saveState(); renderAll();
