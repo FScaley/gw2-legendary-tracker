@@ -21,3 +21,10 @@ All game data (recipes, item and achievement IDs, schedules) sits in the `const 
 The default targets are one player's plan (heavy Obsidian armor, Aurora, Vision, Endless Summer, Conflux, Ad Infinitum, Legendary Relic, Gen 1 weapons); turn them on or off in Settings.
 
 Guild Wars 2 is a trademark of ArenaNet, LLC. This is a fan-made tool, not affiliated with ArenaNet.
+
+## Checking the data
+
+Node 18+ (no dependencies, no API key):
+
+- `node tools/verify.js` checks every item, achievement, currency, map chest, daily craft and Wizard's Vault ID in `DATA` against the official API.
+- `node tools/recipecheck.js` compares every recipe in `DATA` with the API recipe or the wiki's `{{Recipe}}` template and lists the differences (vendor and achievement-reward items show up there by design).

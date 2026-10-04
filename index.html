@@ -322,7 +322,7 @@ const DATA = {
     "Glob of Condensed Spirit Energy": { id: 83082, src: "100 Spirit Shard", in: [["Spirit Shard", 100]] },
     "Gift of Conquering": { id: 81371, src: "Mystic Forge", in: [["Legendary Spike", 1], ["Gift of Battle", 4], ["Memory of Battle", 250], ["Vision Crystal", 2]] },
     "Legendary Spike": { id: 81296, src: "WvW'de oyunculardan/NPC'lerden şansla düşer; TP'de yok", tg: true },
-    "Mist Band (Infused)": { id: 80058, src: "BUY-2046 PFR (Mistlock Observatory): 100 Pristine Fractal Relic + 2 Integrated Fractal Matrix — ticket harcamadan", in: [["Pristine Fractal Relic", 100], ["Integrated Fractal Matrix", 2]] },
+    "Mist Band (Infused)": { id: 80058, alt: [79982], src: "BUY-2046 PFR (Mistlock Observatory): 100 Pristine Fractal Relic + 2 Integrated Fractal Matrix — ticket harcamadan", in: [["Pristine Fractal Relic", 100], ["Integrated Fractal Matrix", 2]] },
     "Badge of Honor": { cur: 15, src: "WvW" },
     "WvW Skirmish Claim Ticket": { cur: 26, src: "Skirmish reward track (~365/hafta) + haftalık WvW achievement'ları (~90/hafta)", tg: true },
     "Testimony of Castoran Heroics": { cur: 82, src: "Skirmish Chest başına 6", tg: true },
@@ -518,7 +518,8 @@ const DATA = {
     { id: "any", title: "Her yerden", note: "" }
   ],
   // kind: tg = timegate (kaçarsa geri gelmez), bn = darboğaz, n = normal. count: kutu sayısı ("chars" = karakter sayısı).
-  // auto: API ile otomatik tik. untilAch: o achievement bitince madde gizlenir. tgt: sadece bu hedefler açıkken göster. how: adım adım.
+  // auto: API ile otomatik tik. untilAch: o achievement bitince madde gizlenir. tgt: sadece bu hedefler açıkken göster.
+  // needsPart: sadece açık (craft edilen) bir hedef bu parçayı istiyorsa göster. mode/required: mod kapalıysa gizle, required ise yine göster. how: adım adım.
   daily: [
     { id: "conv_nayos", mode: "open", group: "soto", title: "Convergence: Outer Nayos", sched: "conv_nayos", kind: "tg",
       serves: "Obsidian → Rift Essence", time: "20-30 dk, 50 kişilik public instance", auto: { t: "mapchest", id: "convergence_heros_choice_chest" },
@@ -644,13 +645,13 @@ const DATA = {
       serves: "Ad Infinitum → Research Page", time: "",
       how: ["Haftalık fractal achievement'ları: Fractal Fighter's Cache'ten 2 Research Page."],
       wiki: "Fractal_Research_Page" },
-    { id: "w_gob", mode: "wvw", required: true, tgt: ["aurora", "vision", "conflux"], group: "any", title: "WvW: Gift of Battle reward track (Aurora ve Vision için birer tane, şart)", kind: "bn",
+    { id: "w_gob", mode: "wvw", required: true, needsPart: "Gift of Battle", group: "any", title: "WvW: Gift of Battle reward track (Aurora ve Vision için birer tane, şart)", kind: "bn",
       serves: "Aurora, Vision, her silah → Gift of Battle", time: "track başına ~6-8,5 saat WvW",
       how: ["WvW paneli (B) → Reward Tracks → 'Gift of Battle Item Reward Track' → Activate.",
             "Eternal Battlegrounds ya da Borderlands'te participation'ı açık tut (kill, kale, event). 20.000 puanda son ödül Gift of Battle.",
             "Haftalık bir sınırı yok; hafta hafta ilerletmek için burada."],
       wiki: "Gift_of_Battle_Item_Reward_Track" },
-    { id: "w_skirm", mode: "wvw", required: true, group: "any", tgt: ["conflux"], title: "WvW: Skirmish track + haftalık WvW achievement'ları", kind: "tg",
+    { id: "w_skirm", mode: "wvw", required: true, needsPart: "WvW Skirmish Claim Ticket", group: "any", title: "WvW: Skirmish track + haftalık WvW achievement'ları", kind: "tg",
       serves: "Conflux → Skirmish Ticket, Castoran Heroics", time: "haftaya yayılmış WvW",
       how: ["WvW'de her 5 dakikalık tick'te pip kazanırsın; Skirmish reward track'in sandıkları Skirmish Claim Ticket verir (haftada en fazla ~365).",
             "Haftalık WvW achievement'ları ~90 ticket daha verir. Haftalık sınır resette sıfırlanır, kaçan hafta geri gelmez.",
@@ -1036,7 +1037,7 @@ const P = DATA.parts;
 function ownedOf(name) {
   const p = P[name]; if (!p || !snap) return 0;
   if (p.cur) return snap.wallet[p.cur] || 0;
-  if (p.id) return snap.owned[p.id] || 0;
+  if (p.id) return (snap.owned[p.id] || 0) + (p.alt || []).reduce((a, id) => a + (snap.owned[id] || 0), 0);
   return 0;
 }
 function achFrac(id) {
@@ -1146,7 +1147,9 @@ function updateScheds() {
 function renderTaskList(el, tasks, bucket) {
   const store = state.checks[bucket].d;
   const on = new Set(tgtPrefs().filter(x => x.enabled).map(x => x.t.key));
-  const rows = tasks.filter(t => !(t.untilAch && achFrac(t.untilAch) >= 1) && !(t.tgt && !t.tgt.some(k => on.has(k))) && (modeOn(t.mode) || t.required)).map(t => {
+  const needed = {};   // craft edilen açık hedeflerin ağacındaki bütün parçalar
+  for (const tp of craftOnly(tgtPrefs().filter(x => x.enabled))) grossNeed(tp.t.root, tp.count, needed);
+  const rows = tasks.filter(t => !(t.needsPart && !needed[t.needsPart]) && !(t.untilAch && achFrac(t.untilAch) >= 1) && !(t.tgt && !t.tgt.some(k => on.has(k))) && (modeOn(t.mode) || t.required)).map(t => {
     const au = autoState(t), cnt = t.count === "chars" ? (snap && snap.chars || 3) : (t.count || 1), val = store[t.id] || 0;
     const done = au && au.done != null ? au.done : val >= cnt;
     const si = t.sched ? schedInfo(t.sched) : null;
@@ -1280,8 +1283,8 @@ function nodeHtml(name, qty, depth) {
 }
 // aynı slot grubundaki, açık modlarla yapılabilen seçenekler
 function altsFor(tp) {
-  const alts = tgtPrefs().filter(x => x.t.key !== tp.t.key && x.t.sg && x.t.sg === tp.t.sg && !x.missing.length);
-  return alts.length ? " Aynı slotta uyumlu: " + alts.map(x => esc(x.t.name) + (x.enabled ? " (zaten açık)" : "")).join(", ") + "." : " Aynı slotta uyumlu bir seçenek yok.";
+  const alts = tgtPrefs().filter(x => x.t.key !== tp.t.key && x.t.sg && x.t.sg === tp.t.sg && !x.missing.length && !x.enabled);
+  return alts.length ? " Aynı slotta açık modlarınla yapılabilen: " + alts.map(x => esc(x.t.name)).join(", ") + "." : " Aynı slotta açık modlarınla yapılabilen başka bir seçenek yok (kopya legendary sayılmaz).";
 }
 function renderTargets() {
   const tps = tgtPrefs().filter(x => x.enabled);
@@ -1390,7 +1393,7 @@ function renderHunter() {
     }).sort((x, y) => (x.d || 9) - (y.d || 9));
     return `<div class="card"><h2>${esc(h.title)} <span class="pill">${esc(tname[h.target] || "")}</span></h2>
       <div class="small">${done ? '<span class="okc">Tamamlandı</span>' : `<b>${fmt(haveN)}/${fmt(needN)}</b> · <b class="warnc">${fmt(left)} tane daha lazım</b>`} · <a href="${wikiUrl(def.name)}" target="_blank" rel="noopener">wiki</a></div>
-      ${h.why ? `<div class="small" style="margin:2px 0">${esc(h.why)}</div>` : ""}
+      ${h.why ? `<div class="small" style="margin:2px 0">${esc(h.why)}${!modeOn("wvw") && /reward track/.test(h.why) ? ' <b class="warnc">WvW kapalı: mastery yolunu seç.</b>' : ""}</div>` : ""}
       ${def.req ? `<div class="small muted">${esc(def.req)}</div>` : ""}
       ${done ? "" : `<ul class="hunt">${rows.map(r => `<li><select data-dk="${esc(r.key)}" title="Zorluk">${["", 1, 2, 3, 4, 5].map(v => `<option value="${v}" ${(r.man || "") == v ? "selected" : ""}>${v === "" ? "–" : v}</option>`).join("")}</select>
         <div><div><a href="${wikiUrl(r.name)}" target="_blank" rel="noopener">${esc(r.name)}</a> <span class="pill">zorluk ${r.d || "?"}</span></div>
