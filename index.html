@@ -444,6 +444,23 @@ const DATA = {
     { key: "gold", name: "Altınla al (TP)", hint: "hazır legendary ya da parçaları TP'den" }
   ],
 
+  // ---------------- Mastery'ler ----------------
+  // track = /v2/masteries id, level = o track'teki seviye (0'dan). Mastery'ler sırayla açılır: önceki seviyeler de gerekir.
+  // role: "required" = olmadan hedef yapılamaz, "helpful" = ilerlemeyi hızlandırır. Açıklamalar API mastery metninden ve wiki'den.
+  masteries: [
+    { track: 37, level: 4, role: "required", targets: ["obsidian"], why: "Obsidian zırh tarifini (Recipe: Legendary Obsidian Armor) almak için şart." },
+    { track: 21, level: 1, role: "required", targets: ["vision"], why: "Vision I: Awakening koleksiyonları Rift Repair istiyor (wiki). Bu PoF'un Skyscale track'i; SotO'daki Flight Training ayrı." },
+    { track: 5, level: 1, role: "required", targets: ["adinf"], why: "Ad Infinitum koleksiyonlarındaki bazı alımlar Fractal Attunement istiyor." },
+    { track: 39, level: 4, role: "helpful", targets: ["obsidian", "endless"], why: "Convergence'lardan bonus Kryptis essence: Rift Essence ~2 kat. Obsidian'ın en uzun kapısını kısaltır." },
+    { track: 37, level: 3, role: "helpful", targets: ["obsidian", "endless"], why: "Rift'lerden daha fazla Kryptis essence (Rift Mastery). Obsidian Armor Crafting'e giderken zaten açılır." },
+    { track: 38, level: 2, role: "helpful", targets: ["obsidian"], why: "Lesser Arcane Chest'leri açar: her biri 2-10 Static Charge / Pinch of Stardust / Calcified Gasp." },
+    { track: 38, level: 4, role: "helpful", targets: ["obsidian"], why: "Greater Arcane Chest'leri açar: her biri 4-18 Static Charge / Pinch of Stardust / Calcified Gasp." },
+    { track: 37, level: 5, role: "helpful", targets: ["obsidian"], why: "Wayfinder: Wizard's Tower'da harita parası ve malzeme takası (Gharr Leadclaw), arcane sandıkları kolay açma." },
+    { track: 48, level: 1, role: "helpful", targets: ["endless"], why: "Overcharged Rifts: rift boss'larının zorluğu ve ödülü artar (Rift Essence)." }
+  ],
+  // /v2/masteries bölge adı → /v2/account/mastery/points bölge adı
+  masteryRegions: { Tyria: "Central Tyria", Maguuma: "Heart of Thorns", Desert: "Path of Fire", Tundra: "Icebrood Saga", Jade: "End of Dragons", Sky: "Secrets of the Obscure", Wild: "Janthir Wilds", Magic: "Visions of Eternity" },
+
   // ---------------- Hedefler (sıra = varsayılan öncelik) ----------------
   // sg: slot grubu (aynı gruptaki hedefler birbirinin alternatifi). need: şart koşulan oyun modları ve ne kadar.
   // count: kaç kopya. gates: kalan gün tahmini. perDay değerleri tahmindir (est: true).
@@ -737,8 +754,6 @@ const DATA = {
 
   // ---------------- Şimdiden başla (sabit öneriler) ----------------
   recs: [
-    { title: "SotO mastery: Obsidian Armor Crafting'i aç", why: "Obsidian tarifi bu mastery olmadan alınamıyor. Önünde Emotion Control (4p) ve Rift Mastery (5p) var; kendisi 6p. Toplam 15 SotO mastery puanı.", targets: ["obsidian"] },
-    { title: "Inner Nayos: Convergence Mastery", why: "Convergence'tan gelen Rift Essence'ı ikiye katlıyor; Obsidian'ın en uzun kapısını kısaltır. Ne kadar erken, o kadar çok gün kazanırsın.", targets: ["obsidian", "endless"] },
     { title: "Wizard's Vault: Starter Key Set 2 için 1.000 Astral Acclaim biriktir", why: "Sadece Bolt ya da The Moot'u CRAFT edeceksen al: kit precursor + silah gift'i + Might/Magic verir (~340-430 altın), ama gerisi için yine Gift of Exploration (world completion) ve Gift of Battle lazım. Silahları hazır alacaksan anahtarı alma; AA'yı 20 Mystic Clover + 60 Mystic Coin'e harca. Sezon 8 Aralık'ta bitiyor; 1.300 AA üstünde ödül alınamıyor.", targets: ["w_sword", "w_mace"] },
     { title: "Artificer 400", why: "Gift of Energy Aurora ve Vision'da ayrı ayrı gerekiyor ve TP'de satılmıyor; Artificer 400 şart (karakter başına 2 aktif meslek). Aynı karaktere Huntsman da açarsan Howler kapısı da açılır.", targets: ["aurora", "vision", "w_staff"] },
     { title: "WvW: Gift of Battle track'ini sürekli açık tut", why: "Aurora, Vision ve her silah 1 Gift of Battle istiyor; track başına ~6-8,5 saat. Diğer işlerle paralel, sadece WvW'de ilerler.", targets: ["aurora", "vision", "w_sword", "w_mace", "w_gs"] },
@@ -845,6 +860,7 @@ const DATA = {
   </section>
 
   <section class="tab" id="tab-recs">
+    <div class="card"><h2>Mastery'ler: zorunlu ve hızlandıranlar</h2><div id="masteryBox" class="scroll"></div></div>
     <div class="card" id="modeWarnCard" style="display:none"><h2>Mod uyumsuzlukları</h2><div id="modeWarn"></div></div>
     <div class="card"><h2>En uzun kapılar (kalan gün tahmini)</h2><div id="gateBox" class="scroll"></div></div>
     <div class="card"><h2>Şimdiden başla</h2><ul class="tasks" id="recList"></ul></div>
@@ -1027,6 +1043,9 @@ async function refresh() {
     }),
     has("unlocks") && job("legendaryarmory", async () => { for (const a of await api("/v2/account/legendaryarmory", true)) s.armory[a.id] = a.count; }),
     has("progression") && job("mapchests", async () => { s.mapchests = await api("/v2/account/mapchests", true); }),
+    has("progression") && job("masteries", async () => { s.masteries = {}; for (const m of await api("/v2/account/masteries", true)) s.masteries[m.id] = m.level != null ? m.level : -1; }),
+    has("progression") && job("mastery points", async () => { s.mpoints = {}; for (const r of (await api("/v2/account/mastery/points", true)).totals || []) s.mpoints[r.region] = r.earned - r.spent; }),
+    job("mastery defs", async () => { if (!stat.mast || !Object.keys(stat.mast).length) { stat.mast = {}; for (const m of await api("/v2/masteries?ids=all", false)) stat.mast[m.id] = { name: m.name, region: m.region, levels: m.levels.map(l => ({ name: l.name, p: l.point_cost, xp: l.exp_cost })) }; lsSet(LS.stat, stat); } }),
     has("progression") && job("dailycrafting", async () => { s.crafting = await api("/v2/account/dailycrafting", true); }),
     has("progression") && job("worldbosses", async () => { s.worldbosses = await api("/v2/account/worldbosses", true); }),
     job("wizardsvault", async () => {
@@ -1264,6 +1283,7 @@ document.addEventListener("change", e => {
 // =================== Render: Şimdiden başla ===================
 function renderRecs() {
   const tps = tgtPrefs().filter(x => x.enabled), byKey = Object.fromEntries(tps.map(x => [x.t.key, x]));
+  renderMasteries(tps);
   const bad = tps.filter(x => x.missing.length);
   $("#modeWarnCard").style.display = bad.length ? "" : "none";
   $("#modeWarn").innerHTML = bad.map(x => `<div class="small" style="margin:4px 0"><b>${esc(x.t.name)}</b> — ${missingText(x)}.${altsFor(x)}</div>`).join("");
@@ -1336,6 +1356,32 @@ function nodeHtml(name, qty, depth) {
     ? `<ul>${p.in.map(([c, q]) => nodeHtml(c, p.ach ? 1 : q * qty, depth + 1)).join("")}</ul>` : "";
   return `<li><div class="node"><a href="${partWiki(name, p)}" target="_blank" rel="noopener">${esc(name)}</a>${p.ach ? '<span class="tag">achievement</span>' : ""}${cnt}${pr}${p.tg ? '<span class="tag tg">timegate</span>' : ""}${p.uv ? '<span class="tag uv">doğrulanmadı</span>' : ""}<span class="small muted">${esc(p.src || "")}</span></div>${kids}</li>`;
 }
+// mastery durumu: hedefin seviyesine kadar eksik seviyeler, puan ve XP
+function masteryState(m) {
+  const def = stat.mast && stat.mast[m.track]; if (!def || !snap || !snap.masteries) return null;
+  const have = snap.masteries[m.track] != null ? snap.masteries[m.track] : -1;
+  const missing = def.levels.slice(have + 1, m.level + 1);
+  return { def, done: have >= m.level, missing, points: missing.reduce((a, l) => a + l.p, 0), xp: missing.reduce((a, l) => a + l.xp, 0),
+    spare: snap.mpoints ? snap.mpoints[DATA.masteryRegions[def.region]] : null, region: DATA.masteryRegions[def.region] || def.region };
+}
+function renderMasteries(tps) {
+  const on = new Set(tps.map(x => x.t.key)), tname = Object.fromEntries(DATA.targets.map(t => [t.key, t.name]));
+  const list = DATA.masteries.filter(m => m.targets.some(k => on.has(k))).map(m => Object.assign({ m }, masteryState(m) || {}));
+  if (!snap || !snap.masteries) { $("#masteryBox").innerHTML = '<div class="muted small">Yenile ile mastery bilgisi okunur (progression yetkisi gerekir).</div>'; return; }
+  list.sort((a, b) => (a.done - b.done) || ((a.m.role === "required" ? 0 : 1) - (b.m.role === "required" ? 0 : 1)) || (a.points - b.points));
+  $("#masteryBox").innerHTML = `<table><tr><th>Mastery</th><th>Rol</th><th>Durum</th><th>Neden</th></tr>${list.map(x => {
+    if (!x.def) return "";
+    const lv = x.def.levels[x.m.level];
+    const role = x.m.role === "required" ? '<b class="err">Zorunlu</b>' : '<span class="okc">Hızlandırır</span>';
+    const state = x.done ? '<span class="okc">açık ✓</span>'
+      : `<span class="warnc">${x.missing.length} seviye eksik</span>: ${x.missing.map(l => esc(l.name)).join(" → ")}<br><span class="small">${x.points} puan + ${fmt(x.xp)} XP · ${esc(x.region)}'da harcanmamış puanın: <b>${x.spare == null ? "?" : x.spare}</b>${x.spare != null && x.spare < x.points ? ` (${x.points - x.spare} puan daha topla)` : x.spare != null ? ' — <b class="okc">puanın yetiyor, XP dolunca açabilirsin</b>' : ""}</span>`;
+    return `<tr><td><b>${esc(lv ? lv.name : "?")}</b><div class="small muted">${esc(x.def.name)} (${esc(x.region)})</div></td><td>${role}<div class="small muted">${x.m.targets.filter(k => on.has(k)).map(k => esc(tname[k])).join(", ")}</div></td><td>${state}</td><td class="small">${esc(x.m.why)}</td></tr>`;
+  }).join("")}</table><div class="small muted" style="margin-top:6px">Mastery'ler sırayla açılır; listede hedef seviyeye kadar açman gereken bütün seviyeler var. Puan ve XP API'den.</div>`;
+}
+// hedef kartı için: eksik zorunlu mastery'ler
+function missingRequiredMasteries(key) {
+  return DATA.masteries.filter(m => m.role === "required" && m.targets.includes(key)).map(m => ({ m, st: masteryState(m) })).filter(x => x.st && !x.st.done);
+}
 // aynı slot grubundaki, açık modlarla yapılabilen seçenekler
 function altsFor(tp) {
   const alts = tgtPrefs().filter(x => x.t.key !== tp.t.key && x.t.sg && x.t.sg === tp.t.sg && !x.missing.length && !x.enabled);
@@ -1352,6 +1398,7 @@ function renderTargets() {
       <div class="small muted">${esc(t.slot)} · ${esc(t.mode)}</div><div>${modeBadges(tp)}</div></div>
       <div style="min-width:220px;flex:1;max-width:360px"><div class="bar"><i style="width:${pct}%"></i></div>
       <div class="small"><b>%${snap ? pct : "?"}</b> · ${snap ? days : "API verisi yok"}${c.armory ? ` · <span class="okc">Armory'de ${c.armory}</span>` : ""}</div></div></div></summary>
+      ${missingRequiredMasteries(t.key).map(x => `<div class="small err" style="margin-top:8px">Zorunlu mastery açık değil: ${esc(x.st.def.levels[x.m.level].name)} (${esc(x.st.def.name)}) — ${x.st.points} puan eksik. Şimdiden başla → Mastery'ler.</div>`).join("")}
       ${tp.missing.length ? `<div class="small err" style="margin-top:8px">Mod tercihlerine uymuyor: ${missingText(tp)}.${altsFor(tp)}</div>` : ""}
       <div class="small" style="margin-top:8px">${esc(t.why)}</div>
       <div class="small muted">Altın: ${esc(t.gold)}${c.tpPrice ? ` · TP'de hazır: <b>${gold(c.tpPrice)}</b>` : ""}${snap && !c.done ? ` · Eksiklerin TP maliyeti ≈ <b>${gold(c.cost)}</b>${c.unpriced ? ` (+${c.unpriced} satılamayan/fiyatsız kalem)` : ""}` : ""}</div>

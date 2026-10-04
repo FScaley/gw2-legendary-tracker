@@ -30,5 +30,8 @@ const get = async u => (await fetch('https://api.guildwars2.com' + u)).json();
   const wi = Object.fromEntries((await get('/v2/items?ids=' + wl.map(l => l.item_id).join(','))).map(x => [x.id, x.name]));
   for (const v of DATA.vault) { const l = wl.find(x => x.id === v.listing); console.log('VAULT', v.listing, v.name, '=>', l && wi[l.item_id], l && l.cost); }
   for (const c of [463, 472]) { const cat = await get('/v2/achievements/categories/' + c); console.log('cat', c, cat.name, cat.achievements.length); }
+  const mast = Object.fromEntries((await get('/v2/masteries?ids=all')).map(m => [m.id, m]));
+  for (const m of DATA.masteries || []) { const d = mast[m.track]; if (!d || !d.levels[m.level]) console.log('MASTERY bad', m.track, m.level); }
+  for (const r of Object.keys(DATA.masteryRegions || {})) if (!Object.values(mast).some(m => m.region === r)) console.log('MASTERY region bad', r);
   console.log('done; ref errors', bad);
 })();
