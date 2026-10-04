@@ -1,0 +1,1457 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Legendary Hedefler</title>
+<style>
+:root{
+  --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a; --text:#e6e8ee; --muted:#9aa3b2;
+  --accent:#d6a84a; --accent2:#7fb3ff; --ok:#5cc28a; --warn:#e0a53a; --bad:#e06c6c; --uv:#c792ea;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent2)}
+header{position:sticky;top:0;z-index:5;background:#0f1115ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:10px 16px}
+.hrow{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto}
+h1{font-size:18px;margin:0;color:var(--accent);letter-spacing:.3px}
+.status{font-size:13px;color:var(--muted)}
+nav{display:flex;gap:4px;flex-wrap:wrap;max-width:1100px;margin:8px auto 0}
+nav button{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:14px}
+nav button.on{background:var(--accent);color:#1a1405;border-color:var(--accent);font-weight:600}
+main{max-width:1100px;margin:0 auto;padding:14px 16px 60px}
+section.tab{display:none} section.tab.on{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px}
+.card h2{font-size:16px;margin:0 0 8px;color:var(--accent)}
+.card h3{font-size:14px;margin:10px 0 6px;color:var(--text)}
+.muted{color:var(--muted)} .small{font-size:12.5px}
+.btn{background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:6px 10px;border-radius:8px;cursor:pointer;font-size:13.5px}
+.btn:hover{border-color:var(--accent)} .btn.pri{background:var(--accent);color:#1a1405;border-color:var(--accent);font-weight:600}
+.btn.danger{border-color:#6b2a2a;color:#ffb3b3}
+.btn:disabled{opacity:.5;cursor:default}
+input[type=text],input[type=password],input[type=number],select,textarea{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:6px 8px;font-size:14px}
+textarea{width:100%;min-height:90px;font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.timers{display:flex;gap:10px;flex-wrap:wrap}
+.timer{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-width:200px}
+.timer b{font-size:20px;font-variant-numeric:tabular-nums;color:var(--accent)}
+ul.tasks{list-style:none;margin:0;padding:0}
+ul.tasks li{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-top:1px solid var(--line)}
+ul.tasks li:first-child{border-top:none}
+ul.tasks li.done .tt{text-decoration:line-through;color:var(--muted)}
+ul.tasks li.k-tg{border-left:3px solid var(--accent);padding-left:8px}
+ul.tasks li.k-bn{border-left:3px solid #c46a2a;padding-left:8px}
+ul.tasks li.k-n{border-left:3px solid var(--line);padding-left:8px}
+.grp{margin:14px 0 4px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.grp h3{margin:0;font-size:15px;color:var(--accent2)}
+.sched{font-size:12.5px;padding:1px 8px;border-radius:999px;background:#0f1115;border:1px solid var(--line);margin-left:6px;white-space:nowrap}
+.sched.now{border-color:var(--ok);color:var(--ok)}
+.how summary{cursor:pointer;color:var(--accent2);font-size:13px;margin-top:2px}
+.how ol{margin:4px 0 4px 18px;padding:0;font-size:13.5px}
+.how li{margin:2px 0}
+.legend{font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;margin:0 4px 0 10px;vertical-align:-1px}
+.chk{display:flex;gap:4px;flex-wrap:wrap;min-width:26px}
+.chk input{width:20px;height:20px;accent-color:var(--ok);margin:0}
+.tt{font-weight:600}
+.tag{display:inline-block;font-size:11.5px;padding:1px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted);margin:2px 4px 0 0;white-space:nowrap}
+.tag.tg{border-color:#7a5a1d;color:#f0c46a} .tag.bn{border-color:#7a3d1d;color:#ffb07a}
+.tag.auto{border-color:#1d5a3d;color:#7fe0aa} .tag.uv{border-color:#5a2d7a;color:var(--uv)}
+.tag.srv{border-color:#24456e;color:#9cc4ff}
+.bar{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#f3d28a)}
+.tgt{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 10px;background:var(--panel2)}
+.tgt summary{cursor:pointer;list-style:none}
+.tgt summary::-webkit-details-marker{display:none}
+.tgthead{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between}
+.tgthead .name{font-weight:700;font-size:15px}
+.tree{margin:8px 0 0;padding-left:0;font-size:13.5px}
+.tree ul{list-style:none;margin:0;padding-left:16px;border-left:1px dashed var(--line)}
+.tree li{margin:3px 0}
+.node{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.cnt{font-variant-numeric:tabular-nums;font-size:12.5px;padding:0 6px;border-radius:6px;background:#0f1115}
+.cnt.ok{color:var(--ok)} .cnt.no{color:var(--warn)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:6px 6px;border-top:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12.5px}
+.scroll{overflow-x:auto}
+.pill{font-size:12px;color:var(--muted)}
+.uvnote{color:var(--uv);font-size:12px}
+.err{color:var(--bad)} .okc{color:var(--ok)} .warnc{color:var(--warn)}
+.hunt li{display:flex;gap:10px;align-items:flex-start;padding:7px 2px;border-top:1px solid var(--line)}
+.hunt{list-style:none;padding:0;margin:6px 0 0}
+.hunt select{padding:2px 4px;font-size:12.5px}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--muted);border-top-color:var(--accent);border-radius:50%;animation:sp 0.8s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.tlist .trow{display:flex;gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.tlist .trow .nm{flex:1;min-width:160px}
+@media (max-width:600px){ body{font-size:14px} .timer{min-width:0;flex:1} main{padding:12px 12px 60px} }
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     OYUN VERİSİ — kodu bilmeden düzeltilebilir.
+     parts: her bileşen (anahtar = İngilizce ad). id = item id, cur = wallet currency id, ach = achievement id.
+       in: [["Bileşen adı", adet], ...]  src: kaynak  uv: true = doğrulanmadı  tg: true = timegate'li
+     targets: hedefler. gates: kalan gün tahmini için timegate kapıları.
+     daily / weekly: Bugün sekmesi. auto: API ile otomatik tik.
+     hunter: Achievement avcısı listeleri.
+     Kaynaklar: wiki.guildwars2.com ve api.guildwars2.com, 4 Ekim 2026'da kontrol edildi.
+     ===================================================================== -->
+<script id="game-data">
+const DATA = {
+  meta: {
+    asOf: "2026-10-04",
+    wiki: "https://wiki.guildwars2.com/wiki/",
+    note: "Mystic Forge tarifleri API'de yok; wiki'den alındı. 'uv' işaretli bilgiler doğrulanmadı."
+  },
+
+  // ---------------- Bileşenler ----------------
+  parts: {
+    // ---- Ortak taban malzemeler / para birimleri ----
+    "Mystic Clover": { id: 19675, src: "Haftalık vendor'lar (BUY-4373 10, Manfred 15, Dugan 5), Wizard's Vault 20/sezon, Lyhr/Ward Crafter Lucirae sınırsız (3 Mystic Coin + 3 Obsidian Shard + 5 Ecto + 3 Spirit Shard)", wiki: "Mystic_Clover", tg: true },
+    "Mystic Coin": { id: 19976, src: "TP / Wizard's Vault 60/sezon / Manfred 10/hafta", wiki: "Mystic_Coin" },
+    "Glob of Ectoplasm": { id: 19721, src: "TP / salvage", wiki: "Glob_of_Ectoplasm" },
+    "Obsidian Shard": { id: 19925, src: "BUY-4373 (30 Fractal Relic), karma vendor, Wizard's Vault 20/sezon", wiki: "Obsidian_Shard" },
+    "Spirit Shard": { cur: 23, src: "Wallet", wiki: "Spirit_Shard" },
+    "Provisioner Token": { cur: 29, src: "Faction Provisioner takasları (günlük/haftalık sınırlı)", wiki: "Provisioner_Token", tg: true },
+    "Legendary Insight": { cur: 70, src: "Raid encounter'ları (strike'lar dahil), Daily Raid Bounties, Weekly Quickplay — en fazla 77/hafta", wiki: "Legendary_Insight", tg: true },
+    "Fractal Relic": { cur: 7, src: "Fractals", wiki: "Fractal_Relic" },
+    "Research Note": { cur: 61, src: "Crafted item salvage", wiki: "Research_Note" },
+    "Ancient Coin": { cur: 66, src: "Cantha/Janthir sandıkları", wiki: "Ancient_Coin" },
+    "Static Charge": { cur: 72, src: "Skywatch Archipelago; Latent Magic 100/gün", wiki: "Static_Charge", tg: true },
+    "Pinch of Stardust": { cur: 73, src: "Amnytas; Latent Magic 100/gün", wiki: "Pinch_of_Stardust", tg: true },
+    "Calcified Gasp": { cur: 75, src: "Inner Nayos; Latent Magic 100 küre (200-400)/gün", wiki: "Calcified_Gasp", tg: true },
+    "Fine Rift Essence": { cur: 78, src: "Convergence, rift hunting", wiki: "Rift_essence", tg: true },
+    "Rare Rift Essence": { cur: 79, src: "Convergence, rift hunting", wiki: "Rift_essence", tg: true },
+    "Masterwork Rift Essence": { cur: 80, src: "Convergence, rift hunting", wiki: "Rift_essence", tg: true },
+    "Antiquated Ducat": { cur: 81, src: "Castora (VoE)", wiki: "Antiquated_Ducat" },
+    "Aether-Rich Sap": { cur: 83, src: "Castora (VoE)", wiki: "Aether-Rich_Sap" },
+    "Tales of Dungeon Delving": { cur: 69, src: "Dungeon explorable", wiki: "Tales_of_Dungeon_Delving" },
+    "Stabilizing Matrix": { id: 73248, src: "Fractal sandıkları (oran doğrulanmadı) / TP", wiki: "Stabilizing_Matrix" },
+    "Ball of Dark Energy": { id: 71994, src: "Ascended silah/zırh salvage", wiki: "Ball_of_Dark_Energy" },
+    "Icy Runestone": { id: 19676, src: "Rojan the Penitent, 1 altın", wiki: "Icy_Runestone" },
+    "Mystic Runestone": { id: 79418, src: "Miyani, 1 altın", wiki: "Mystic_Runestone" },
+    "Xunlai Electrum Ingot": { id: 46743, src: "TP (Jeweler 400 gerekmez)", wiki: "Xunlai_Electrum_Ingot" },
+    "Thermocatalytic Reagent": { id: 46747, src: "Master craftsman vendor", wiki: "Thermocatalytic_Reagent" },
+    "Hydrocatalytic Reagent": { id: 95813, src: "50 Research Note / 10 adet", wiki: "Hydrocatalytic_Reagent" },
+    "Exotic Essence of Luck": { id: 45178, src: "Luck refine", wiki: "Essence_of_Luck" },
+    "Orichalcum Ingot": { id: 19685 }, "Mithril Ingot": { id: 19684 }, "Darksteel Ingot": { id: 19681 }, "Platinum Ingot": { id: 19686 },
+    "Seasoned Wood Plank": { id: 19714 }, "Hard Wood Plank": { id: 19711 }, "Elder Wood Plank": { id: 19709 }, "Ancient Wood Plank": { id: 19712 },
+    "Cured Hardened Leather Square": { id: 19737 }, "Bolt of Gossamer": { id: 19746 },
+    "Charged Lodestone": { id: 24305 }, "Molten Lodestone": { id: 24315 }, "Destroyer Lodestone": { id: 24325 },
+    "Glacial Lodestone": { id: 24320 }, "Corrupted Lodestone": { id: 24340 },
+    "Ghost Pepper": { id: 12544 }, "Box o' Fun": { id: 20000 }, "Unidentified Dye": { id: 20323 }, "Opal Orb": { id: 24522 },
+    "Vicious Fang": { id: 24357 }, "Large Fang": { id: 24356 }, "Sharp Fang": { id: 24355 }, "Fang": { id: 24354 },
+    "Ancient Bone": { id: 24358 }, "Large Bone": { id: 24341 }, "Heavy Bone": { id: 24345 }, "Bone": { id: 24344 },
+    "Vicious Claw": { id: 24351 }, "Large Claw": { id: 24350 }, "Sharp Claw": { id: 24349 }, "Claw": { id: 24348 },
+    "Armored Scale": { id: 24289 }, "Large Scale": { id: 24288 }, "Smooth Scale": { id: 24287 }, "Scale": { id: 24286 },
+    "Pile of Crystalline Dust": { id: 24277 }, "Pile of Incandescent Dust": { id: 24276 }, "Pile of Luminous Dust": { id: 24275 }, "Pile of Radiant Dust": { id: 24274 },
+    "Powerful Venom Sac": { id: 24283 }, "Potent Venom Sac": { id: 24282 }, "Full Venom Sac": { id: 24281 }, "Venom Sac": { id: 24280 },
+    "Vial of Powerful Blood": { id: 24295 }, "Vial of Potent Blood": { id: 24294 }, "Vial of Thick Blood": { id: 24293 }, "Vial of Blood": { id: 24292 },
+    "Elaborate Totem": { id: 24300 }, "Intricate Totem": { id: 24299 }, "Engraved Totem": { id: 24363 }, "Totem": { id: 24298 },
+
+    // ---- Ortak gift'ler ----
+    "Bloodstone Shard": { id: 20797, src: "Miyani: 200 Spirit Shard", in: [["Spirit Shard", 200]], wiki: "Bloodstone_Shard" },
+    "Gift of Fangs": { id: 75744, src: "Craft (Weaponsmith/Huntsman/Artificer 400, tarif 10g Miyani)", in: [["Vicious Fang", 100], ["Large Fang", 250], ["Sharp Fang", 50], ["Fang", 50]] },
+    "Gift of Bones": { id: 71123, src: "Craft 400", in: [["Ancient Bone", 100], ["Large Bone", 250], ["Heavy Bone", 50], ["Bone", 50]] },
+    "Gift of Claws": { id: 70801, src: "Craft 400", in: [["Vicious Claw", 100], ["Large Claw", 250], ["Sharp Claw", 50], ["Claw", 50]] },
+    "Gift of Scales": { id: 75299, src: "Craft 400", in: [["Armored Scale", 100], ["Large Scale", 250], ["Smooth Scale", 50], ["Scale", 50]] },
+    "Gift of Dust": { id: 73196, src: "Craft 400", in: [["Pile of Crystalline Dust", 100], ["Pile of Incandescent Dust", 250], ["Pile of Luminous Dust", 50], ["Pile of Radiant Dust", 50]] },
+    "Gift of Venom": { id: 71787, src: "Craft 400", in: [["Powerful Venom Sac", 100], ["Potent Venom Sac", 250], ["Full Venom Sac", 50], ["Venom Sac", 50]] },
+    "Gift of Blood": { id: 71655, src: "Craft 400", in: [["Vial of Powerful Blood", 100], ["Vial of Potent Blood", 250], ["Vial of Thick Blood", 50], ["Vial of Blood", 50]] },
+    "Gift of Totems": { id: 73236, src: "Craft 400", in: [["Elaborate Totem", 100], ["Intricate Totem", 250], ["Engraved Totem", 50], ["Totem", 50]] },
+    "Gift of Condensed Might": { id: 70867, src: "Mystic Forge", in: [["Gift of Fangs", 1], ["Gift of Scales", 1], ["Gift of Claws", 1], ["Gift of Bones", 1]], wiki: "Gift_of_Condensed_Might" },
+    "Gift of Condensed Magic": { id: 76530, src: "Mystic Forge", in: [["Gift of Blood", 1], ["Gift of Venom", 1], ["Gift of Totems", 1], ["Gift of Dust", 1]], wiki: "Gift_of_Condensed_Magic" },
+    "Mystic Tribute": { id: 71820, src: "Mystic Forge", in: [["Gift of Condensed Might", 2], ["Gift of Condensed Magic", 2], ["Mystic Clover", 77], ["Mystic Coin", 250]], wiki: "Mystic_Tribute" },
+    "Gift of Might": { id: 19672, src: "Mystic Forge", in: [["Vicious Fang", 250], ["Armored Scale", 250], ["Vicious Claw", 250], ["Ancient Bone", 250]] },
+    "Gift of Magic": { id: 19673, src: "Mystic Forge", in: [["Vial of Powerful Blood", 250], ["Powerful Venom Sac", 250], ["Elaborate Totem", 250], ["Pile of Crystalline Dust", 250]] },
+    "Gift of Fortune": { id: 19626, src: "Mystic Forge", in: [["Mystic Clover", 77], ["Glob of Ectoplasm", 250], ["Gift of Might", 1], ["Gift of Magic", 1]], wiki: "Gift_of_Fortune" },
+    "Gift of Battle": { id: 19678, src: "WvW: Gift of Battle Item Reward Track (~6-8,5 saat)", wiki: "Gift_of_Battle", tg: true },
+    "Gift of Exploration": { id: 19677, src: "Central Tyria world completion: karakter başına 2 adet", wiki: "Gift_of_Exploration", tg: true },
+    "Gift of Mastery": { id: 19674, src: "Mystic Forge", in: [["Bloodstone Shard", 1], ["Obsidian Shard", 250], ["Gift of Exploration", 1], ["Gift of Battle", 1]], wiki: "Gift_of_Mastery" },
+    "Shard of Glory": { id: 70820, src: "TP / PvP" },
+    "Memory of Battle": { id: 71581, src: "TP / WvW" },
+    "Gift of Glory": { id: 70528, src: "Mystic Forge", in: [["Shard of Glory", 250]] },
+    "Gift of War": { id: 71008, src: "Mystic Forge", in: [["Memory of Battle", 250]] },
+    "Cube of Stabilized Dark Energy": { id: 73137, src: "Craft 500 (6 craft mesleğinden herhangi biri)", in: [["Ball of Dark Energy", 1], ["Stabilizing Matrix", 75]], wiki: "Cube_of_Stabilized_Dark_Energy" },
+    "Gift of the Mists": { id: 76427, src: "Mystic Forge", in: [["Gift of Glory", 1], ["Gift of Battle", 1], ["Gift of War", 1], ["Cube of Stabilized Dark Energy", 1]], wiki: "Gift_of_the_Mists" },
+    "Gift of Energy": { id: 19623, src: "Artificer 400", in: [["Pile of Crystalline Dust", 250], ["Pile of Incandescent Dust", 250], ["Pile of Luminous Dust", 250], ["Pile of Radiant Dust", 250]], wiki: "Gift_of_Energy" },
+    "Gift of Metal": { id: 19621, src: "Weaponsmith 400", in: [["Orichalcum Ingot", 250], ["Mithril Ingot", 250], ["Darksteel Ingot", 250], ["Platinum Ingot", 250]], wiki: "Gift_of_Metal" },
+    "Gift of Wood": { id: 19622, src: "Huntsman 400", in: [["Seasoned Wood Plank", 250], ["Hard Wood Plank", 250], ["Elder Wood Plank", 250], ["Ancient Wood Plank", 250]], wiki: "Gift_of_Wood" },
+    "Gift of Craftsmanship": { id: 77451, src: "Faction Provisioner: 50 Provisioner Token", in: [["Provisioner Token", 50]], wiki: "Gift_of_Craftsmanship", tg: true },
+    "Gift of Research": { id: 97655, src: "Mystic Forge", in: [["Thermocatalytic Reagent", 250], ["Hydrocatalytic Reagent", 500], ["Exotic Essence of Luck", 250]], wiki: "Gift_of_Research" },
+    "Vision Crystal": { id: 46746, src: "Craft 400 (any) / Wizard's Vault 4/sezon", in: [["Bloodstone Brick", 5], ["Dragonite Ingot", 5], ["Empyreal Star", 5], ["Augur's Stone", 1]], wiki: "Vision_Crystal" },
+    "Bloodstone Brick": { id: 46730, src: "Craft: 100 Bloodstone Dust + 2 Obsidian Shard + 10 Thermocatalytic" },
+    "Dragonite Ingot": { id: 46732, src: "Craft: 100 Dragonite Ore + 2 Obsidian Shard + 10 Thermocatalytic" },
+    "Empyreal Star": { id: 46734, src: "Craft: 100 Empyreal Fragment + 2 Obsidian Shard + 10 Thermocatalytic" },
+    "Augur's Stone": { id: 46752, src: "Miyani/Lyhr: 20 Spirit Shard" },
+    "Amalgamated Rift Essence": { id: 100930, src: "Craft 400 (tarif Lyhr 50s)", in: [["Fine Rift Essence", 250], ["Masterwork Rift Essence", 100], ["Rare Rift Essence", 50], ["Glob of Ectoplasm", 50]], wiki: "Amalgamated_Rift_Essence", tg: true },
+    "Purified Rift Essence": { id: 100569, src: "Craft 400", in: [["Amalgamated Rift Essence", 1], ["Mystic Clover", 1]], wiki: "Purified_Rift_Essence" },
+    "Funerary Incense": { id: 86093, src: "PoF heart vendor 1/gün, Primeval Steward sınırsız (Trade Contract/Elegy Mosaic)", wiki: "Funerary_Incense" },
+
+    // ---- SotO Obsidian (heavy) ----
+    "Obsidian Heavy Set": { src: "6 parça (Armorsmith 500, Wizard's Tower; ya da Lyhr parça başı +10 Ecto). Tarif: Recipe: Legendary Obsidian Armor (Lyhr 50s, mastery: Obsidian Armor Crafting)", in: [["Obsidian Heavy Helmet", 1], ["Obsidian Heavy Pauldrons", 1], ["Obsidian Heavy Breastplate", 1], ["Obsidian Heavy Gauntlets", 1], ["Obsidian Heavy Cuisses", 1], ["Obsidian Heavy Greaves", 1]], wiki: "Obsidian_armor" },
+    "Obsidian Heavy Helmet": { id: 101544, src: "Armorsmith 500 / Lyhr", in: [["Arcanum of Astral Thought", 1], ["Gift of Expertise", 1], ["Gift of Stormy Skies", 1], ["Gift of Magical Prosperity", 1]] },
+    "Obsidian Heavy Pauldrons": { id: 101551, src: "Armorsmith 500 / Lyhr", in: [["Arcanum of Astral Bearing", 1], ["Gift of Expertise", 1], ["Gift of Stormy Skies", 1], ["Gift of Magical Prosperity", 1]] },
+    "Obsidian Heavy Breastplate": { id: 101521, src: "Armorsmith 500 / Lyhr", in: [["Arcanum of Astral Heartbeat", 1], ["Gift of Expertise", 1], ["Gift of Stormy Skies", 1], ["Gift of Magical Prosperity", 1]] },
+    "Obsidian Heavy Gauntlets": { id: 101609, src: "Armorsmith 500 / Lyhr", in: [["Arcanum of Astral Grasp", 1], ["Gift of Expertise", 1], ["Gift of Stormy Skies", 1], ["Gift of Mighty Prosperity", 1]] },
+    "Obsidian Heavy Cuisses": { id: 101568, src: "Armorsmith 500 / Lyhr", in: [["Arcanum of Astral Stride", 1], ["Gift of Expertise", 1], ["Gift of Stormy Skies", 1], ["Gift of Mighty Prosperity", 1]] },
+    "Obsidian Heavy Greaves": { id: 101460, src: "Armorsmith 500 / Lyhr", in: [["Arcanum of Astral Footprints", 1], ["Gift of Expertise", 1], ["Gift of Stormy Skies", 1], ["Gift of Mighty Prosperity", 1]] },
+    "Arcanum of Astral Thought": { id: 100706, src: "Lyhr: 1 Lesser Vision Crystal, koleksiyon bitince", in: [["Astral Thought", 1], ["Lesser Vision Crystal", 1]] },
+    "Arcanum of Astral Bearing": { id: 100524, src: "Lyhr: 1 Lesser Vision Crystal, koleksiyon bitince", in: [["Astral Bearing", 1], ["Lesser Vision Crystal", 1]] },
+    "Arcanum of Astral Heartbeat": { id: 100509, src: "Lyhr: 1 Lesser Vision Crystal, koleksiyon bitince", in: [["Astral Heartbeat", 1], ["Lesser Vision Crystal", 1]] },
+    "Arcanum of Astral Grasp": { id: 100050, src: "Lyhr: 1 Lesser Vision Crystal, koleksiyon bitince", in: [["Astral Grasp", 1], ["Lesser Vision Crystal", 1]] },
+    "Arcanum of Astral Stride": { id: 100198, src: "Lyhr: 1 Lesser Vision Crystal, koleksiyon bitince", in: [["Astral Stride", 1], ["Lesser Vision Crystal", 1]] },
+    "Arcanum of Astral Footprints": { id: 100946, src: "Lyhr: 1 Lesser Vision Crystal, koleksiyon bitince", in: [["Astral Footprints", 1], ["Lesser Vision Crystal", 1]] },
+    "Astral Thought": { ach: 7214, src: "Koleksiyon: Astral Ward + Rift Hunter + Oneiros-Spun heavy kask skinleri + Lifeblood of Ignaxious (Inner Nayos)" },
+    "Astral Bearing": { ach: 7098, src: "Koleksiyon: 3 omuz skini + Lifeblood of Galene the Seething (harita doğrulanmadı)", uv: true },
+    "Astral Heartbeat": { ach: 7096, src: "Koleksiyon: 3 göğüs skini + Lifeblood of Nourys (Amnytas meta)" },
+    "Astral Grasp": { ach: 7219, src: "Koleksiyon: 3 eldiven skini + Lifeblood of Pherus (Inner Nayos)" },
+    "Astral Stride": { ach: 7240, src: "Koleksiyon: 3 bacak skini + Lifeblood of Knaebelag (Inner Nayos meta)" },
+    "Astral Footprints": { ach: 7051, src: "Koleksiyon: 3 bot skini + Lifeblood of Myros (Inner Nayos)" },
+    "Lesser Vision Crystal": { id: 49523, src: "Armorsmith 500 / Lyhr +10 Ecto", in: [["Bloodstone Brick", 2], ["Dragonite Ingot", 2], ["Empyreal Star", 2], ["Augur's Stone", 1]] },
+    "Gift of Expertise": { id: 100852, src: "Mystic Forge / Lyhr +10 Ecto", in: [["Amalgamated Rift Essence", 12], ["Eldritch Scroll", 1], ["Obsidian Shard", 50], ["Cube of Stabilized Dark Energy", 1]], wiki: "Gift_of_Expertise" },
+    "Eldritch Scroll": { id: 20852, src: "Miyani: 50 Spirit Shard", in: [["Spirit Shard", 50]] },
+    "Gift of Stormy Skies": { id: 100288, src: "Mystic Forge", in: [["Gift of the Astral Ward", 1], ["Case of Captured Lightning", 5], ["Pouch of Stardust", 5], ["Clot of Congealed Screams", 5]], wiki: "Gift_of_Stormy_Skies" },
+    "Gift of the Astral Ward": { id: 100466, src: "Mystic Forge", in: [["Gift of Skywatch Archipelago", 1], ["Gift of Amnytas", 1], ["Gift of Inner Nayos", 1], ["Gift of Persistence", 1]] },
+    "Gift of Skywatch Archipelago": { id: 100544, src: "Harita tamamlama / Illuminating Skywatch (ach 7126) sandığı / Gharr: 13 Case" },
+    "Gift of Amnytas": { id: 100798, src: "Harita tamamlama / Illuminating Amnytas (ach 7053) / Gharr: 13 Pouch" },
+    "Gift of Inner Nayos": { id: 101595, src: "Illuminating Inner Nayos (ach 7809) / Inner Nayos Mastery II (7800) / Gharr: 13 Clot" },
+    "Gift of Persistence": { id: 99962, src: "Lyhr", in: [["Ancient Coin", 250], ["Static Charge", 250], ["Pinch of Stardust", 250], ["Calcified Gasp", 250]] },
+    "Case of Captured Lightning": { id: 100267, src: "250 Static Charge (provisioner) ya da günlük Hero's Choice Chest seçimi", in: [["Static Charge", 250]], tg: true },
+    "Pouch of Stardust": { id: 99964, src: "250 Pinch of Stardust ya da günlük sandık seçimi", in: [["Pinch of Stardust", 250]], tg: true },
+    "Clot of Congealed Screams": { id: 100098, src: "250 Calcified Gasp ya da günlük sandık seçimi", in: [["Calcified Gasp", 250]], tg: true },
+    "Gift of Magical Prosperity": { id: 100512, src: "Mystic Forge", in: [["Gift of Craftsmanship", 1], ["Mystic Clover", 9], ["Gift of Condensed Magic", 1], ["Gift of Research", 1]] },
+    "Gift of Mighty Prosperity": { id: 100933, src: "Mystic Forge", in: [["Gift of Craftsmanship", 1], ["Mystic Clover", 9], ["Gift of Condensed Might", 1], ["Gift of Research", 1]] },
+
+    // ---- Legendary Relic ----
+    "Legendary Relic": { id: 101582, src: "Mystic Forge", in: [["Gift of Relics", 1], ["Gift of Craftsmanship", 1], ["Gift of Condensed Might", 1], ["Gift of Condensed Magic", 1]], wiki: "Legendary_Relic" },
+    "Gift of Relics": { id: 101519, src: "Mystic Forge", in: [["Mystic Facet", 25], ["Mystic Clover", 25], ["Glob of Ectoplasm", 150], ["Gift of Research", 1]] },
+    "Mystic Facet": { id: 101540, src: "Mystic Forge: 1 exotic relic + 750 Pile of Lucent Crystal (her exotic relic kabul ediliyor mu doğrulanmadı)", uv: true },
+
+    // ---- Aurora ----
+    "Aurora": { id: 81908, src: "Mystic Forge", in: [["Spark of Sentience", 1], ["Mystic Tribute", 1], ["Gift of Sentience", 1], ["Gift of Draconic Mastery", 1]], wiki: "Aurora" },
+    "Spark of Sentience": { id: 81729, src: "Aurora II: Empowering ödülü", in: [["Aurora II: Empowering", 1], ["Xunlai Electrum Ingot", 21]] },
+    "Aurora II: Empowering": { ach: 3489, src: "21 Mastery Insight'ta Xunlai Electrum Ingot doldur" },
+    "Gift of Sentience": { id: 81796, src: "Mystic Forge", in: [["Gift of the Mists", 1], ["Icy Runestone", 100], ["Gift of Valor", 1], ["Gift of Energy", 1]] },
+    "Gift of Valor": { id: 82008, src: "Aurora: Awakening ödülü", in: [["Aurora: Awakening", 1]] },
+    "Aurora: Awakening": { ach: 3522, src: "6 Hero item + Sentient Seed", in: [["A Henge Away from Home", 1], ["Bloodstone Fen Master", 1], ["Ember Bay Master", 1], ["Bitterfrost Frontier Master", 1], ["Lake Doric Master", 1], ["Draconis Mons Master", 1], ["Siren's Landing Master", 1]] },
+    "Awakening the Druid Stone": { ach: 3445, src: "Druid Stone 2. adım (3 Druid Runestone + 12 Fire Orchid)" },
+    "Sprouting the Druid Stone": { ach: 3447, src: "Druid Stone 3. adım: 5 Druid Runestone (günde 1)", tg: true },
+    "A Henge Away from Home": { ach: 3436, src: "Druid Stone 4. adım: 7 Druid Runestone (günde 1) → The Wayfarer's Henge", tg: true, in: [["Awakening the Druid Stone", 1], ["Sprouting the Druid Stone", 1]] },
+    "Bloodstone Fen Master": { ach: 3500, src: "Bloodstone Fen koleksiyonu", in: [['"Out of the Shadows" Mastery', 1]] },
+    '"Out of the Shadows" Mastery': { ach: 3050, src: "LS3 bölüm mastery'si. Ödülü Bloodstone Crown Box → koleksiyonun skin maddesi. Alternatif: haritanın WvW reward track'i (son ödül Bloodstone Cache, tam track ~6-8 saat)" },
+    "Ember Bay Master": { ach: 3529, src: "Ember Bay koleksiyonu", in: [['"Rising Flames" Mastery', 1]] },
+    '"Rising Flames" Mastery': { ach: 3123, src: "LS3 bölüm mastery'si. Ödülü Dragonscale Epaulettes Box → koleksiyonun skin maddesi. Alternatif: haritanın WvW reward track'i (son ödül Ember Bay Cache, tam track ~6-8 saat)" },
+    "Bitterfrost Frontier Master": { ach: 3499, src: "Bitterfrost koleksiyonu (Crystallized Suet: RNG, günde 5 sandık/karakter)", tg: true, in: [['"A Crack in the Ice" Mastery', 1], ["Gift of Aurene", 1]] },
+    '"A Crack in the Ice" Mastery': { ach: 3171, src: "LS3 bölüm mastery'si. Ödülü Glacial Gauntlets Box → koleksiyonun skin maddesi. Alternatif: haritanın WvW reward track'i (son ödül Bitterfrost Frontier Cache, tam track ~6-8 saat)" },
+    "Lake Doric Master": { ach: 3491, src: "Lake Doric koleksiyonu", in: [['"The Head of the Snake" Mastery', 1]] },
+    '"The Head of the Snake" Mastery': { ach: 3348, src: "LS3 bölüm mastery'si. Ödülü White Mantle Elite Guard Mask Box → koleksiyonun skin maddesi. Alternatif: haritanın WvW reward track'i (son ödül Lake Doric Cache, tam track ~6-8 saat)" },
+    "Draconis Mons Master": { ach: 3547, src: "Draconis Mons koleksiyonu (Wayfarer's Henge skini gerekir)", in: [['"Flashpoint" Mastery', 1]] },
+    '"Flashpoint" Mastery': { ach: 3442, src: "LS3 bölüm mastery'si. Ödülü Houndskin Mantle Box → koleksiyonun skin maddesi. Alternatif: haritanın WvW reward track'i (son ödül Draconis Mons Cache, tam track ~6-8 saat)" },
+    "Siren's Landing Master": { ach: 3495, src: "Siren's Landing koleksiyonu (Ancient Cipher: RNG, günde 2 sandık/karakter)", tg: true, in: [['"One Path Ends" Mastery', 1]] },
+    '"One Path Ends" Mastery': { ach: 3516, src: "LS3 bölüm mastery'si. Ödülü Mursaat Brogan Box → koleksiyonun skin maddesi. Alternatif: haritanın WvW reward track'i (son ödül Siren's Landing Cache, tam track ~6-8 saat)" },
+    "Gift of Aurene": { ach: 3178, src: "Aurene mini koleksiyonu — Bitterfrost Frontier Master'ın bir maddesi. 5 doll parçası TP'de (~50 altın), craft gerekmez." },
+    "Gift of Draconic Mastery": { id: 81861, src: "Mystic Forge", in: [["Crystalline Ingot", 1], ["Bloodstone Shard", 1], ["Gift of Bloodstone Magic", 1], ["Gift of Dragon Magic", 1]] },
+    "Crystalline Ingot": { id: 46683, src: "Craft 500: Crystalline Ore + Fulgurite + Ecto + Amalgamated Gemstone" },
+    "Gift of Bloodstone Magic": { id: 81815, src: "Mystic Forge", in: [["Blood Ruby", 250], ["Jade Shard", 250], ["Orrian Pearl", 250]] },
+    "Gift of Dragon Magic": { id: 82036, src: "Mystic Forge", in: [["Petrified Wood", 250], ["Fresh Winterberry", 250], ["Fire Orchid Blossom", 250]] },
+    "Blood Ruby": { id: 79280, src: "Bloodstone Fen" }, "Jade Shard": { id: 80332, src: "Lake Doric" }, "Orrian Pearl": { id: 81706, src: "Siren's Landing" },
+    "Petrified Wood": { id: 79469, src: "Ember Bay" }, "Fresh Winterberry": { id: 79899, src: "Bitterfrost" }, "Fire Orchid Blossom": { id: 81127, src: "Draconis Mons" },
+
+    // ---- Vision ----
+    "Vision": { id: 91048, src: "Mystic Forge", in: [["Glimpse", 1], ["Mystic Tribute", 1], ["Gift of Prescience", 1], ["Gift of Arid Mastery", 1]], wiki: "Vision" },
+    "Glimpse": { id: 91035, src: "Vision II: Farsight ödülü", in: [["Vision II: Farsight", 1]] },
+    "Vision II: Farsight": { ach: 4771, src: "24 LS4 Mastery Insight'ın 20'sinde /kneel" },
+    "Gift of Prescience": { id: 90985, src: "Mystic Forge", in: [["Gift of the Mists", 1], ["Shattered Gift of Prescience", 1], ["Gift of Energy", 1], ["Icy Runestone", 100]] },
+    "Shattered Gift of Prescience": { id: 91010, src: "Vision I: Awakening ödülü", in: [["Vision I: Awakening", 1]] },
+    "Vision I: Awakening": { ach: 4762, src: "6 Visions of ... koleksiyonu", in: [["Visions of Istan", 1], ["Visions of Sandswept Isles", 1], ["Visions of Kourna", 1], ["Visions of Jahai", 1], ["Visions of Thunderhead Peaks", 1], ["Visions of Dragonfall", 1]] },
+    "Visions of Istan": { ach: 4765, src: "Koleksiyon (7)", in: [['"Daybreak" Mastery', 1]] },
+    '"Daybreak" Mastery': { ach: 3988, src: "LS4 bölüm mastery'si. Ödülü Corsair Turban Box → koleksiyonun skin maddesi. Alternatif: haritanın WvW reward track'i (son ödül Istan Cache, tam track ~6-8 saat)" },
+    "Visions of Sandswept Isles": { ach: 4774, src: "Koleksiyon (7)", in: [['"A Bug in the System" Mastery', 1]] },
+    '"A Bug in the System" Mastery': { ach: 4093, src: "LS4 bölüm mastery'si. Ödülü Olmakhan Mantle Box → koleksiyonun skin maddesi. Alternatif: haritanın WvW reward track'i (son ödül Sandswept Isles Cache, tam track ~6-8 saat)" },
+    "Visions of Kourna": { ach: 4760, src: "Koleksiyon (7)", in: [['"Long Live the Lich" Mastery', 1]] },
+    '"Long Live the Lich" Mastery': { ach: 4195, src: "LS4 bölüm mastery'si. Ödülü Corsair Jerkin Box → koleksiyonun skin maddesi. Alternatif: haritanın WvW reward track'i (son ödül Kournan Cache, tam track ~6-8 saat)" },
+    "Visions of Jahai": { ach: 4770, src: "Koleksiyon (7)", in: [['"A Star to Guide Us" Mastery', 1]] },
+    '"A Star to Guide Us" Mastery': { ach: 4359, src: "LS4 bölüm mastery'si: 38 achievement bitince Trader Hyacinth (Yatendi Village) Updated Record of Joko's Deeds satar → Visions of Jahai. Reward track alternatifi yok." },
+    "Visions of Thunderhead Peaks": { ach: 4764, src: "Koleksiyon (7)", in: [['"All or Nothing" Mastery', 1]] },
+    '"All or Nothing" Mastery': { ach: 4544, src: "LS4 bölüm mastery'si. Ödülü Corsair Leggings → koleksiyonun skin maddesi. Alternatif: haritanın WvW reward track'i (son ödül Thunderhead Peaks Cache, tam track ~6-8 saat)" },
+    "Visions of Dragonfall": { ach: 4757, src: "Koleksiyon (7)", in: [['"War Eternal" Mastery', 1]] },
+    '"War Eternal" Mastery': { ach: 4689, src: "LS4 bölüm mastery'si. Ödülü Corsair Boot Box → koleksiyonun skin maddesi. Alternatif: haritanın WvW reward track'i (son ödül Dragonfall Cache, tam track ~6-8 saat)" },
+    "Gift of Arid Mastery": { id: 91041, src: "Mystic Forge", in: [["Gift of Crystalline Magic", 1], ["Gift of Ephemeral Magic", 1], ["Bloodstone Shard", 1], ["Funerary Incense", 100]] },
+    "Gift of Crystalline Magic": { id: 91124, src: "100 Kralkatite Ore + 100 Difluorite Crystal + 100 Inscribed Shard + Bottle of Elonian Wine" },
+    "Gift of Ephemeral Magic": { id: 91112, src: "100 Lump of Mistonium + 100 Branded Mass + 100 Mistborn Mote + Bottle of Elonian Wine" },
+
+    // ---- Coalescence ----
+    "Coalescence": { id: 91234, src: "Mystic Forge", in: [["Hateful Sworl", 1], ["Gift of Patience", 1], ["Mystic Tribute", 1], ["Gift of Compassion", 1]], wiki: "Coalescence" },
+    "Hateful Sworl": { id: 86104, src: "Coalescence I ödülü", in: [["Coalescence I: Unbridled", 1]] },
+    "Coalescence I: Unbridled": { ach: 4035, src: "Açmak için herhangi bir raid boss sandığı gerekir" },
+    "Gift of Patience": { id: 91193, src: "Coalescence III ödülü", in: [["Coalescence III: Culmination", 1]] },
+    "Coalescence III: Culmination": { ach: 4805, src: "Wing 7 (Adina, Sabir, Qadim the Peerless) haftalık bonus sandıkları — raid grubu gerekir" },
+    "Gift of Compassion": { id: 91225, src: "Magnetite vendor", in: [["Gift of Desert Mastery", 1], ["Gift of Complex Emotions", 1], ["Ball of Dark Energy", 6], ["Legendary Insight", 150]] },
+    "Gift of Complex Emotions": { id: 88909, src: "Coalescence II ödülü", in: [["Coalescence II: The Gift", 1]] },
+    "Coalescence II: The Gift": { ach: 4412, src: "9 şişe bul ve doldur (biri Qadim sonrası Mythwright Gambit sandığında)" },
+    "Gift of Desert Mastery": { id: 86036, src: "Mystic Forge", in: [["Gift of the Desert", 1], ["Gift of the Rider", 1], ["Bloodstone Shard", 1], ["Funerary Incense", 250]] },
+    "Gift of the Desert": { id: 85631, src: "4 PoF bölge gift'i (harita tamamlama + o günün heart'ı + karma)" },
+    "Gift of the Rider": { id: 86330, src: "4 mount Spirit (75 Elegy Mosaic her biri)" },
+
+    // ---- Conflux (WvW) ----
+    "Conflux": { id: 93105, src: "Mystic Forge", in: [["Gift of the World", 1], ["Mist Band (Infused)", 1], ["Mystic Tribute", 1], ["Gift of Conquering", 1]], wiki: "Conflux" },
+    "Gift of the World": { id: 93190, src: "Mystic Forge", in: [["War Commendation", 1], ["Gift of the Mists", 1], ["Gift of War Dedication", 1], ["Icy Runestone", 100]] },
+    "War Commendation": { id: 93101, src: "Mystic Forge", in: [["Gift of Warfare", 1], ["Emblem of the Conqueror", 1], ["Mist Pearl", 1], ["Mist-Enhanced Mithril", 1]] },
+    "Gift of Warfare": { id: 81478, src: "Mystic Forge", in: [["Mystic Essence of Strategy", 1], ["Mystic Essence of Animosity", 1], ["Mystic Essence of Carnage", 1], ["Mystic Essence of Annihilation", 1]] },
+    "Mystic Essence of Strategy": { id: 81319, src: "Mystic Forge", in: [["Vial of Powerful Blood", 20], ["Vial of Potent Blood", 50], ["Pile of Bloodstone Dust", 250], ["Essence of Strategy", 1]] },
+    "Mystic Essence of Animosity": { id: 81494, src: "Mystic Forge", in: [["Ancient Bone", 20], ["Large Bone", 50], ["Empyreal Fragment", 250], ["Essence of Animosity", 1]] },
+    "Mystic Essence of Carnage": { id: 81449, src: "Mystic Forge", in: [["Armored Scale", 20], ["Large Scale", 50], ["Dragonite Ore", 250], ["Essence of Carnage", 1]] },
+    "Mystic Essence of Annihilation": { id: 81407, src: "Mystic Forge", in: [["Vicious Claw", 20], ["Large Claw", 50], ["Glob of Dark Matter", 10], ["Essence of Annihilation", 1]] },
+    "Essence of Strategy": { id: 81326, src: "Legendary Commander War Razor (WvW)", in: [["Badge of Honor", 1000]] },
+    "Essence of Animosity": { id: 81522, src: "Legendary Commander War Razor (WvW): 500 Heroics testimony — güncel birimin Testimony of Castoran Heroics olduğu doğrulanmadı", in: [["Testimony of Castoran Heroics", 500]], uv: true },
+    "Essence of Carnage": { id: 81469, src: "Legendary Commander War Razor (WvW)", in: [["Memory of Battle", 500]] },
+    "Essence of Annihilation": { id: 81320, src: "Legendary Commander War Razor (WvW)", in: [["WvW Skirmish Claim Ticket", 350]] },
+    "Emblem of the Conqueror": { id: 93146, src: "Achievement (100 hedef ele geçir/savun) ya da 100 Emblem of the Avenger", in: [["Emblem of the Conqueror (achievement)", 1]] },
+    "Emblem of the Conqueror (achievement)": { ach: 5220, src: "WvW'de 100 objective ele geçir ya da savun" },
+    "Mist Pearl": { id: 93147, src: "Skirmish Supervisor (WvW)", in: [["Memory of Battle", 250], ["WvW Skirmish Claim Ticket", 750]] },
+    "Mist-Enhanced Mithril": { id: 93248, src: "Skirmish Supervisor (WvW)", in: [["Memory of Battle", 250], ["WvW Skirmish Claim Ticket", 750]] },
+    "Gift of War Dedication": { id: 83259, src: "Mystic Forge", in: [["Certificate of Honor", 1], ["Certificate of Heroics", 1], ["Glob of Condensed Spirit Energy", 1], ["Memory of Battle", 250]] },
+    "Certificate of Honor": { id: 83620, src: "Legendary Commander War Razor", in: [["Badge of Honor", 500]] },
+    "Certificate of Heroics": { id: 84099, src: "Legendary Commander War Razor: 250 Heroics testimony (güncel birim doğrulanmadı)", in: [["Testimony of Castoran Heroics", 250]], uv: true },
+    "Glob of Condensed Spirit Energy": { id: 83082, src: "100 Spirit Shard", in: [["Spirit Shard", 100]] },
+    "Gift of Conquering": { id: 81371, src: "Mystic Forge", in: [["Legendary Spike", 1], ["Gift of Battle", 4], ["Memory of Battle", 250], ["Vision Crystal", 2]] },
+    "Legendary Spike": { id: 81296, src: "WvW'de oyunculardan/NPC'lerden şansla düşer; TP'de yok", tg: true },
+    "Mist Band (Infused)": { id: 80058, src: "BUY-2046 PFR (Mistlock Observatory): 100 Pristine Fractal Relic + 2 Integrated Fractal Matrix — ticket harcamadan", in: [["Pristine Fractal Relic", 100], ["Integrated Fractal Matrix", 2]] },
+    "Badge of Honor": { cur: 15, src: "WvW" },
+    "WvW Skirmish Claim Ticket": { cur: 26, src: "Skirmish reward track (~365/hafta) + haftalık WvW achievement'ları (~90/hafta)", tg: true },
+    "Testimony of Castoran Heroics": { cur: 82, src: "Skirmish Chest başına 6", tg: true },
+    "Pristine Fractal Relic": { cur: 24, src: "Fractal günlükleri" },
+    "Pile of Bloodstone Dust": { id: 46731 }, "Empyreal Fragment": { id: 46735 }, "Dragonite Ore": { id: 46733 },
+    "Glob of Dark Matter": { id: 46681 }, "Integrated Fractal Matrix": { id: 79230 },
+
+    // ---- Endless Summer (VoE) ----
+    "Endless Summer": { id: 107022, src: "Mystic Forge", in: [["Gift of Rays", 1], ["Gift of the Survivors", 1], ["Gift of the People", 1], ["Gift of the Hylek", 1]], wiki: "Endless_Summer" },
+    "Gift of Rays": { id: 107040, src: "Mystic Forge", in: [["Gift of the Sun", 1], ["Gift of the Beach", 1], ["Gift of Infused Gems", 1], ["Purified Rift Essence", 10]] },
+    "Gift of the Sun": { id: 107136, src: "Mystic Forge", in: [["Gift of Light", 2], ["Gift of Condensed Might", 2], ["Gift of Condensed Magic", 2], ["Sun Bead", 250]] },
+    "Gift of Light": { id: 19632, src: "Armorsmith 400", in: [["Gift of Ascalon", 1], ["Orichalcum Ingot", 250], ["Cured Hardened Leather Square", 250], ["Charged Lodestone", 100]] },
+    "Gift of Ascalon": { id: 19664, src: "500 Tales of Dungeon Delving", in: [["Tales of Dungeon Delving", 500]] },
+    "Sun Bead": { id: 19717, src: "Karma (Cuadinti)" },
+    "Gift of the Beach": { id: 107201, src: "250 Coarse Sand + 100 Ley-Infused Sand + 250 Coral Orb + Relic of the Sunless" },
+    "Gift of Infused Gems": { id: 106975, src: "Mystic Forge (+ herhangi bir T6 çekirdek taş 250 adet)", in: [["Obsidian Shard", 250], ["Bloodstone Shard", 1], ["Mystic Runestone", 100]] },
+    "Gift of the Survivors": { id: 106712, src: "Castaway Agnes (Shipwreck Strand)", in: [["Concentrated Chromatic Sap", 1], ["Gift of Shipwreck Strand Exploration", 1], ["Survivor's Enchanted Compass", 1], ["Aether-Rich Sap", 500]] },
+    "Concentrated Chromatic Sap": { id: 105848, src: "Sharpwhisker: 500 Chromatic Sap + 250 altın + 300.000 karma (Shipwreck Strand Mastery gerekir)" },
+    "Gift of Shipwreck Strand Exploration": { id: 106467, src: "Harita tamamlama" },
+    "Survivor's Enchanted Compass": { id: 106370, src: "Shipwreck Strand Mastery ödülü; 2. kopya için vendor'lardan (Canach vb.) satın alınır, mastery şartıyla (fiyat: 50 + 300.000, birimler doğrulanmadı)", in: [["Shipwreck Strand Mastery", 1]] },
+    "Shipwreck Strand Mastery": { ach: 8880, src: "36 harita achievement'ı" },
+    "Gift of the People": { id: 105804, src: "Canach", in: [["Patron of the Magical Arts Plaque", 1], ["Gift of Starlit Weald Exploration", 1], ["Seer Wreath of Service", 1], ["Antiquated Ducat", 500]] },
+    "Patron of the Magical Arts Plaque": { id: 105933, src: "500 Raw Enchanting Stone + 250 altın + 300.000 karma (Starlit Weald Mastery gerekir)" },
+    "Gift of Starlit Weald Exploration": { id: 106672, src: "Harita tamamlama" },
+    "Seer Wreath of Service": { id: 106627, src: "Starlit Weald Mastery ödülü; 2. kopya için vendor'dan satın alınır (fiyat birimleri doğrulanmadı)", in: [["Starlit Weald Mastery", 1]] },
+    "Starlit Weald Mastery": { ach: 9057, src: "36 harita achievement'ı" },
+    "Gift of the Hylek": { id: 106986, src: "Radiance of the Sun God ödülü; 2. kopya Shaman Palak'tan (Hullgarden) satın alınır", in: [["Radiance of the Sun God", 1]] },
+    "Radiance of the Sun God": { ach: 9183, src: "20 adımlı açık dünya görev zinciri (Tequatl dahil)" },
+
+    // ---- Ad Infinitum ----
+    "Ad Infinitum": { id: 74155, src: "Mystic Forge", in: [["Unbound", 1], ["Gift of Infinity", 1], ["Gift of Fortune", 1], ["Gift of Ascension", 1]], wiki: "Ad_Infinitum" },
+    "Unbound": { id: 72309, src: "Craft", in: [["Solution: Unbound", 1], ["Pristine Mist Essence", 5], ["Unbound Wings", 1], ["Third Order Mist Frame", 1]] },
+    "Solution: Unbound": { id: 75469, src: "Ad Infinitum III ödülü", in: [["Ad Infinitum I: Finite Result", 1], ["Ad Infinitum II: Upper Bound", 1], ["Ad Infinitum III: Unbound", 1]] },
+    "Ad Infinitum I: Finite Result": { ach: 2351, src: "Koleksiyon + 1 Fractal Journal (28 sayfa)", tg: true },
+    "Ad Infinitum II: Upper Bound": { ach: 2557, src: "Koleksiyon + 1 Fractal Journal", tg: true },
+    "Ad Infinitum III: Unbound": { ach: 2368, src: "Koleksiyon + 1 Fractal Journal", tg: true },
+    "Pristine Mist Essence": { id: 75781, src: "Craft: 10 Rare Essence of Luck + 1 Cube + 10 Thermocatalytic (5 adet)" },
+    "Unbound Wings": { id: 72613, src: "25 Ecto + 5 Shard of Crystallized Mists Essence + Vision Crystal + Spirit of the Upper Bound" },
+    "Third Order Mist Frame": { id: 71885, src: "5 Spiritwood + 5 Deldrimor Steel + 5 Elonian Leather + 5 Bolt of Damask" },
+    "Gift of Infinity": { id: 74377, src: "Legendary Backpack: Ad Infinitum ödülü", in: [["Legendary Backpack: Ad Infinitum", 1]] },
+    "Legendary Backpack: Ad Infinitum": { ach: 2295, src: "Koleksiyon + 1 Fractal Journal", tg: true },
+    "Gift of Ascension": { id: 37070, src: "500 Fractal Relic", in: [["Fractal Relic", 500]] },
+
+    // ---- Silahlar (Gen 1): Precursor + Gift of <silah> + Gift of Fortune + Gift of Mastery ----
+    "Incinerator": { id: 30687, src: "Mystic Forge / TP", in: [["Spark", 1], ["Gift of Incinerator", 1], ["Gift of Fortune", 1], ["Gift of Mastery", 1]], wiki: "Incinerator" },
+    "Spark": { id: 29167, src: "Precursor: TP / koleksiyon" },
+    "Gift of Incinerator": { id: 19645, src: "Mystic Forge", in: [["Gift of Metal", 1], ["Vial of Liquid Flame", 1], ["Icy Runestone", 100], ["Superior Sigil of Fire", 1]] },
+    "Vial of Liquid Flame": { id: 19634, src: "Chef 400", in: [["Ghost Pepper", 250], ["Gift of Baelfire", 1], ["Molten Lodestone", 100], ["Destroyer Lodestone", 100]] },
+    "Gift of Baelfire": { id: 19668, src: "Dungeon gift (500 Tales)", in: [["Tales of Dungeon Delving", 500]] },
+    "Superior Sigil of Fire": { id: 24548 },
+
+    "Bolt": { id: 30699, src: "Mystic Forge / TP / Starter Key Set 2", in: [["Zap", 1], ["Gift of Bolt", 1], ["Gift of Fortune", 1], ["Gift of Mastery", 1]], wiki: "Bolt" },
+    "Zap": { id: 29181, src: "Precursor" },
+    "Gift of Bolt": { id: 19655, src: "Mystic Forge", in: [["Gift of Metal", 1], ["Gift of Lightning", 1], ["Icy Runestone", 100], ["Superior Sigil of Air", 1]] },
+    "Gift of Lightning": { id: 19639, src: "Artificer 400", in: [["Gift of Ascalon", 1], ["Orichalcum Ingot", 250], ["Bolt of Gossamer", 250], ["Charged Lodestone", 100]] },
+    "Superior Sigil of Air": { id: 24554 },
+
+    "The Moot": { id: 30692, src: "Mystic Forge / TP / Starter Key Set 2", in: [["The Energizer", 1], ["Gift of The Moot", 1], ["Gift of Fortune", 1], ["Gift of Mastery", 1]], wiki: "The_Moot" },
+    "The Energizer": { id: 29173, src: "Precursor" },
+    "Gift of The Moot": { id: 19650, src: "Mystic Forge", in: [["Gift of Metal", 1], ["Gift of Entertainment", 1], ["Icy Runestone", 100], ["Superior Sigil of Energy", 1]] },
+    "Gift of Entertainment": { id: 19635, src: "Armorsmith 400", in: [["Gift of the Nobleman", 1], ["Orichalcum Ingot", 250], ["Bolt of Gossamer", 250], ["Box o' Fun", 5]] },
+    "Gift of the Nobleman": { id: 19665, src: "Dungeon gift (500 Tales)", in: [["Tales of Dungeon Delving", 500]] },
+    "Superior Sigil of Energy": { id: 24607 },
+
+    "Frostfang": { id: 30684, src: "Mystic Forge / TP", in: [["Tooth of Frostfang", 1], ["Gift of Frostfang", 1], ["Gift of Fortune", 1], ["Gift of Mastery", 1]], wiki: "Frostfang" },
+    "Tooth of Frostfang": { id: 29166, src: "Precursor" },
+    "Gift of Frostfang": { id: 19625, src: "Mystic Forge", in: [["Gift of Metal", 1], ["Gift of Ice", 1], ["Icy Runestone", 100], ["Superior Sigil of Ice", 1]] },
+    "Gift of Ice": { id: 19624, src: "Jeweler 400", in: [["Gift of the Sanctuary", 1], ["Orichalcum Ingot", 250], ["Glacial Lodestone", 100], ["Corrupted Lodestone", 100]] },
+    "Gift of the Sanctuary": { id: 19670, src: "Dungeon gift (500 Tales)", in: [["Tales of Dungeon Delving", 500]] },
+    "Superior Sigil of Ice": { id: 24555 },
+
+    "Kamohoali'i Kotaki": { id: 30691, src: "Mystic Forge / TP", in: [["Carcharias", 1], ["Gift of Kamohoali'i Kotaki", 1], ["Gift of Fortune", 1], ["Gift of Mastery", 1]], wiki: "Kamohoali'i_Kotaki" },
+    "Carcharias": { id: 29171, src: "Precursor" },
+    "Gift of Kamohoali'i Kotaki": { id: 19657, src: "Mystic Forge", in: [["Gift of Metal", 1], ["Shark Statue", 1], ["Icy Runestone", 100], ["Superior Sigil of Agony", 1]] },
+    "Shark Statue": { id: 19641, src: "Jeweler 400", in: [["Gift of Zhaitan", 1], ["Orichalcum Ingot", 250], ["Armored Scale", 250], ["Vial of Powerful Blood", 250]] },
+    "Gift of Zhaitan": { id: 19669, src: "Dungeon gift (500 Tales)", in: [["Tales of Dungeon Delving", 500]] },
+    "Superior Sigil of Agony": { id: 24612 },
+
+    "Sunrise": { id: 30703, src: "Mystic Forge / TP", in: [["Dawn", 1], ["Gift of Sunrise", 1], ["Gift of Fortune", 1], ["Gift of Mastery", 1]], wiki: "Sunrise" },
+    "Dawn": { id: 29169, src: "Precursor" },
+    "Gift of Sunrise": { id: 19647, src: "Mystic Forge", in: [["Gift of Metal", 1], ["Gift of Light", 1], ["Icy Runestone", 100], ["Superior Sigil of Strength", 1]] },
+    "Superior Sigil of Strength": { id: 24562 },
+
+    "The Bifrost": { id: 30698, src: "Mystic Forge / TP", in: [["The Legend", 1], ["Gift of The Bifrost", 1], ["Gift of Fortune", 1], ["Gift of Mastery", 1]], wiki: "The_Bifrost" },
+    "The Legend": { id: 29180, src: "Precursor" },
+    "Gift of The Bifrost": { id: 19654, src: "Mystic Forge", in: [["Gift of Energy", 1], ["Gift of Color", 1], ["Icy Runestone", 100], ["Superior Sigil of Nullification", 1]] },
+    "Gift of Color": { id: 19638, src: "Chef 400", in: [["Gift of Zhaitan", 1], ["Unidentified Dye", 100], ["Pile of Crystalline Dust", 250], ["Opal Orb", 100]] },
+    "Superior Sigil of Nullification": { id: 24572 },
+
+    "Howler": { id: 30702, src: "Mystic Forge / TP", in: [["Howl", 1], ["Gift of Howler", 1], ["Gift of Fortune", 1], ["Gift of Mastery", 1]], wiki: "Howler" },
+    "Howl": { id: 29184, src: "Precursor" },
+    "Gift of Howler": { id: 19662, src: "Mystic Forge", in: [["Gift of Wood", 1], ["Wolf Statue", 1], ["Icy Runestone", 100], ["Superior Sigil of Accuracy", 1]] },
+    "Wolf Statue": { id: 19640, src: "Leatherworker 400", in: [["Orichalcum Ingot", 250], ["Cured Hardened Leather Square", 250], ["Gift of Thorns", 1], ["Vicious Fang", 250]] },
+    "Gift of Thorns": { id: 19667, src: "Dungeon gift (500 Tales)", in: [["Tales of Dungeon Delving", 500]] },
+    "Superior Sigil of Accuracy": { id: 24618 },
+
+    // ---- Rune / Sigil ----
+    "Legendary Rune": { id: 91536, src: "Mystic Forge", in: [["Gift of Runes", 1], ["Gift of Craftsmanship", 1], ["Gift of Condensed Might", 1], ["Gift of Condensed Magic", 1]], wiki: "Legendary_Rune" },
+    "Gift of Runes": { id: 89218, src: "Mystic Forge", in: [["Mystic Aspect", 50], ["Mystic Clover", 20], ["Glob of Ectoplasm", 100], ["Obsidian Shard", 50]] },
+    "Mystic Aspect": { id: 89105, src: "Craft 75: 10 Pile of Lucent Crystal + 1 Charm" },
+    "Legendary Sigil": { id: 91505, src: "Mystic Forge", in: [["Gift of Sigils", 1], ["Gift of Craftsmanship", 1], ["Gift of Condensed Might", 1], ["Gift of Condensed Magic", 1]], wiki: "Legendary_Sigil" },
+    "Gift of Sigils": { id: 91449, src: "Mystic Forge", in: [["Mystic Mote", 75], ["Mystic Clover", 30], ["Glob of Ectoplasm", 150], ["Obsidian Shard", 75]] },
+    "Mystic Mote": { id: 89133, src: "Craft 75: 10 Pile of Lucent Crystal + 1 Symbol" }
+  },
+
+  // ---------------- Hedefler (sıra = varsayılan öncelik) ----------------
+  // count: kaç kopya. gates: kalan gün tahmini. perDay değerleri tahmindir (est: true).
+  targets: [
+    { key: "obsidian", name: "Obsidian Armor (heavy, 6 parça)", root: "Obsidian Heavy Set", count: 1, slot: "Armor", mode: "Açık dünya (SotO), solo + meta",
+      gold: "Condensed Might/Magic ×3+3, Research ×6 ve 66 clover için ciddi altın",
+      why: "En uzun kapı Rift Essence (21.000 Fine). Ön koşul: SotO mastery 'Obsidian Armor Crafting' ve Convergence Mastery (essence'ı ikiye katlar). Ağaçta Astral Ward + Oneiros-Spun skinlerinin maliyeti (12 Purified Rift Essence, 6.000 Research Note) yok; onlar Arcanum koleksiyonlarında (Achievement avcısı) görünür.",
+      gates: [
+        { label: "Fine Rift Essence", cur: 78, need: 21000, perDay: 525, est: true, note: "2 Convergence günlük sandık + haftalık Extraction + birkaç run; araştırma tahmini" },
+        { label: "Masterwork Rift Essence", cur: 80, need: 8400, perDay: 210, est: true },
+        { label: "Rare Rift Essence", cur: 79, need: 4200, perDay: 105, est: true },
+        { label: "Static Charge", cur: 72, need: 10500, perDay: 350, est: true, note: "100 Latent Magic + günlük sandıktan 1 Case (=250)" },
+        { label: "Pinch of Stardust", cur: 73, need: 10500, perDay: 350, est: true },
+        { label: "Calcified Gasp", cur: 75, need: 10500, perDay: 500, est: true },
+        { label: "Provisioner Token", cur: 29, need: 300, perDay: 10, est: true, uv: true, note: "Vendor sınırları doğrulanmadı" }
+      ] },
+    { key: "aurora", name: "Aurora", root: "Aurora", count: 1, slot: "Accessory 1", mode: "Açık dünya (LS3)",
+      gold: "~1.500-1.700 altın (Mystic Tribute ~1.200-1.400)",
+      why: "Ana kapı Druid Runestone (günde 1). Gift of Energy için Artificer 400 lazım.",
+      gates: [ { label: "Druid Runestone (günde 1)", steps: [[3447, 5], [3436, 7]], perDay: 1 } ] },
+    { key: "coalescence", off: true, name: "Coalescence", root: "Coalescence", count: 1, slot: "Ring (raid — kapalı)", mode: "Raid: Wing 6-7 + LI",
+      gold: "~1.300-1.500 altın",
+      why: "LI strike'lardan da geliyor (strike-only ~31/hafta; günlük bounty'lerin çoğu raid bossu). Dikkat: Coalescence I için bir raid boss sandığı, III için Wing 7 (Adina, Sabir, Qadim the Peerless) gerekir.",
+      gates: [ { label: "Legendary Insight", cur: 70, need: 150, perDay: 4.5, est: true, note: "Strike-only ~31/hafta: 15 encounter + ~10 bounty + 6 quickplay" } ] },
+    { key: "vision", name: "Vision", root: "Vision", count: 1, slot: "Accessory 2", mode: "Açık dünya (LS4)",
+      gold: "~1.900-2.400 altın",
+      why: "Stella Radians ve Strife Unending'den kısa; LS4 haritalarında oynarken koleksiyonlar kendiliğinden ilerler.", gates: [] },
+    { key: "endless", name: "Endless Summer", root: "Endless Summer", count: 1, slot: "Ring 1", mode: "Açık dünya (VoE), solo",
+      gold: "~1.430 altın + 1.000 Tales + ~1,2M karma",
+      why: "Mystic Tribute yok. ~4.000 Rift Essence ister — Obsidian'la çakışır, Obsidian'dan sonra.", gates: [] },
+    { key: "conflux", name: "Conflux", root: "Conflux", count: 1, slot: "Ring 2", mode: "WvW",
+      gold: "~1.500-1.700 altın (Mystic Tribute dahil)",
+      why: "Raid'siz ikinci yüzük (Endless Summer'dan farklı). Kapılar: ~1.850 Skirmish Ticket (haftada en fazla ~455), 750 Testimony of Castoran Heroics, 5 Gift of Battle, şansla düşen Legendary Spike. Mist Band'i fractal relic'le alırsan 350 ticket kazanırsın.",
+      gates: [
+        { label: "WvW Skirmish Claim Ticket", cur: 26, need: 1850, perDay: 40, est: true, note: "Tam WvW haftası ~455; 40/gün orta tempo tahmini" },
+        { label: "Testimony of Castoran Heroics", cur: 82, need: 750, perDay: 15, est: true, uv: true, note: "Skirmish Chest başına 6; oran tahmini" }
+      ] },
+    { key: "adinf", name: "Ad Infinitum", root: "Ad Infinitum", count: 1, slot: "Sırt", mode: "Fractal",
+      gold: "~800-1.000 altın",
+      why: "Kapı Fractal Journal (28 sayfa her biri). Mai Trin mote'u için fractal 76 gerekir.",
+      gates: [ { label: "Fractal Research Page (~4/gün)", steps: [[2351, 28], [2557, 28], [2368, 28], [2295, 28]], perDay: 4, est: true } ] },
+    { key: "relic", name: "Legendary Relic", root: "Legendary Relic", count: 1, slot: "Relic", mode: "Fark etmez",
+      gold: "Condensed Might+Magic + 25 relic + 18.750 Lucent Crystal", why: "Timegate yok; Clover ve Gift of Research'ü Obsidian'la paylaşır, armordan sonra.", gates: [] },
+    { key: "w_sword", buyDefault: true, name: "Bolt (sword)", root: "Bolt", count: 1, slot: "Silah", mode: "TP / Starter Key", gold: "TP ~1.390 altın (en ucuz legendary)",
+      why: "Wizard's Vault Starter Key Set 2 (1.000 AA, 8 Aralık'a kadar) Bolt ya da The Moot kiti verir.", gates: [] },
+    { key: "w_mace", buyDefault: true, name: "The Moot (mace)", root: "The Moot", count: 1, slot: "Silah", mode: "TP / craft", gold: "TP ~1.540 altın",
+      why: "Tek kopya: Mace/Mace'te ikinci el legendary olmaz. Craft'ı Weaponsmith + Armorsmith ile yapılabilen Gen 1.", gates: [] },
+    { key: "w_gs", buyDefault: true, name: "Sunrise (greatsword)", root: "Sunrise", count: 1, slot: "Silah", mode: "TP / craft", gold: "TP ~1.540 altın", why: "Meslek eksiği yok.", gates: [] },
+    { key: "w_staff", buyDefault: true, name: "The Bifrost (staff)", root: "The Bifrost", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.500 altın",
+      why: "Tek staff hem DPS hem healer şablonunda çalışır. Craft için Artificer + Chef gerekir.", gates: [] },
+    { key: "w_spear", buyDefault: true, name: "Kamohoali'i Kotaki (spear)", root: "Kamohoali'i Kotaki", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.830 altın", why: "Klobjarne Geirr ~2.540 altın; Ancora VoE + çok pahalı.", gates: [] },
+    { key: "w_axe", buyDefault: true, name: "Frostfang (axe)", root: "Frostfang", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.850 altın", why: "Craft için Jeweler 400 gerekir.", gates: [] },
+    { key: "w_dagger", buyDefault: true, name: "Incinerator (dagger)", root: "Incinerator", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.890 altın", why: "Craft için Chef 400 gerekir.", gates: [] },
+    { key: "w_warhorn", buyDefault: true, name: "Howler (warhorn)", root: "Howler", count: 1, slot: "Silah", mode: "TP", gold: "TP ~1.900 altın", why: "Craft için Huntsman + Leatherworker 400 gerekir.", gates: [] },
+    { key: "rune", name: "Legendary Rune", root: "Legendary Rune", count: 1, slot: "Upgrade", mode: "Fark etmez", gold: "~430 altın/adet", why: "En sona. Tek kopya tek rune slotunu karşılar (6 zırh slotu = 6 kopya); varsayılan 1 (Ayarlar'dan değişir).", gates: [] },
+    { key: "sigil", name: "Legendary Sigil", root: "Legendary Sigil", count: 1, slot: "Upgrade", mode: "Fark etmez", gold: "~530 altın/adet", why: "En sona.", gates: [] }
+  ],
+
+  // ---------------- Bugün ----------------
+  // Gruplar = gideceğin yer (bir turda biten işler). Saatler UTC dakika (00:00'dan itibaren); ekranda senin yerel saatinle gösterilir.
+  // Program kaynağı: wiki Event timer verisi (Widget:Event_timer/data.json).
+  schedules: {
+    conv_balrior: { start: 0, every: 180, dur: 10, name: "Convergence: Mount Balrior portalı" },
+    conv_nexus: { start: 60, every: 180, dur: 10, name: "Convergence: Nexus of Eternity portalı" },
+    conv_nayos: { start: 90, every: 180, dur: 10, name: "Convergence: Outer Nayos portalı" },
+    skywatch: { start: 60, every: 120, dur: 25, name: "Unlocking the Wizard's Tower (Skywatch meta)" },
+    amnytas: { start: 0, every: 120, dur: 25, name: "The Defense of Amnytas (meta)" }
+  },
+  groups: [
+    { id: "soto", title: "SotO turu — Wizard's Tower", note: "Lion's Arch'tan Wizard's Tower portalı. Obsidian zırhın neredeyse bütün günlük kapıları burada. ~1-1,5 saat, saatli metalara göre planla." },
+    { id: "ls3", title: "LS3 turu — Aurora", note: "Draconis Mons, Bitterfrost Frontier, Siren's Landing. ~30-45 dk, solo, saat yok." },
+    { id: "raid", title: "Raid / strike — Lion's Arch Aerodrome", note: "Coalescence için Legendary Insight. Grup (LFG)." },
+    { id: "frac", title: "Fractal — Lion's Arch, Fort Marriner", note: "Ad Infinitum sayfaları + clover için Fractal Relic. Grup (LFG)." },
+    { id: "any", title: "Her yerden", note: "" }
+  ],
+  // kind: tg = timegate (kaçarsa geri gelmez), bn = darboğaz, n = normal. count: kutu sayısı ("chars" = karakter sayısı).
+  // auto: API ile otomatik tik. untilAch: o achievement bitince madde gizlenir. tgt: sadece bu hedefler açıkken göster. how: adım adım.
+  daily: [
+    { id: "conv_nayos", group: "soto", title: "Convergence: Outer Nayos", sched: "conv_nayos", kind: "tg",
+      serves: "Obsidian → Rift Essence", time: "20-30 dk, 50 kişilik public instance", auto: { t: "mapchest", id: "convergence_heros_choice_chest" },
+      how: ["Portal açılmadan önce Wizard's Tower → Outer Sanctorium → Rift Hunter Lounge, 2. kat: 'Convergence: Outer Nayos' portalı (Tower Courtyard Waypoint).",
+            "Portal 10 dk açık kalır; gir, içerideki başlatıcıyla konuş, Kryptis dalgalarını ve sondaki haftalık bossu birlikte kesin.",
+            "Bitince günlük Hero's Choice Chest gelir: 100 Fine / 40 Masterwork / 20 Rare Rift Essence ya da Amalgamated Gemstone seç (Obsidian için Rift Essence).",
+            "Günde 1 sandık; aynı gün tekrar girersen sadece normal essence ödülü."],
+      wiki: "Convergence:_Outer_Nayos" },
+    { id: "conv_balrior", group: "soto", title: "Convergence: Mount Balrior (Janthir)", sched: "conv_balrior", kind: "tg",
+      serves: "Obsidian / Endless Summer → Rift Essence", time: "20-30 dk, public instance",
+      how: ["Portal Lowland Shore, Harvest Den'de (Bonfire Lodge yakını).",
+            "Kendi günlük Commander's Choice Chest'ini verir. Bu sandık API'de yok, elle tikle."],
+      wiki: "Convergence:_Mount_Balrior" },
+    { id: "conv_nexus", group: "soto", title: "Convergence: Nexus of Eternity (VoE)", sched: "conv_nexus", kind: "tg",
+      serves: "Rift Essence", time: "20-30 dk, public instance",
+      how: ["Portal Leyspring Hollows, Rooted Sanctuary'de (Cannulae'nin hemen güneyi).",
+            "Kendi günlük Wayfinder's Choice Chest'ini verir. API'de yok, elle tikle."],
+      wiki: "Convergence:_Nexus_of_Eternity" },
+    { id: "hc_sky", group: "soto", title: "Skywatch meta → Case of Captured Lightning", sched: "skywatch", kind: "tg",
+      serves: "Obsidian → Gift of Stormy Skies", time: "25 dk, açık dünya grup", auto: { t: "mapchest", id: "skywatch_archipelago_heros_choice_chest" },
+      how: ["Skywatch Archipelago, Droknar's Light: 'Unlocking the Wizard's Tower' metası (tek saatlerde UTC, 25 dk).",
+            "Son event 'Purge Lyhr's corruption' bitince Hero's Choice Chest: Case of Captured Lightning seç (= 250 Static Charge).",
+            "Günde 1."],
+      wiki: "Skywatch_Archipelago:_Hero%27s_Choice_Chest" },
+    { id: "hc_amn", group: "soto", title: "Amnytas meta → Pouch of Stardust", sched: "amnytas", kind: "tg",
+      serves: "Obsidian → Gift of Stormy Skies", time: "25 dk, açık dünya grup", auto: { t: "mapchest", id: "amnytas_heros_choice_chest" },
+      how: ["Amnytas: 'The Defense of Amnytas' metası (çift saatlerde UTC; banner 10 dk önce çıkar).",
+            "Sandıktan Pouch of Stardust seç (= 250 Pinch of Stardust). Günde 1."],
+      wiki: "Amnytas:_Hero%27s_Choice_Chest" },
+    { id: "hc_nay", group: "soto", title: "Inner Nayos meta → Clot of Congealed Screams", kind: "tg",
+      serves: "Obsidian → Gift of Stormy Skies", time: "25-30 dk, açık dünya grup, saati yok", auto: { t: "mapchest", id: "inner_nayos_heros_choice_chest" },
+      how: ["Inner Nayos'ta saat yok: 'The Road to Heitor' (Heitor's Territory) ya da 'The Fangs That Gnash' (Nyedra Surrounds, Forward Bivouac WP) — hangisi önce başlarsa.",
+            "Haritada bekleyen squad/LFG'ye bak. Sandıktan Clot of Congealed Screams seç (= 250 Calcified Gasp). Günde 1."],
+      wiki: "Inner_Nayos:_Hero%27s_Choice_Chest" },
+    { id: "lm", group: "soto", title: "Latent Magic topla (Skywatch + Amnytas + Inner Nayos)", kind: "tg", count: 3,
+      serves: "Obsidian → Static Charge / Pinch of Stardust / Calcified Gasp", time: "10-20 dk/harita, solo",
+      how: ["Her haritada havada süzülen parlak küreler: Skyscale'le içinden geç, tuşa basmaya gerek yok.",
+            "Küre başına 2-4 para birimi; günde ~100 küre sınırı (wiki sayfası eksik, sınır kesin değil).",
+            "Her harita için bir kutu."],
+      wiki: "Latent_Magic", uv: true },
+    { id: "rend", group: "soto", title: "Daily craft yap → Rend Scorchmaul'a ver (Provisioner Token)", kind: "bn",
+      serves: "Obsidian + Relic → Gift of Craftsmanship", time: "5 dk, solo", auto: { t: "crafts", ids: ["lump_of_mithrilium", "glob_of_elder_spirit_residue", "spool_of_thick_elonian_cord", "charged_quartz_crystal"] },
+      how: ["Crafting istasyonunda günde 1'er tane yap: Lump of Mithrillium, Glob of Elder Spirit Residue, Spool of Thick Elonian Cord (Weaponsmith/Armorsmith yapabilir), Charged Quartz Crystal (25 Quartz, Place of Power'da).",
+            "Wizard's Tower, Tower Courtyard WP: Rend Scorchmaul her birini 1 Provisioner Token'a alır, sınırsız.",
+            "Günde ~4 token; 300 token için en ucuz yol bu."],
+      wiki: "Rend_Scorchmaul" },
+    { id: "druid", group: "ls3", tgt: ["aurora"], title: "Druid Runestone: 5 parça al, birleştir", kind: "tg", untilAch: 3436,
+      serves: "Aurora → Druid Stone (günde 1; zincirde toplam 16 runestone)", time: "~5 dk, solo",
+      how: ["Draconis Mons'ta 5 satıcı, her biri günde 1 Druid Runestone Fragment satar:",
+            "Tactician Tunelle (Savage Rise), Z.O.X. (Ancient Hollow), Escaped Prisoner Arissea (Heathen's Hold), Mark I Golemite (Rata Arcanum) — her biri 1.050 karma, heart'ı bitmiş olmalı.",
+            "Supplymaster Hanjo (Mariner Landing, harita girişi) — 1.000 Unbound Magic.",
+            "5 parçaya çift tıkla → 1 Druid Runestone. Henge bitince satıcılar satmayı bırakır."],
+      wiki: "Druid_Runestone_Fragment" },
+    { id: "orchid", group: "ls3", tgt: ["aurora"], title: "Primordial Orchid kes (Fire Orchid Blossom)", kind: "tg", untilAch: 3436,
+      serves: "Aurora → Druid Stone + Gift of Dragon Magic", time: "1 dk",
+      how: ["Draconis Mons'taki Primordial Orchid düğümlerini balta ile kes; Blossom şansla düşer.",
+            "Home instance/homestead'e Fire Orchid Node koyarsan (Supplymaster Hanjo satar) her gün garanti 1 tane.",
+            "Hesap başına günde 1."],
+      wiki: "Primordial_Orchid" },
+    { id: "suet", group: "ls3", tgt: ["aurora"], title: "Bitterfrost: 5 Icebound Chest (Crystallized Suet)", kind: "bn", count: "chars", untilAch: 3499,
+      serves: "Aurora → Bitterfrost Frontier Master", time: "15-25 dk/karakter, solo, RNG",
+      how: ["Bir kerelik: karakterde 'A Crack in the Ice' hikayesinin 'Elixir Cookin'' adımı bitmiş olmalı (Thaw Elixir açılır).",
+            "Her gün: Dragon's Teeth Hot Springs, Blister Cauldron'da Thaw Elixir pişir (12 Fresh Winterberry + 8 Clump of Frostbitten Suet + 3 Cold Resistant Eggshell + 1 Grawl Firestone).",
+            "The Bitter Cold'a gir (sarkıttaki cihaz buz duvarını eritir), 5 Icebound Chest'i aç.",
+            "Suet şansla düşer; günler/haftalar sürebilir. Karakter başına günde 1 tur."],
+      wiki: "Crystallized_Suet" },
+    { id: "cipher", group: "ls3", tgt: ["aurora"], title: "Siren's Landing: Hidden Reliquary Chest (Ancient Cipher)", kind: "bn", count: "chars", untilAch: 3495,
+      serves: "Aurora → Siren's Landing Master", time: "5-10 dk, solo, RNG",
+      how: ["Abaddon's Reliquary: 5 reliquary'nin (Balthazar, Dwayna, Grenth, Lyssa, Melandru) event/heart'ı bitince Hidden Reliquary kapağı açılır, havuza atla.",
+            "Queen Doran the Cheerful: 1 sandık bedava, 2.'si 1,5 altın. Cipher ~%10 şansla.",
+            "Hesap mı karakter mi sınırlı, doğrulanmadı."],
+      wiki: "Ancient_Cipher", uv: true },
+    { id: "bounty", group: "raid", tgt: ["coalescence"], title: "Daily Raid Bounties (strike olanlar)", kind: "tg", count: 2,
+      serves: "Coalescence → Legendary Insight", time: "5-15 dk/encounter, 10 kişi",
+      how: ["Günde 4 bounty çıkar ama karışık: raid wing bossları + strike'lar (eski strike'ların yeni adı 'raid encounter').",
+            "Strike-only oynayınca günde ~1-2 tane yapılabilir; hangileri olduğu Achievements → Daily Raid Bounties'te yazar.",
+            "Lion's Arch Aerodrome → 'Raid - Combined' portalı ya da LFG → Raids."],
+      wiki: "Daily_Raid_Bounties" },
+    { id: "frac", group: "frac", tgt: ["adinf"], title: "Fractal günlükleri (Recommended + Tier 3)", kind: "tg",
+      serves: "Ad Infinitum → Fractal Research Page; Fractal Relic → clover", time: "15-30 dk, 5 kişi",
+      how: ["Lion's Arch, Fort Marriner'daki asura kapısı → Mistlock Observatory.",
+            "Daily Recommended fractal: Research Chest = Fractal Research Page (28 sayfa → 1 Fractal Journal). Expert önerisi bazen kişisel fractal seviyenin üstünde olur, o gün yapılamaz.",
+            "Tier 3 günlüklerinden biri: Pristine Fractal Relic + relic."],
+      wiki: "Daily_Fractals" },
+    { id: "wv_d", group: "any", title: "Wizard's Vault günlük", kind: "tg", auto: { t: "wvDaily" },
+      serves: "Astral Acclaim → Starter Key Set 2 / Clover / Obsidian Shard", time: "normal oyun içinde",
+      how: ["Shift+H. 4 günlük hedef + giriş; 4'ü bitince sandığı al. Ödüller resette kaybolur, almayı unutma.",
+            "1.300 AA üstündeyken ödül alınamaz."],
+      wiki: "Wizard%27s_Vault" },
+    { id: "wb", group: "any", title: "World boss sandıkları", kind: "n", auto: { t: "worldbosses" },
+      serves: "Altın / Ecto — bütün hedefler", time: "boss başına 5-15 dk",
+      how: ["Program: wiki 'World boss' sayfası ya da oyunda /wiki et. Boss başına karakter başına günde 1 sandık."],
+      wiki: "World_boss" }
+  ],
+
+  // ---------------- Haftalık (reset Pazartesi 07:30 UTC) ----------------
+  weekly: [
+    { id: "w_conv", group: "soto", title: "Convergence haftalık achievement'ları (her biri 3 tur)", kind: "tg", count: 3,
+      serves: "Obsidian → Convergence Extraction (= 1 Amalgamated Rift Essence)", time: "3 instance × 3 tur",
+      how: ["Her Convergence'ın '(Weekly) Convergences' achievement'ı: haftada 3 tamamla → Unstable Rift Motivation + 3 Convergence Extraction.",
+            "1 Extraction = 250 Fine + 100 Masterwork + 50 Rare essence. Kutular: Outer Nayos, Mount Balrior, Nexus."],
+      wiki: "Convergence_Extraction" },
+    { id: "w_strike", group: "raid", tgt: ["coalescence"], title: "Strike encounter'larını haftalık temizle", kind: "tg",
+      serves: "Coalescence → LI (encounter başına 1, strike'lar ~15)", time: "birkaç saat, 10 kişi",
+      how: ["Ödüller artık haftalık: her encounter haftada 1 kez LI verir (OLC, Icebrood 7, EoD 4, SotO 2, VoE 1).",
+            "Lion's Arch Aerodrome'dan; LFG'de grup bul."],
+      wiki: "Weekly_Raids" },
+    { id: "w_qp", group: "raid", tgt: ["coalescence"], title: "Weekly Quickplay Raid Encounters (10 quickplay)", kind: "tg",
+      serves: "Coalescence → 6 LI", time: "10 × 5-15 dk",
+      how: ["LFG → Raids → 'Raids (Training)': rastgele bir strike'a otomatik eşleştirir.",
+            "5 ve 10 tamamlamada 3'er LI. Quickplay bounty'ye sayılmaz."],
+      wiki: "Raid#Quickplay_mode" },
+    { id: "w_manfred", group: "raid", title: "Manfred: 15 Mystic Clover + 10 Mystic Coin", kind: "bn",
+      serves: "Tribute / Prosperity / Fortune → Clover", time: "2 dk",
+      how: ["Lion's Arch Aerodrome, Manfred Njallson. Clover: 30 Magnetite + 2 Mystic Coin + 2 Ecto + 2 Spirit Shard (haftada 15).",
+            "Mystic Coin: 10 Magnetite + 1 Spirit Shard (haftada 10). Magnetite strike'lardan gelir."],
+      wiki: "Manfred_Njallson" },
+    { id: "w_buy", group: "frac", title: "BUY-4373: 10 Mystic Clover", kind: "bn",
+      serves: "Clover", time: "2 dk",
+      how: ["Mistlock Observatory'nin kuzey ucu. 150 Fractal Relic + 2 Mystic Coin + 2 Ecto + 2 Spirit Shard, haftada 10."],
+      wiki: "BUY-4373" },
+    { id: "w_frac", group: "frac", tgt: ["adinf"], title: "Fractal haftalık cache", kind: "tg",
+      serves: "Ad Infinitum → Research Page", time: "",
+      how: ["Haftalık fractal achievement'ları: Fractal Fighter's Cache'ten 2 Research Page."],
+      wiki: "Fractal_Research_Page" },
+    { id: "w_gob", group: "any", title: "WvW: Gift of Battle reward track", kind: "bn",
+      serves: "Aurora, Vision, her silah → Gift of Battle", time: "track başına ~6-8,5 saat WvW",
+      how: ["WvW paneli (B) → Reward Tracks → 'Gift of Battle Item Reward Track' → Activate.",
+            "Eternal Battlegrounds ya da Borderlands'te participation'ı açık tut (kill, kale, event). 20.000 puanda son ödül Gift of Battle.",
+            "Haftalık bir sınırı yok; hafta hafta ilerletmek için burada."],
+      wiki: "Gift_of_Battle_Item_Reward_Track" },
+    { id: "w_skirm", group: "any", tgt: ["conflux"], title: "WvW: Skirmish track + haftalık WvW achievement'ları", kind: "tg",
+      serves: "Conflux → Skirmish Ticket, Castoran Heroics", time: "haftaya yayılmış WvW",
+      how: ["WvW'de her 5 dakikalık tick'te pip kazanırsın; Skirmish reward track'in sandıkları Skirmish Claim Ticket verir (haftada en fazla ~365).",
+            "Haftalık WvW achievement'ları ~90 ticket daha verir. Haftalık sınır resette sıfırlanır, kaçan hafta geri gelmez.",
+            "Skirmish Chest'ten Testimony of Castoran Heroics seç (sandık başına 6).",
+            "Gift of Battle track'ini (aynı sürede) aktif tut."],
+      wiki: "WvW_Skirmish_Claim_Ticket" },
+    { id: "w_miyani", group: "any", title: "Miyani / Mystic Forge Attendant: 10 Mystic Clover", kind: "bn",
+      serves: "Clover", time: "2 dk",
+      how: ["Lion's Arch'ta Mystic Forge yanında Miyani (ya da Mystic Forge Attendant'lar): 3 Mystic Coin + 5 Ecto + 3 Obsidian Shard + 3 Spirit Shard / clover, haftada 10 (ortak sınır).",
+            "Aynı fiyata Lyhr (Wizard's Tower) ve Ward Crafter Lucirae (Janthir) sınırsız satar — haftalık sınır bitince altınla devam etmenin yolu bu."],
+      wiki: "Mystic_Clover" },
+    { id: "w_dugan", group: "any", title: "Dugan (WvW): 5 Mystic Clover", kind: "n",
+      serves: "Clover", time: "2 dk",
+      how: ["WvW başlangıç alanları. 20 Skirmish Ticket + 10 Badge of Honor + 2 Ecto + 2 Mystic Coin, haftada 5."],
+      wiki: "Dugan" },
+    { id: "w_wv", group: "any", title: "Wizard's Vault haftalık", kind: "tg", auto: { t: "wvWeekly" },
+      serves: "Astral Acclaim (450 sandık + 8×50)", time: "",
+      how: ["Shift+H → Weekly. 6 hedef bitince 450 AA'lık sandık."],
+      wiki: "Wizard%27s_Vault" }
+  ],
+
+  // ---------------- Altınla kısalt ----------------
+  // Saatlik altın varsayımı (Ayarlar'dan değişir). Kaynak: Farming Community meta ölçümlerinden hesaplanan saatlik altın:
+  // S >= 15 altın/saat (Convergence Outer Nayos ~6,6g/15 dk, Mount Balrior ~6,3g/20 dk, Dragonstorm ~4,4g/12 dk — günün ilk turu).
+  goldPerHour: 15,
+  bestGold: [
+    { what: "Convergence: Outer Nayos", pay: "~6,6 altın / ~15 dk (+ haftalık achievement ~6 altın) + Rift Essence", note: "zaten SotO turunda" },
+    { what: "Convergence: Mount Balrior", pay: "~6,3 altın / ~20 dk + Rift Essence", note: "zaten SotO turunda" },
+    { what: "Dragonstorm (Eye of the North)", pay: "~4,4 altın + ~55 Tyria Defense Seal / 12 dk", note: "günde 1 iyi tur" },
+    { what: "Aetherblade Assault, Kaineng Blackout, Gang War (EoD)", pay: "~3 altın + Writ torbaları (~3 altın)", note: "A tier" },
+    { what: "Defense of Amnytas", pay: "~3,2 altın + Pinch of Stardust", note: "zaten SotO turunda" }
+  ],
+  // part: TP'den alınacak malzeme; adet = açık (craft edilen) hedeflerin eksiği. items: DATA dışındaki item'lar (id, adet).
+  goldShortcuts: [
+    { kind: "weapons", title: "Gen 1 silahlar: TP'den hazır al", verdict: "AL",
+      instead: "Craft da altın ister: 8 silahın TP parçaları ~9.600 altın; hazır almak ~3.800 altın (15 altın/saat ile ~255 saat farm) daha pahalı. Craft'ın karşılığı: 8 Gift of Exploration (her 2 silah için 1 Central Tyria world completion), 8 Gift of Battle (~50-70 saat WvW), 4.000 Tales of Dungeon Delving, ~3.400 Spirit Shard, ~3.800 Obsidian Shard ve çoğunda ayrı bir craft mesleği. Fark yakın; Spirit Shard ve world completion yüzünden hazır almak daha hızlı ve daha az zahmetli." },
+    { part: "Mystic Facet", title: "Mystic Facet ×25 (Legendary Relic)", verdict: "AL",
+      instead: "Her facet = 1 exotic relic + 750 Pile of Lucent Crystal. 750 Lucent Crystal'ın TP fiyatı tek başına facet kadar; üstüne relic. Hazır facet craft'tan ucuz." },
+    { part: "Stabilizing Matrix", title: "Stabilizing Matrix (Cube of Stabilized Dark Energy)", verdict: "AL",
+      instead: "Fractal sandıklarından şansla düşer; tanesi ~0,3 altın, beklemeye değmez." },
+    { part: "Xunlai Electrum Ingot", title: "Xunlai Electrum Ingot ×21 (Aurora II)", verdict: "AL",
+      instead: "Jeweler 400 açmak gerekirdi." },
+    { items: [[79817, 1], [79763, 1], [79790, 1], [79726, 1], [79795, 1]], title: "Gift of Aurene doll parçaları (Bitterfrost Master)", verdict: "AL",
+      instead: "Huntsman, Tailor, Leatherworker, Artificer ve Jeweler'ın her biri gerekirdi." },
+    { part: "Memory of Battle", title: "Memory of Battle (Gift of War, Conflux)", verdict: "AL",
+      instead: "WvW'de toplamak; TP'de tanesi kuruş." },
+    { part: "Shard of Glory", title: "Shard of Glory (Gift of Glory)", verdict: "AL",
+      instead: "PvP oynamak gerekirdi." },
+    { kind: "clover", title: "Mystic Clover: haftalık vendor'lar bitince Lyhr", verdict: "DURUMA GÖRE",
+      instead: "Haftalık vendor'lar (40/hafta) daha ucuz ama yavaş. Lyhr sınırsız: 3 Mystic Coin + 5 Ecto + 3 Obsidian Shard + 3 Spirit Shard. Asıl darboğaz Spirit Shard (clover başı 3)." },
+    { kind: "text", title: "T5/T6 malzemeler (Condensed Might/Magic, Gift of Might/Magic, Gift of Metal...)", verdict: "AL",
+      instead: "Farm etmek yerine TP'den al; tutarı Hedefler sekmesindeki 'eksiklerin TP maliyeti'nde." }
+  ],
+  notBuyable: ["Rift Essence (Fine/Masterwork/Rare)", "Static Charge, Pinch of Stardust, Calcified Gasp", "Provisioner Token", "Gift of Battle", "Gift of Exploration",
+    "Gift of Energy (Artificer 400 şart)", "Skirmish Ticket, Testimony of Castoran Heroics, Legendary Spike", "Druid Runestone, Fire Orchid", "LS3 harita malzemeleri (Blood Ruby, Jade Shard, Orrian Pearl, Petrified Wood, Winterberry)",
+    "Crystalline Ingot, Ball of Dark Energy", "Fractal Research Page, Fractal Relic", "Koleksiyonlar ve mastery'ler"],
+
+  // Mystic Clover kaynakları (wiki Mystic_Clover, 4 Ekim 2026). per: "hafta" olanlar haftalık toplama girer.
+  cloverSources: [
+    { who: "BUY-4373 (Mistlock Observatory)", n: 10, per: "hafta", cost: "150 Fractal Relic + 2 Mystic Coin + 2 Ecto + 2 Spirit Shard", mode: "Fractal (relic)" },
+    { who: "Manfred Njallson (LA Aerodrome)", n: 15, per: "hafta", cost: "30 Magnetite Shard + 2 Mystic Coin + 2 Ecto + 2 Spirit Shard", mode: "Strike (magnetite)" },
+    { who: "Miyani / Mystic Forge Attendant", n: 10, per: "hafta", cost: "3 Mystic Coin + 5 Ecto + 3 Obsidian Shard + 3 Spirit Shard", mode: "Herkes" },
+    { who: "Dugan (WvW)", n: 5, per: "hafta", cost: "20 Skirmish Ticket + 10 Badge of Honor + 2 Ecto + 2 Mystic Coin", mode: "WvW" },
+    { who: "Wizard's Vault", n: 0, per: "20 / sezon", cost: "60 Astral Acclaim", mode: "Herkes" },
+    { who: "Gift of Battle reward track", n: 0, per: "2 / track", cost: "WvW track", mode: "WvW" },
+    { who: "Lyhr (Wizard's Tower), Ward Crafter Lucirae (Janthir)", n: 0, per: "sınırsız", cost: "3 Mystic Coin + 5 Ecto + 3 Obsidian Shard + 3 Spirit Shard", mode: "Herkes (altın)" },
+    { who: "PvP League Vendor", n: 0, per: "5 / hafta", cost: "PvP", mode: "PvP" }
+  ],
+
+  // Wizard's Vault sezonluk alımlar (API: /v2/account/wizardsvault/listings)
+  vault: [
+    { listing: 60, name: "Legendary Weapon Starter Key - Set 2", cost: 1000, max: 1, serves: "Bolt ya da The Moot kiti (precursor + silah gift'i + Might/Magic)" },
+    { listing: 81, name: "Mystic Clover", cost: 60, max: 20, serves: "Bütün Tribute/Prosperity/Fortune" },
+    { listing: 82, name: "Obsidian Shard", cost: 30, max: 20, serves: "Gift of Expertise, Gift of Mastery" },
+    { listing: 75, name: "Mystic Coin", cost: 9, max: 60, serves: "Mystic Tribute" },
+    { listing: 80, name: "Vision Crystal", cost: 150, max: 4, serves: "Druid Stone (Henge), Ad Infinitum" }
+  ],
+  vaultSeasonEnd: "2026-12-08T17:00:00Z",
+
+  // ---------------- Şimdiden başla (sabit öneriler) ----------------
+  recs: [
+    { title: "SotO mastery: Obsidian Armor Crafting'i aç", why: "Obsidian tarifi bu mastery olmadan alınamıyor. Önünde Emotion Control (4p) ve Rift Mastery (5p) var; kendisi 6p. Toplam 15 SotO mastery puanı.", targets: ["obsidian"] },
+    { title: "Inner Nayos: Convergence Mastery", why: "Convergence'tan gelen Rift Essence'ı ikiye katlıyor; Obsidian'ın en uzun kapısını kısaltır. Ne kadar erken, o kadar çok gün kazanırsın.", targets: ["obsidian", "endless"] },
+    { title: "Wizard's Vault: Starter Key Set 2 için 1.000 Astral Acclaim biriktir", why: "Sadece Bolt ya da The Moot'u CRAFT edeceksen al: kit precursor + silah gift'i + Might/Magic verir (~340-430 altın), ama gerisi için yine Gift of Exploration (world completion) ve Gift of Battle lazım. Silahları hazır alacaksan anahtarı alma; AA'yı 20 Mystic Clover + 60 Mystic Coin'e harca. Sezon 8 Aralık'ta bitiyor; 1.300 AA üstünde ödül alınamıyor.", targets: ["w_sword", "w_mace"] },
+    { title: "Artificer 400", why: "Gift of Energy Aurora ve Vision'da ayrı ayrı gerekiyor ve TP'de satılmıyor; Artificer 400 şart (karakter başına 2 aktif meslek). Aynı karaktere Huntsman da açarsan Howler kapısı da açılır.", targets: ["aurora", "vision", "w_staff"] },
+    { title: "WvW: Gift of Battle track'ini sürekli açık tut", why: "Aurora, Vision ve her silah 1 Gift of Battle istiyor; track başına ~6-8,5 saat. Diğer işlerle paralel, sadece WvW'de ilerler.", targets: ["aurora", "vision", "w_sword", "w_mace", "w_gs"] },
+    { title: "WvW'ye haftalık giriş: Skirmish Ticket + Gift of Battle", why: "Conflux'un en uzun kapısı Skirmish Ticket (~1.850; haftada en fazla ~455) ve haftalık sınır kaçınca geri gelmiyor. Aynı WvW süresi Gift of Battle track'ini de ilerletir.", targets: ["conflux"] },
+    { title: "Daily Raid Bounties + haftalık strike/quickplay", why: "LI haftada en fazla 49 (strike-only). Kaçırılan hafta geri gelmez.", targets: ["coalescence"] },
+    { title: "Haftalık clover vendor'ları (30/hafta)", why: "Hedef seti ~400+ clover istiyor. Vendor clover'ı Lyhr'inkinden çok daha ucuz; kaçırılan haftalık limit geri gelmez.", targets: ["obsidian", "aurora", "vision", "coalescence", "adinf", "relic"] },
+    { title: "LS3 ve LS4 bölüm mastery'leri (ya da harita reward track'leri)", why: "Aurora'nın 6 Master koleksiyonu ve Vision'ın 6 Visions koleksiyonu birer zırh skini istiyor; skinler bölüm mastery'lerinin (Out of the Shadows, Daybreak, All or Nothing ...) ödülü. Her birinin kalanını Achievement avcısında görürsün. Mastery uzun geliyorsa o haritanın WvW reward track'i de aynı skini veriyor (track ~6-8 saat). A Star to Guide Us'un alternatifi yok.", targets: ["aurora", "vision"] },
+    { title: "Central Tyria world completion", why: "Her Gen 1 silah 1 Gift of Exploration istiyor (karakter başına 2 adet). 9 silah = 5 karakterlik world completion; TP'den hazır almayacaksan çok uzun iş.", targets: ["w_sword", "w_mace", "w_gs", "w_staff", "w_spear", "w_axe", "w_dagger", "w_warhorn"] }
+  ],
+
+  // ---------------- Achievement avcısı ----------------
+  // kind: bits = achievement'ın eksik parçaları; category = kategorideki tamamlanmamış achievement'lar (meta için X/Y)
+  hunter: [
+    { key: "druid2", target: "aurora", title: "Awakening the Druid Stone", kind: "bits", ach: 3445 },
+    { key: "druid3", target: "aurora", title: "Sprouting the Druid Stone", kind: "bits", ach: 3447 },
+    { key: "druid4", target: "aurora", title: "A Henge Away from Home", kind: "bits", ach: 3436 },
+    { key: "a_bf", target: "aurora", title: "Bloodstone Fen Master", kind: "bits", ach: 3500 },
+    { key: "a_eb", target: "aurora", title: "Ember Bay Master", kind: "bits", ach: 3529 },
+    { key: "a_bit", target: "aurora", title: "Bitterfrost Frontier Master", kind: "bits", ach: 3499 },
+    { key: "a_ld", target: "aurora", title: "Lake Doric Master", kind: "bits", ach: 3491 },
+    { key: "a_dm", target: "aurora", title: "Draconis Mons Master", kind: "bits", ach: 3547 },
+    { key: "a_sl", target: "aurora", title: "Siren's Landing Master", kind: "bits", ach: 3495 },
+    { key: "a_ii", target: "aurora", title: "Aurora II: Empowering", kind: "bits", ach: 3489 },
+    { key: "o_1", target: "obsidian", title: "Astral Thought (kask)", kind: "bits", ach: 7214 },
+    { key: "o_2", target: "obsidian", title: "Astral Bearing (omuz)", kind: "bits", ach: 7098 },
+    { key: "o_3", target: "obsidian", title: "Astral Heartbeat (göğüs)", kind: "bits", ach: 7096 },
+    { key: "o_4", target: "obsidian", title: "Astral Grasp (eldiven)", kind: "bits", ach: 7219 },
+    { key: "o_5", target: "obsidian", title: "Astral Stride (bacak)", kind: "bits", ach: 7240 },
+    { key: "o_6", target: "obsidian", title: "Astral Footprints (bot)", kind: "bits", ach: 7051 },
+    { key: "c_1", target: "coalescence", title: "Coalescence I: Unbridled", kind: "bits", ach: 4035 },
+    { key: "c_2", target: "coalescence", title: "Coalescence II: The Gift", kind: "bits", ach: 4412 },
+    { key: "c_3", target: "coalescence", title: "Coalescence III: Culmination", kind: "bits", ach: 4805 },
+    { key: "v_is", target: "vision", title: "Visions of Istan", kind: "bits", ach: 4765 },
+    { key: "v_ss", target: "vision", title: "Visions of Sandswept Isles", kind: "bits", ach: 4774 },
+    { key: "v_ko", target: "vision", title: "Visions of Kourna", kind: "bits", ach: 4760 },
+    { key: "v_ja", target: "vision", title: "Visions of Jahai", kind: "bits", ach: 4770 },
+    { key: "v_th", target: "vision", title: "Visions of Thunderhead Peaks", kind: "bits", ach: 4764 },
+    { key: "v_df", target: "vision", title: "Visions of Dragonfall", kind: "bits", ach: 4757 },
+    { key: "m3050", target: "aurora", title: '"Out of the Shadows" Mastery', kind: "category", cat: 139, ach: 3050, why: "Bloodstone Fen Master için Bloodstone Crown Box skini. Alternatif: haritanın WvW reward track'i (son ödül Bloodstone Cache, tam track ~6-8 saat)" },
+    { key: "m3123", target: "aurora", title: '"Rising Flames" Mastery', kind: "category", cat: 144, ach: 3123, why: "Ember Bay Master için Dragonscale Epaulettes Box skini. Alternatif: haritanın WvW reward track'i (son ödül Ember Bay Cache, tam track ~6-8 saat)" },
+    { key: "m3171", target: "aurora", title: '"A Crack in the Ice" Mastery', kind: "category", cat: 147, ach: 3171, why: "Bitterfrost Frontier Master için Glacial Gauntlets Box skini. Alternatif: haritanın WvW reward track'i (son ödül Bitterfrost Frontier Cache, tam track ~6-8 saat)" },
+    { key: "m3348", target: "aurora", title: '"The Head of the Snake" Mastery', kind: "category", cat: 154, ach: 3348, why: "Lake Doric Master için White Mantle Elite Guard Mask Box skini. Alternatif: haritanın WvW reward track'i (son ödül Lake Doric Cache, tam track ~6-8 saat)" },
+    { key: "m3442", target: "aurora", title: '"Flashpoint" Mastery', kind: "category", cat: 164, ach: 3442, why: "Draconis Mons Master için Houndskin Mantle Box skini. Alternatif: haritanın WvW reward track'i (son ödül Draconis Mons Cache, tam track ~6-8 saat)" },
+    { key: "m3516", target: "aurora", title: '"One Path Ends" Mastery', kind: "category", cat: 171, ach: 3516, why: "Siren's Landing Master için Mursaat Brogan Box skini. Alternatif: haritanın WvW reward track'i (son ödül Siren's Landing Cache, tam track ~6-8 saat)" },
+    { key: "g_aurene", target: "aurora", title: "Gift of Aurene", kind: "bits", ach: 3178, why: "Bitterfrost Frontier Master'ın bir maddesi. Doll parçalarını (Frame, Stuffing, Hide, Eye, Adornments) TP'den al (~50 altın), birleştir, Aurene'ye götür." },
+    { key: "m3988", target: "vision", title: '"Daybreak" Mastery', kind: "category", cat: 196, ach: 3988, why: "Visions of Istan için Corsair Turban Box skini. Alternatif: haritanın WvW reward track'i (son ödül Istan Cache, tam track ~6-8 saat)" },
+    { key: "m4093", target: "vision", title: '"A Bug in the System" Mastery', kind: "category", cat: 203, ach: 4093, why: "Visions of Sandswept Isles için Olmakhan Mantle Box skini. Alternatif: haritanın WvW reward track'i (son ödül Sandswept Isles Cache, tam track ~6-8 saat)" },
+    { key: "m4195", target: "vision", title: '"Long Live the Lich" Mastery', kind: "category", cat: 209, ach: 4195, why: "Visions of Kourna için Corsair Jerkin Box skini. Alternatif: haritanın WvW reward track'i (son ödül Kournan Cache, tam track ~6-8 saat)" },
+    { key: "m4359", target: "vision", title: '"A Star to Guide Us" Mastery', kind: "category", cat: 216, ach: 4359, why: "Visions of Jahai için: 38'in tamamı bitince Trader Hyacinth'ten Updated Record of Joko's Deeds. Reward track alternatifi yok." },
+    { key: "m4544", target: "vision", title: '"All or Nothing" Mastery', kind: "category", cat: 224, ach: 4544, why: "Visions of Thunderhead Peaks için Corsair Leggings skini. Alternatif: haritanın WvW reward track'i (son ödül Thunderhead Peaks Cache, tam track ~6-8 saat)" },
+    { key: "m4689", target: "vision", title: '"War Eternal" Mastery', kind: "category", cat: 226, ach: 4689, why: "Visions of Dragonfall için Corsair Boot Box skini. Alternatif: haritanın WvW reward track'i (son ödül Dragonfall Cache, tam track ~6-8 saat)" },
+    { key: "cf_emb", target: "conflux", title: "Emblem of the Conqueror", kind: "bits", ach: 5220, why: "War Commendation için: WvW'de 100 objective ele geçir ya da savun." },
+    { key: "e_ss", target: "endless", title: "Shipwreck Strand Mastery", kind: "category", cat: 463, ach: 8880 },
+    { key: "e_sw", target: "endless", title: "Starlit Weald Mastery", kind: "category", cat: 472, ach: 9057 },
+    { key: "e_hy", target: "endless", title: "Radiance of the Sun God", kind: "bits", ach: 9183 },
+    { key: "ai_1", target: "adinf", title: "Ad Infinitum I: Finite Result", kind: "bits", ach: 2351 },
+    { key: "ai_2", target: "adinf", title: "Ad Infinitum II: Upper Bound", kind: "bits", ach: 2557 },
+    { key: "ai_3", target: "adinf", title: "Ad Infinitum III: Unbound", kind: "bits", ach: 2368 },
+    { key: "ai_4", target: "adinf", title: "Legendary Backpack: Ad Infinitum", kind: "bits", ach: 2295 }
+  ],
+
+  // Elle verilmiş zorluk / etiket / ipucu. Anahtar: "item:<id>", "skin:<id>", "ach:<id>".  d: 1 (kolay) - 5 (zor)
+  hunterTags: {
+    "item:82050": { d: 4, tags: ["RNG", "günlük"], tip: "Bitterfrost'ta 5 Icebound Chest, karakter başına günde 1'er; Thaw Elixir gerekir." },
+    "item:81722": { d: 4, tags: ["RNG", "günlük"], tip: "Abaddon's Reliquary'de Hidden Reliquary Chest, karakter başına günde 2." },
+    "item:81201": { d: 1, tags: ["toplama"], tip: "3 Fire Orchid Blossom → Kodama (Savage Rise)." },
+    "item:81006": { d: 1, tags: ["toplama"], tip: "3 Fire Orchid Blossom → Liriodendron (Savage Rise su başı)." },
+    "item:81200": { d: 2, tags: ["toplama", "zıplama"], tip: "3 Fire Orchid Blossom → Broadleaf (Savage Rise üstündeki çıkıntı)." },
+    "item:81035": { d: 2, tags: ["toplama", "zıplama"], tip: "3 Fire Orchid Blossom → Rosewood (Ancient Hollow üstündeki çıkıntı)." }
+  }
+};
+</script>
+
+<header>
+  <div class="hrow">
+    <h1>Legendary Hedefler</h1>
+    <div class="row">
+      <span id="status" class="status">API key yok — manuel mod</span>
+      <button class="btn pri" id="refreshBtn">Yenile</button>
+    </div>
+  </div>
+  <nav id="nav">
+    <button data-tab="today" class="on">Bugün</button>
+    <button data-tab="recs">Şimdiden başla</button>
+    <button data-tab="targets">Hedefler</button>
+    <button data-tab="hunter">Achievement avcısı</button>
+    <button data-tab="settings">Ayarlar</button>
+  </nav>
+</header>
+
+<main>
+  <section class="tab on" id="tab-today">
+    <div class="card">
+      <div class="timers">
+        <div class="timer"><div class="muted small">Günlük reset (00:00 UTC / 03:00 TR)</div><b id="tDaily">--:--:--</b></div>
+        <div class="timer"><div class="muted small">Haftalık reset (Pzt 07:30 UTC / 10:30 TR)</div><b id="tWeekly">--</b></div>
+      </div>
+      <div class="legend" style="margin-top:8px">İşler gideceğin yere göre gruplu. Sol çizgi:<i style="background:var(--accent)"></i>timegate (kaçarsa geri gelmez)<i style="background:#c46a2a"></i>darboğaz<i style="background:var(--line)"></i>opsiyonel. "API" yazanlar kendiliğinden tiklenir. Saatler senin saatinle.</div>
+    </div>
+    <div class="card"><h2>Günlük</h2><div id="dailyList"></div></div>
+    <div class="card"><h2>Haftalık</h2><div id="weeklyList"></div></div>
+    <div class="card"><h2>Wizard's Vault (sezon)</h2><div id="vaultBox" class="scroll"></div></div>
+  </section>
+
+  <section class="tab" id="tab-recs">
+    <div class="card"><h2>En uzun kapılar (kalan gün tahmini)</h2><div id="gateBox" class="scroll"></div></div>
+    <div class="card"><h2>Şimdiden başla</h2><ul class="tasks" id="recList"></ul></div>
+    <div class="card"><h2>Altınla kısalt: yapmak yerine farm edip al</h2><div id="goldBox" class="scroll"></div></div>
+    <div class="card"><h2>Mystic Clover planı</h2><div id="cloverBox" class="scroll"></div></div>
+    <div class="card"><h2>Birden fazla hedefe yarayan timegate'li malzemeler</h2><div id="sharedTg" class="scroll"></div></div>
+  </section>
+
+  <section class="tab" id="tab-targets">
+    <div class="card small muted">İlerleme kaba bir tahmindir: sahip olduğun ara gift'ler ve malzemeler sayılır, her alt dal eşit ağırlıklıdır. Aynı malzeme birden fazla hedefte sayılabilir — çakışmalar aşağıda. Mystic Forge tarifleri wiki'den.</div>
+    <div id="targetList"></div>
+    <div class="card"><h2>Ortak malzemeler ve çakışmalar</h2><div class="small muted" style="margin-bottom:6px">Aktif hedeflerin toplam ihtiyacı (sahip olunanlar düşülmeden) ve sende olan. Kırmızı: toplam ihtiyaç elindekinden fazla.</div><div id="sharedBox" class="scroll"></div></div>
+  </section>
+
+  <section class="tab" id="tab-hunter">
+    <div class="card small muted">Kartlar en az maddesi kalandan başlar; bitenler en altta. Mastery kartları (ör. "All or Nothing" Mastery) koleksiyonlardaki zırh skinlerini veriyor — her birinin yanında reward track alternatifi yazıyor. Eksik maddeler kolaydan zora sıralı. Zorluk: veri dosyasındaki etiket → senin seçimin → açıklamadan otomatik tahmin (sırasıyla öncelikli). Otomatik etiketler "oto" işaretli ve doğrulanmamıştır.</div>
+    <div class="row" style="margin-bottom:10px"><label class="small">Hedef: <select id="hunterFilter"></select></label><button class="btn" id="hunterLoad">Listeyi yükle</button><span id="hunterStatus" class="small muted"></span></div>
+    <div id="hunterBox"></div>
+  </section>
+
+  <section class="tab" id="tab-settings">
+    <div class="card">
+      <h2>API key</h2>
+      <div class="small muted">Key sadece bu tarayıcıda (localStorage) saklanır ve sadece https://api.guildwars2.com adresine gönderilir. Gerekli yetkiler: account, progression, inventories, wallet, unlocks, characters (tradingpost opsiyonel).</div>
+      <div class="row" style="margin-top:8px">
+        <input type="password" id="keyInput" placeholder="API key" style="flex:1;min-width:220px" autocomplete="off">
+        <button class="btn pri" id="keySave">Kaydet ve kontrol et</button>
+        <button class="btn danger" id="keyDel">Key'i sil</button>
+      </div>
+      <div id="keyInfo" class="small" style="margin-top:8px"></div>
+    </div>
+    <div class="card">
+      <h2>Hedefler</h2>
+      <div class="small muted">Aç/kapat, sırala, kopya sayısı. Kapalı hedefler hesaplara girmez. "Hazır al" işaretli hedefler TP'den alınacak sayılır: tarifleri clover, kapı ve ortak malzeme hesaplarına girmez.</div>
+      <div class="row small" style="margin:6px 0"><label>Saatlik altın varsayımı: <input type="number" id="gphInput" min="1" max="200" style="width:70px"> altın/saat</label><span class="muted">(varsayılan 15: Farming Community ölçümlerinde en iyi metaların eşiği)</span></div>
+      <div class="tlist" id="tgtSettings"></div>
+    </div>
+    <div class="card">
+      <h2>Yedek</h2>
+      <div class="small muted">Tikler, hedef ayarları ve zorluk seçimlerin. API key dahil edilmez.</div>
+      <div class="row" style="margin:8px 0"><button class="btn" id="expBtn">Dışa aktar</button><button class="btn" id="impBtn">İçe aktar</button><button class="btn danger" id="cacheBtn">Önbelleği temizle</button></div>
+      <textarea id="ioBox" placeholder="JSON"></textarea>
+    </div>
+    <div class="card small muted">Veri tarihi: <span id="dataAsOf"></span>. Oyun verisi dosyanın başındaki <code>const DATA</code> bloğunda.</div>
+  </section>
+</main>
+
+<script>
+"use strict";
+// =================== Yardımcılar ===================
+const API = "https://api.guildwars2.com";
+const LS = { key: "lh.key", state: "lh.state", snap: "lh.snap", stat: "lh.static", price: "lh.prices" };
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = n => (n == null || isNaN(n)) ? "?" : Math.round(n).toLocaleString("tr-TR");
+const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } };
+const wikiUrl = n => "https://wiki.guildwars2.com/wiki/Special:Search?search=" + encodeURIComponent(n);
+const partWiki = (name, p) => p && p.wiki ? DATA.meta.wiki + encodeURI(p.wiki) : wikiUrl(name);
+const gold = c => (c / 10000).toLocaleString("tr-TR", { maximumFractionDigits: 0 }) + " altın";
+
+// =================== Durum ===================
+let state = Object.assign({ targets: {}, checks: { daily: { p: "", d: {} }, weekly: { p: "", d: {} } }, diff: {}, hunterFilter: "" }, lsGet(LS.state, {}));
+let snap = lsGet(LS.snap, null);      // hesap verisinin son hali
+let stat = lsGet(LS.stat, { items: {}, skins: {}, minis: {}, ach: {}, cats: {} });   // statik API önbelleği
+let prices = lsGet(LS.price, { ts: 0, p: {} });
+let apiKey = lsGet(LS.key, "");
+let busy = false;
+const saveState = () => lsSet(LS.state, state);
+
+const craftOnly = tps => tps.filter(x => !x.buy);   // hazır alınacak hedeflerin tarifi hesaplara girmez
+const gph = () => state.gph || DATA.goldPerHour;
+function tgtPrefs() {
+  return DATA.targets.map((t, i) => {
+    const p = state.targets[t.key] || {};
+    return { t, enabled: p.enabled != null ? p.enabled : !t.off, order: p.order != null ? p.order : i, count: p.count != null ? p.count : t.count,
+      buy: !!(P[t.root] && P[t.root].id) && (p.buy != null ? p.buy : !!t.buyDefault) };
+  }).sort((a, b) => a.order - b.order);
+}
+
+// =================== Reset zamanları ===================
+function dailyPeriod(d = new Date()) { return d.toISOString().slice(0, 10); }
+function weeklyStart(d = new Date()) {
+  const x = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 7, 30, 0));
+  const dow = (x.getUTCDay() + 6) % 7; // Pzt=0
+  x.setUTCDate(x.getUTCDate() - dow);
+  if (x > d) x.setUTCDate(x.getUTCDate() - 7);
+  return x;
+}
+function weeklyPeriod(d = new Date()) { return weeklyStart(d).toISOString(); }
+function rollPeriods() {
+  const dp = dailyPeriod(), wp = weeklyPeriod();
+  let ch = false;
+  if (state.checks.daily.p !== dp) { state.checks.daily = { p: dp, d: {} }; ch = true; }
+  if (state.checks.weekly.p !== wp) { state.checks.weekly = { p: wp, d: {} }; ch = true; }
+  if (ch) saveState();
+  return ch;
+}
+function hms(ms) {
+  const s = Math.max(0, Math.floor(ms / 1000)), d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), ss = s % 60;
+  const p = n => String(n).padStart(2, "0");
+  return (d ? d + "g " : "") + p(h) + ":" + p(m) + ":" + p(ss);
+}
+function tick() {
+  const now = new Date();
+  const nd = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
+  const nw = new Date(weeklyStart(now).getTime() + 7 * 86400000);
+  $("#tDaily").textContent = hms(nd - now);
+  $("#tWeekly").textContent = hms(nw - now);
+  if (rollPeriods()) renderToday();
+  if (now.getSeconds() === 0) updateScheds();
+}
+
+// =================== API ===================
+async function api(path, auth) {
+  const url = new URL(API + path);
+  if (url.origin !== API) throw new Error("Yalnızca api.guildwars2.com");
+  if (auth) { if (!apiKey) throw new Error("key yok"); url.searchParams.set("access_token", apiKey); }
+  const r = await fetch(url.toString());
+  if (r.status === 404 && path.includes("ids=")) return [];
+  if (!r.ok) { let m = r.status + ""; try { const j = await r.json(); if (j && j.text) m += " " + j.text; } catch (e) { } throw new Error(m); }
+  return r.json();
+}
+async function apiIds(base, ids, auth) {
+  const out = [], list = [...new Set(ids)].filter(x => x != null);
+  for (let i = 0; i < list.length; i += 200) out.push(...await api(base + (base.includes("?") ? "&" : "?") + "ids=" + list.slice(i, i + 200).join(","), auth));
+  return out;
+}
+function setStatus(html) { $("#status").innerHTML = html; }
+
+async function refresh() {
+  if (busy) return;
+  if (!apiKey) { setStatus("API key yok — manuel mod"); return; }
+  busy = true; $("#refreshBtn").disabled = true;
+  setStatus('<span class="spinner"></span> API okunuyor…');
+  const s = { ts: Date.now(), errors: [], owned: {}, wallet: {}, ach: {}, armory: {}, mapchests: null, crafting: null, worldbosses: null, wv: {}, scopes: [], name: "" };
+  const add = (id, n) => { if (id) s.owned[id] = (s.owned[id] || 0) + (n || 1); };
+  const job = async (label, fn) => { try { await fn(); } catch (e) { s.errors.push(label + ": " + e.message); } };
+  await job("tokeninfo", async () => { const t = await api("/v2/tokeninfo", true); s.scopes = t.permissions || []; });
+  const has = sc => s.scopes.includes(sc);
+  await Promise.all([
+    job("account", async () => { const a = await api("/v2/account", true); s.name = a.name; }),
+    has("progression") && job("achievements", async () => { for (const a of await api("/v2/account/achievements", true)) s.ach[a.id] = { done: !!a.done, cur: a.current || 0, max: a.max || 0, bits: a.bits || [] }; }),
+    has("wallet") && job("wallet", async () => { for (const w of await api("/v2/account/wallet", true)) s.wallet[w.id] = w.value; }),
+    has("inventories") && job("materials", async () => { for (const m of await api("/v2/account/materials", true)) add(m.id, m.count); }),
+    has("inventories") && job("bank", async () => { for (const b of await api("/v2/account/bank", true)) if (b) add(b.id, b.count); }),
+    has("inventories") && job("shared", async () => { for (const b of await api("/v2/account/inventory", true)) if (b) add(b.id, b.count); }),
+    has("inventories") && has("characters") && job("characters", async () => {
+      const chars = await api("/v2/characters?ids=all", true); s.chars = chars.length;
+      for (const c of chars) for (const bag of (c.bags || [])) if (bag) { add(bag.id, 1); for (const it of (bag.inventory || [])) if (it) add(it.id, it.count); }
+    }),
+    has("unlocks") && job("legendaryarmory", async () => { for (const a of await api("/v2/account/legendaryarmory", true)) s.armory[a.id] = a.count; }),
+    has("progression") && job("mapchests", async () => { s.mapchests = await api("/v2/account/mapchests", true); }),
+    has("progression") && job("dailycrafting", async () => { s.crafting = await api("/v2/account/dailycrafting", true); }),
+    has("progression") && job("worldbosses", async () => { s.worldbosses = await api("/v2/account/worldbosses", true); }),
+    job("wizardsvault", async () => {
+      s.wv.daily = await api("/v2/account/wizardsvault/daily", true).catch(() => null);
+      s.wv.weekly = await api("/v2/account/wizardsvault/weekly", true).catch(() => null);
+      s.wv.listings = await api("/v2/account/wizardsvault/listings", true).catch(() => null);
+    })
+  ].filter(Boolean));
+  for (const [id, n] of Object.entries(s.armory)) s.owned[id] = (s.owned[id] || 0) + n;
+  snap = s; lsSet(LS.snap, s);
+  await loadPrices().catch(e => s.errors.push("TP fiyatları: " + e.message));
+  busy = false; $("#refreshBtn").disabled = false;
+  renderAll();
+}
+
+// TP fiyatları (anahtarsız, 1 saat önbellek)
+async function loadPrices(force) {
+  const ids = new Set();
+  for (const [n, p] of Object.entries(DATA.parts)) if (p.id) ids.add(p.id);
+  for (const g of DATA.goldShortcuts) for (const [id] of (g.items || [])) ids.add(id);
+  // veri değişip yeni id eklendiyse (n farklı) önbelleği beklemeden yenile
+  if (!force && Date.now() - prices.ts < 3600000 && prices.n === ids.size) return;
+  const list = await apiIds("/v2/commerce/prices", [...ids], false);
+  const p = {};
+  for (const x of list) p[x.id] = { s: x.sells && x.sells.unit_price || 0, b: x.buys && x.buys.unit_price || 0 };
+  prices = { ts: Date.now(), n: ids.size, p }; lsSet(LS.price, prices);
+}
+
+// =================== Hesaplama ===================
+const P = DATA.parts;
+function ownedOf(name) {
+  const p = P[name]; if (!p || !snap) return 0;
+  if (p.cur) return snap.wallet[p.cur] || 0;
+  if (p.id) return snap.owned[p.id] || 0;
+  return 0;
+}
+function achFrac(id) {
+  if (!snap) return 0;
+  const a = snap.ach[id]; if (!a) return 0;
+  if (a.done) return 1;
+  return a.max ? Math.min(1, a.cur / a.max) : 0;
+}
+// pool: hedef içinde aynı malzeme iki kez sayılmasın
+function prog(name, qty, pool, depth = 0) {
+  const p = P[name]; if (!p || depth > 20) return 0;
+  if (p.ach) {
+    const own = achFrac(p.ach);
+    if (own >= 1 || !p.in) return own;
+    const kids = p.in.map(([c]) => prog(c, 1, pool, depth + 1));
+    return (own + kids.reduce((a, b) => a + b, 0)) / (kids.length + 1);
+  }
+  const have = Math.min(pool[name] != null ? pool[name] : (pool[name] = ownedOf(name)), qty);
+  pool[name] -= have;
+  const rem = qty - have; if (rem <= 0) return 1;
+  if (!p.in) return have / qty;
+  const kids = p.in.map(([c, q]) => prog(c, q * rem, pool, depth + 1));
+  return (have + rem * kids.reduce((a, b) => a + b, 0) / kids.length) / qty;
+}
+// eksik taban malzemeler (TP maliyeti için)
+function missingLeaves(name, qty, pool, out, depth = 0) {
+  const p = P[name]; if (!p || depth > 20) return out;
+  if (p.ach) return out;
+  const have = Math.min(pool[name] != null ? pool[name] : (pool[name] = ownedOf(name)), qty);
+  pool[name] -= have;
+  const rem = qty - have; if (rem <= 0) return out;
+  if (p.in) for (const [c, q] of p.in) missingLeaves(c, q * rem, pool, out, depth + 1);
+  else out[name] = (out[name] || 0) + rem;
+  return out;
+}
+// brüt ihtiyaç (çakışma tablosu için)
+function grossNeed(name, qty, out, depth = 0) {
+  const p = P[name]; if (!p || depth > 20 || p.ach) return out;
+  out[name] = (out[name] || 0) + qty;
+  if (p.in) for (const [c, q] of p.in) grossNeed(c, q * qty, out, depth + 1);
+  return out;
+}
+function targetCalc(tp) {
+  const t = tp.t, root = P[t.root];
+  const armory = snap && root && root.id ? (snap.armory[root.id] || 0) : 0;
+  if (tp.buy) {
+    const price = prices.p[root.id] ? prices.p[root.id].s : 0, need = price * Math.max(0, tp.count - armory), coin = snap ? (snap.wallet[1] || 0) : 0;
+    const done = armory >= tp.count;
+    return { buy: true, pct: done ? 1 : need ? Math.min(1, coin / need) : 0, armory, done, miss: {}, cost: need, unpriced: price ? 0 : 1, gates: [], worst: null, tpPrice: price, coin };
+  }
+  const pool = {};
+  const pct = snap ? prog(t.root, tp.count, pool) : 0;
+  const miss = snap ? missingLeaves(t.root, tp.count, {}, {}) : {};
+  let cost = 0, unpriced = 0;
+  for (const [n, q] of Object.entries(miss)) {
+    const id = P[n] && P[n].id, pr = id && prices.p[id];
+    if (pr && pr.s) cost += pr.s * q; else unpriced++;
+  }
+  const gates = (t.gates || []).map(g => gateDays(g, miss));
+  const worst = gates.reduce((a, g) => g.days != null && (!a || g.days > a.days) ? g : a, null);
+  const tpPrice = root && root.id && prices.p[root.id] ? prices.p[root.id].s : 0;
+  return { pct: Math.min(1, pct), armory, done: armory >= tp.count || (!!snap && pct >= 1), miss, cost, unpriced, gates, worst, tpPrice };
+}
+// miss: hedefin eksik taban malzemeleri (ara ürünler craftlandıysa kalan da düşer)
+function gateDays(g, miss) {
+  let need = g.need || 0, have = 0, rem;
+  if (g.steps) { need = g.steps.reduce((a, [id, u]) => a + (achFrac(id) >= 1 ? 0 : u), 0); rem = need; }
+  else {
+    const name = Object.keys(P).find(n => (g.cur && P[n].cur === g.cur) || (g.item && P[n].id === g.item));
+    have = snap ? (g.cur ? (snap.wallet[g.cur] || 0) : (snap.owned[g.item] || 0)) : 0;
+    rem = miss && name ? (miss[name] || 0) : Math.max(0, need - have);
+  }
+  return Object.assign({}, g, { have, rem, days: snap ? Math.ceil(rem / g.perDay) : null });
+}
+
+// =================== Render: Bugün ===================
+function autoState(task) {
+  const a = task.auto; if (!a || !snap) return null;
+  const fresh = dailyPeriod(new Date(snap.ts)) === dailyPeriod();
+  const freshW = weeklyPeriod(new Date(snap.ts)) === weeklyPeriod();
+  if (a.t === "mapchest" && snap.mapchests && fresh) return { done: snap.mapchests.includes(a.id) };
+  if (a.t === "craft" && snap.crafting && fresh) return { done: snap.crafting.includes(a.id) };
+  if (a.t === "crafts" && snap.crafting && fresh) { const n = a.ids.filter(id => snap.crafting.includes(id)).length; return { done: n >= a.ids.length, text: n + "/" + a.ids.length + " craft" }; }
+  if (a.t === "worldbosses" && snap.worldbosses && fresh) return { done: snap.worldbosses.length >= 15, text: snap.worldbosses.length + "/15" };
+  if (a.t === "wvDaily" && snap.wv.daily && fresh) return { done: !!snap.wv.daily.meta_reward_claimed, text: (snap.wv.daily.meta_progress_current || 0) + "/" + (snap.wv.daily.meta_progress_complete || "?") };
+  if (a.t === "wvWeekly" && snap.wv.weekly && freshW) return { done: !!snap.wv.weekly.meta_reward_claimed, text: (snap.wv.weekly.meta_progress_current || 0) + "/" + (snap.wv.weekly.meta_progress_complete || "?") };
+  return { stale: true };
+}
+const KIND = { tg: 0, bn: 1, n: 2 };
+const openHow = new Set();   // açık "Nasıl?" kutuları yeniden çizimde kapanmasın
+function schedInfo(key, now = new Date()) {
+  const sc = DATA.schedules[key]; if (!sc) return null;
+  const m = now.getUTCHours() * 60 + now.getUTCMinutes() + now.getUTCSeconds() / 60;
+  const ph = ((m - sc.start) % sc.every + sc.every) % sc.every;
+  if (ph < sc.dur) return { now: true, mins: Math.ceil(sc.dur - ph), text: `ŞU AN AÇIK · ${Math.ceil(sc.dur - ph)} dk kaldı` };
+  const wait = sc.every - ph, at = new Date(now.getTime() + wait * 60000);
+  const hm = at.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+  const w = Math.round(wait);
+  return { now: false, mins: w, text: `sıradaki ${hm} · ${w >= 60 ? Math.floor(w / 60) + " sa " + (w % 60) + " dk" : w + " dk"} sonra` };
+}
+function updateScheds() {
+  document.querySelectorAll("[data-sched]").forEach(el => {
+    const i = schedInfo(el.dataset.sched); if (!i) return;
+    el.textContent = "⏰ " + i.text; el.classList.toggle("now", i.now);
+  });
+}
+function renderTaskList(el, tasks, bucket) {
+  const store = state.checks[bucket].d;
+  const on = new Set(tgtPrefs().filter(x => x.enabled).map(x => x.t.key));
+  const rows = tasks.filter(t => !(t.untilAch && achFrac(t.untilAch) >= 1) && !(t.tgt && !t.tgt.some(k => on.has(k)))).map(t => {
+    const au = autoState(t), cnt = t.count === "chars" ? (snap && snap.chars || 3) : (t.count || 1), val = store[t.id] || 0;
+    const done = au && au.done != null ? au.done : val >= cnt;
+    const si = t.sched ? schedInfo(t.sched) : null;
+    return { t, au, cnt, val, done, soon: si ? (si.now ? -1 : si.mins) : 9999 };
+  });
+  const rowHtml = ({ t, au, cnt, val, done }) => {
+    let boxes = "";
+    if (au && au.done != null) boxes = `<input type="checkbox" disabled ${au.done ? "checked" : ""} title="API'den">`;
+    else for (let i = 0; i < cnt; i++) boxes += `<input type="checkbox" data-b="${bucket}" data-id="${esc(t.id)}" data-i="${i}" ${i < val ? "checked" : ""}>`;
+    const hid = bucket + ":" + t.id;
+    const api = t.auto ? ` · <span class="okc">API${au && au.text ? " " + esc(au.text) : ""}${au && au.stale ? " (Yenile)" : ""}</span>` : "";
+    return `<li class="k-${t.kind}${done ? " done" : ""}"><div class="chk">${boxes}</div><div style="flex:1">
+      <div class="tt">${esc(t.title)}${t.sched ? `<span class="sched" data-sched="${t.sched}"></span>` : ""}</div>
+      <div class="small muted">${esc(t.serves)}${t.time ? " · " + esc(t.time) : ""}${api}${t.uv ? ' · <span style="color:var(--uv)">kısmen doğrulanmadı</span>' : ""}</div>
+      ${t.how ? `<details class="how" data-how="${esc(hid)}" ${openHow.has(hid) ? "open" : ""}><summary>Nasıl?</summary><ol>${t.how.map(h => `<li>${esc(h)}</li>`).join("")}</ol>${t.wiki ? `<a class="small" href="${DATA.meta.wiki + t.wiki}" target="_blank" rel="noopener">wiki</a>` : ""}</details>` : ""}
+    </div></li>`;
+  };
+  el.innerHTML = DATA.groups.map(g => {
+    const list = rows.filter(r => r.t.group === g.id)
+      .sort((a, b) => (a.done - b.done) || (KIND[a.t.kind] - KIND[b.t.kind]) || (a.soon - b.soon));
+    if (!list.length) return "";
+    const left = list.filter(r => !r.done && r.t.kind !== "n").length;
+    return `<div class="grp"><h3>${esc(g.title)}</h3><span class="small ${left ? "warnc" : "okc"}">${left ? left + " iş kaldı" : "tamam"}</span></div>
+      ${g.note ? `<div class="small muted">${esc(g.note)}</div>` : ""}<ul class="tasks">${list.map(rowHtml).join("")}</ul>`;
+  }).join("") || '<div class="muted">Liste boş.</div>';
+  updateScheds();
+}
+document.addEventListener("toggle", e => {
+  const d = e.target; if (!d.dataset || !d.dataset.how) return;
+  if (d.open) openHow.add(d.dataset.how); else openHow.delete(d.dataset.how);
+}, true);
+function renderVault() {
+  const lst = snap && snap.wv && snap.wv.listings;
+  const bought = {}, limit = {}; if (Array.isArray(lst)) for (const l of lst) { bought[l.id] = l.purchased || 0; if (l.purchase_limit) limit[l.id] = l.purchase_limit; }
+  const aa = snap ? (snap.wallet[63] || 0) : null;
+  const days = Math.ceil((new Date(DATA.vaultSeasonEnd) - Date.now()) / 86400000);
+  $("#vaultBox").innerHTML = `<div class="small muted" style="margin-bottom:6px">Astral Acclaim: <b>${aa == null ? "?" : fmt(aa)}</b> (1.300 üstünde ödül alınamaz) · Sezon bitişine ${days} gün</div>
+  <table><tr><th>Ürün</th><th>Alınan</th><th>Maliyet</th><th>Neye yarar</th></tr>${DATA.vault.map(v => {
+    const b = Array.isArray(lst) ? (bought[v.listing] || 0) : null, mx = limit[v.listing] || v.max;
+    return `<tr><td>${esc(v.name)}</td><td class="${b != null && b >= mx ? "okc" : ""}">${b == null ? "?" : b}/${mx}</td><td>${v.cost} AA</td><td class="small">${esc(v.serves)}</td></tr>`;
+  }).join("")}</table>`;
+}
+function renderToday() {
+  rollPeriods();
+  renderTaskList($("#dailyList"), DATA.daily, "daily");
+  renderTaskList($("#weeklyList"), DATA.weekly, "weekly");
+  renderVault();
+}
+document.addEventListener("change", e => {
+  const c = e.target; if (!c.matches || !c.matches("input[data-b]")) return;
+  const b = c.dataset.b, id = c.dataset.id, i = +c.dataset.i;
+  const store = state.checks[b].d;
+  store[id] = c.checked ? i + 1 : i;
+  saveState(); renderToday();
+});
+
+// =================== Render: Şimdiden başla ===================
+function renderRecs() {
+  const tps = tgtPrefs().filter(x => x.enabled), byKey = Object.fromEntries(tps.map(x => [x.t.key, x]));
+  const gates = [];
+  for (const tp of craftOnly(tps)) { const miss = snap ? missingLeaves(tp.t.root, tp.count, {}, {}) : null; for (const g of (tp.t.gates || [])) gates.push(Object.assign(gateDays(g, miss), { tname: tp.t.name })); }
+  gates.sort((a, b) => (b.days || 0) - (a.days || 0));
+  $("#gateBox").innerHTML = !snap ? '<div class="muted">API verisi yok — key gir ve Yenile.</div>' :
+    `<table><tr><th>Kapı</th><th>Hedef</th><th>Durum</th><th>~Gün</th></tr>${gates.map(g => `<tr>
+      <td>${esc(g.label)}${g.est ? ' <span class="tag uv">oran tahmini</span>' : ""}${g.note ? `<div class="small muted">${esc(g.note)}</div>` : ""}</td>
+      <td>${esc(g.tname)}</td><td>${g.steps ? "kalan " + fmt(g.rem) : "sende " + fmt(g.have) + " · kalan " + fmt(g.rem)}</td>
+      <td class="${g.days > 30 ? "warnc" : g.days === 0 ? "okc" : ""}"><b>${g.days == null ? "?" : g.days}</b></td></tr>`).join("")}</table>
+      <div class="small muted" style="margin-top:6px">Neden şimdi: bu kapılar günlük/haftalık sınırlı; kaçırılan her gün bitişi bir gün öteler. Gün = kalan ÷ günlük oran.</div>`;
+  $("#recList").innerHTML = DATA.recs.filter(r => r.targets.some(k => byKey[k])).map(r => `<li><div>
+    <div class="tt">${esc(r.title)}</div>
+    <div>${r.targets.filter(k => byKey[k]).map(k => `<span class="tag srv">${esc(byKey[k].t.name)}</span>`).join("")}</div>
+    <div class="small"><b class="muted">Neden şimdi:</b> ${esc(r.why)}</div></div></li>`).join("");
+  // Altınla kısalt
+  {
+    const all = tgtPrefs().filter(x => x.enabled), pool = {}, miss = {};
+    for (const tp of craftOnly(all)) missingLeaves(tp.t.root, tp.count, pool, miss);
+    const pr = id => prices.p[id] ? prices.p[id].s : 0;
+    const coinPer = 3 * pr(19976) + 5 * pr(19721);
+    const rows = DATA.goldShortcuts.map(g => {
+      let cost = null, qty = "";
+      if (g.kind === "weapons") { const w = all.filter(x => x.buy); cost = w.reduce((a, x) => a + pr(P[x.t.root].id) * x.count, 0); qty = w.length + " silah"; }
+      else if (g.part) { const n = miss[g.part] || 0; cost = n * pr(P[g.part].id); qty = fmt(n) + " adet"; }
+      else if (g.items) { cost = g.items.reduce((a, [id, q]) => a + pr(id) * q, 0); qty = g.items.length + " parça"; }
+      else if (g.kind === "clover") { cost = coinPer; qty = "adet başı"; }
+      const hrs = cost ? (cost / 10000 / gph()) : 0;
+      return `<tr><td><b>${esc(g.title)}</b><div class="small muted">${esc(g.instead)}</div></td><td>${qty}</td>
+        <td>${cost == null ? "—" : cost ? gold(cost) : '<span class="muted">0 / fiyat yok</span>'}</td><td>${cost ? (hrs < 1 ? "<1" : fmt(hrs)) + " sa" : "—"}</td>
+        <td class="${g.verdict === "AL" ? "okc" : "warnc"}"><b>${esc(g.verdict)}</b></td></tr>`;
+    }).join("");
+    $("#goldBox").innerHTML = `<div class="small muted" style="margin-bottom:6px">Farm süresi = TP fiyatı ÷ ${gph()} altın/saat (Ayarlar'dan değişir). Adetler craft edeceğin açık hedeflerin eksiği.</div>
+      <table><tr><th>Ne</th><th>Ne kadar</th><th>TP</th><th>Farm</th><th>Karar</th></tr>${rows}</table>
+      <h3>Altınla alınamayanlar (oynaman şart)</h3><div class="small">${DATA.notBuyable.map(esc).join(" · ")}</div>
+      <h3>En iyi altın kaynakları (Farming Community ölçümleri, günün ilk turu)</h3>
+      <table><tr><th>Etkinlik</th><th>Kazanç</th><th></th></tr>${DATA.bestGold.map(b => `<tr><td>${esc(b.what)}</td><td class="small">${esc(b.pay)}</td><td class="small muted">${esc(b.note)}</td></tr>`).join("")}</table>
+      <div class="small muted" style="margin-top:6px">En iyi altın kaynaklarının çoğu zaten SotO turunda; Obsidian'ın günlük işleri aynı zamanda günün en iyi farmı. Tekrar turları çok daha az kazandırır.</div>`;
+  }
+  // Mystic Clover: günlük kaynağı yok; haftalık vendor'lar + sezonluk Vault + sınırsız Lyhr
+  {
+    let need = 0; const pool = {};   // tek havuz: elindeki clover'lar bir kez sayılır
+    for (const tp of craftOnly(tps)) need += missingLeaves(tp.t.root, tp.count, pool, {})["Mystic Clover"] || 0;
+    const have = ownedOf("Mystic Clover"), weekly = DATA.cloverSources.filter(c => c.per === "hafta").reduce((a, c) => a + c.n, 0);
+    const lst = snap && snap.wv && snap.wv.listings, wvLeft = Array.isArray(lst) ? Math.max(0, 20 - ((lst.find(l => l.id === 81) || {}).purchased || 0)) : 20;
+    const rest = Math.max(0, need - wvLeft), weeks = Math.ceil(rest / weekly);
+    $("#cloverBox").innerHTML = (snap ? `<div class="small">Açık hedefler için eksik: <b>${fmt(need)}</b> clover (sende ${fmt(have)} sayıldı). Vault'tan bu sezon alınabilecek: ${wvLeft}. Haftalık vendor'ların hepsiyle haftada <b>${weekly}</b> → ~<b>${weeks} hafta</b>. Daha hızlısı: Lyhr'den sınırsız (~7 altın/adet + 3 Obsidian + 3 Spirit Shard).</div>` : '<div class="muted small">API verisi yok.</div>') +
+      `<div class="small muted" style="margin:6px 0 4px">Her gün yapılan bir clover işi yok: bütün kaynaklar haftalık ya da sezonluk.</div>
+      <table><tr><th>Kaynak</th><th>Adet</th><th>Bedel</th><th>Mod</th></tr>${DATA.cloverSources.map(c => `<tr><td>${esc(c.who)}</td><td>${c.n ? c.n + " / " + c.per : esc(c.per)}</td><td class="small">${esc(c.cost)}</td><td class="small">${esc(c.mode)}</td></tr>`).join("")}</table>`;
+  }
+  // birden fazla hedefe yarayan timegate'li parçalar
+  const use = {};
+  for (const tp of craftOnly(tps)) { const g = grossNeed(tp.t.root, tp.count, {}); for (const [n, q] of Object.entries(g)) if (P[n] && P[n].tg) (use[n] = use[n] || []).push([tp.t.name, q]); }
+  const rows = Object.entries(use).filter(([, l]) => l.length > 1).sort((a, b) => b[1].length - a[1].length);
+  $("#sharedTg").innerHTML = rows.length ? `<table><tr><th>Malzeme</th><th>Hedefler</th><th>Toplam</th><th>Sende</th></tr>${rows.map(([n, l]) => {
+    const tot = l.reduce((a, [, q]) => a + q, 0), have = ownedOf(n);
+    return `<tr><td><a href="${partWiki(n, P[n])}" target="_blank" rel="noopener">${esc(n)}</a><div class="small muted">${esc(P[n].src || "")}</div></td><td class="small">${l.map(([t, q]) => esc(t) + " ×" + fmt(q)).join("<br>")}</td><td>${fmt(tot)}</td><td class="${have >= tot ? "okc" : "warnc"}">${snap ? fmt(have) : "?"}</td></tr>`;
+  }).join("")}</table><div class="small muted" style="margin-top:6px">Neden şimdi: bunlar hem sınırlı hızda geliyor hem birden fazla hedefe gidiyor; erken biriktirmek her hedefi kısaltır.</div>` : '<div class="muted">Yok.</div>';
+}
+
+// =================== Render: Hedefler ===================
+function nodeHtml(name, qty, depth) {
+  const p = P[name]; if (!p) return `<li><span class="err">${esc(name)} (veri yok)</span></li>`;
+  let cnt = "";
+  if (p.ach) { const f = achFrac(p.ach), a = snap && snap.ach[p.ach]; cnt = `<span class="cnt ${f >= 1 ? "ok" : "no"}">${f >= 1 ? "tamam" : a ? a.cur + "/" + a.max : "başlanmadı"}</span>`; }
+  else { const h = ownedOf(name); cnt = `<span class="cnt ${h >= qty ? "ok" : "no"}">${snap ? fmt(h) : "?"} / ${fmt(qty)}</span>`; }
+  const pr = p.id && prices.p[p.id] && prices.p[p.id].s ? `<span class="pill">TP ${gold(prices.p[p.id].s)}</span>` : "";
+  const kids = p.in && depth < 8 && !(snap && !p.ach && ownedOf(name) >= qty)
+    ? `<ul>${p.in.map(([c, q]) => nodeHtml(c, p.ach ? 1 : q * qty, depth + 1)).join("")}</ul>` : "";
+  return `<li><div class="node"><a href="${partWiki(name, p)}" target="_blank" rel="noopener">${esc(name)}</a>${p.ach ? '<span class="tag">achievement</span>' : ""}${cnt}${pr}${p.tg ? '<span class="tag tg">timegate</span>' : ""}${p.uv ? '<span class="tag uv">doğrulanmadı</span>' : ""}<span class="small muted">${esc(p.src || "")}</span></div>${kids}</li>`;
+}
+function renderTargets() {
+  const tps = tgtPrefs().filter(x => x.enabled);
+  $("#targetList").innerHTML = tps.map(tp => {
+    const t = tp.t, c = targetCalc(tp);
+    const pct = c.done ? 100 : Math.round(c.pct * 100);
+    const hrs = c.buy && c.cost ? Math.max(0, Math.ceil((c.cost - (c.coin || 0)) / 10000 / gph())) : 0;
+    const days = c.done ? "bitti" : c.buy ? (c.tpPrice ? `hazır alınacak · ~${hrs} saat farm` : "TP fiyatı yok") : c.worst ? `~${c.worst.days} gün (${esc(c.worst.label)})` : "timegate yok — altına/çabaya bağlı";
+    return `<details class="tgt"><summary><div class="tgthead"><div><div class="name">${esc(t.name)}${tp.count > 1 ? " ×" + tp.count : ""}</div>
+      <div class="small muted">${esc(t.slot)} · ${esc(t.mode)}</div></div>
+      <div style="min-width:220px;flex:1;max-width:360px"><div class="bar"><i style="width:${pct}%"></i></div>
+      <div class="small"><b>%${snap ? pct : "?"}</b> · ${snap ? days : "API verisi yok"}${c.armory ? ` · <span class="okc">Armory'de ${c.armory}</span>` : ""}</div></div></div></summary>
+      <div class="small" style="margin-top:8px">${esc(t.why)}</div>
+      <div class="small muted">Altın: ${esc(t.gold)}${c.tpPrice ? ` · TP'de hazır: <b>${gold(c.tpPrice)}</b>` : ""}${snap && !c.done ? ` · Eksiklerin TP maliyeti ≈ <b>${gold(c.cost)}</b>${c.unpriced ? ` (+${c.unpriced} satılamayan/fiyatsız kalem)` : ""}` : ""}</div>
+      ${c.gates.length ? `<div class="small" style="margin-top:4px">${c.gates.map(g => `${esc(g.label)}: kalan ${fmt(g.rem)} → ~${g.days == null ? "?" : g.days} gün`).join(" · ")}</div>` : ""}
+      ${c.buy ? `<div class="small" style="margin-top:6px">TP'den hazır alınacak: <b>${c.tpPrice ? gold(c.cost) : "fiyat yok"}</b> · cüzdanında ${snap ? gold(c.coin) : "?"} · ${gph()} altın/saat ile ~<b>${hrs} saat</b> farm. Cüzdan bütün hedefler için ortak — yüzde sadece fikir verir. Craft ağacını görmek için Ayarlar'da "hazır al"ı kapat.</div>`
+        : `<ul class="tree">${nodeHtml(t.root, tp.count, 0)}</ul>`}</details>`;
+  }).join("") || '<div class="card muted">Aktif hedef yok.</div>';
+  // ortak malzemeler
+  const use = {};
+  for (const tp of craftOnly(tps)) { const g = grossNeed(tp.t.root, tp.count, {}); delete g[tp.t.root]; for (const [n, q] of Object.entries(g)) (use[n] = use[n] || []).push([tp.t.name, q]); }
+  // sıra: timegate'li → ara gift'ler → taban malzemeler; her grupta hedef sayısına göre
+  const grp = n => P[n].tg ? 0 : P[n].in ? 1 : 2;
+  const rows = Object.entries(use).filter(([n, l]) => l.length > 1 && !P[n].ach).sort((a, b) => grp(a[0]) - grp(b[0]) || b[1].length - a[1].length || b[1].reduce((x, [, q]) => x + q, 0) - a[1].reduce((x, [, q]) => x + q, 0));
+  const show = state.showAllShared ? rows : rows.slice(0, 25);
+  $("#sharedBox").innerHTML = `<table><tr><th>Malzeme</th><th>Hedef sayısı</th><th>Hedefler</th><th>Toplam</th><th>Sende</th></tr>${show.map(([n, l]) => {
+    const tot = l.reduce((a, [, q]) => a + q, 0), h = ownedOf(n);
+    return `<tr><td><a href="${partWiki(n, P[n])}" target="_blank" rel="noopener">${esc(n)}</a></td><td>${l.length}</td><td class="small">${l.map(([t, q]) => esc(t) + " ×" + fmt(q)).join("<br>")}</td><td>${fmt(tot)}</td><td class="${!snap ? "" : h >= tot ? "okc" : "err"}">${snap ? fmt(h) : "?"}</td></tr>`;
+  }).join("")}</table>${rows.length > 25 ? `<button class="btn" id="sharedMore" style="margin-top:8px">${state.showAllShared ? "Daha az göster" : "Tümünü göster (" + rows.length + ")"}</button>` : ""}`;
+  const m = $("#sharedMore"); if (m) m.onclick = () => { state.showAllShared = !state.showAllShared; saveState(); renderTargets(); };
+}
+
+// =================== Render: Achievement avcısı ===================
+const AUTO_TAGS = [
+  [/jumping puzzle|\bjp\b|climb|ledge|atop/i, "zıplama", 3],
+  [/chance|random|drop(s|ped)? (from|by)|chest/i, "RNG", 4],
+  [/champion|legendary |world boss|meta|squad|defeat .* (boss|wurm|dragon)/i, "grup/meta", 4],
+  [/(skyscale|griffon|springer|skimmer|jackal|raptor|roller beetle|warclaw|skiff)|mount(?! (maelstrom|balrior))/i, "mount", 3],
+  [/event|defend|escort/i, "event", 3],
+  [/(purchase|buy|vendor|karma)/i, "satın al", 1],
+  [/bring|give|talk|speak|deliver/i, "teslim", 2],
+  [/collect|gather|harvest|forage/i, "toplama", 2]
+];
+function autoTags(text) {
+  const tags = [], ds = [];
+  for (const [re, t, d] of AUTO_TAGS) if (re.test(text)) { tags.push(t); ds.push(d); }
+  return { tags, d: ds.length ? Math.max(...ds) : null };
+}
+async function ensureStatic(kind, ids) {
+  const need = [...new Set(ids)].filter(id => id != null && !stat[kind][id]);
+  if (!need.length) return;
+  const base = { items: "/v2/items", skins: "/v2/skins", minis: "/v2/minis", ach: "/v2/achievements" }[kind];
+  for (const x of await apiIds(base, need, false)) stat[kind][x.id] = kind === "ach"
+    ? { name: x.name, req: x.requirement || "", desc: x.description || "", bits: x.bits || [], tiers: x.tiers || [], flags: x.flags || [] }
+    : { name: x.name };
+  lsSet(LS.stat, stat);
+}
+async function loadHunter() {
+  const st = $("#hunterStatus");
+  st.innerHTML = '<span class="spinner"></span> Achievement verisi okunuyor…';
+  try {
+    const on = new Set(tgtPrefs().filter(x => x.enabled).map(x => x.t.key));
+    const sel = state.hunterFilter, list = DATA.hunter.filter(h => on.has(h.target) && (!sel || h.target === sel));
+    for (const h of list) if (h.kind === "category" && !stat.cats[h.cat]) { const c = await api("/v2/achievements/categories/" + h.cat, false); stat.cats[h.cat] = c.achievements || []; }
+    const achIds = list.map(h => h.ach).concat(...list.filter(h => h.kind === "category").map(h => stat.cats[h.cat] || []));
+    await ensureStatic("ach", achIds);
+    const items = [], skins = [], minis = [];
+    for (const h of list) if (h.kind === "bits") for (const b of (stat.ach[h.ach] || {}).bits || []) { if (b.type === "Item") items.push(b.id); if (b.type === "Skin") skins.push(b.id); if (b.type === "Minipet") minis.push(b.id); }
+    await ensureStatic("items", items); await ensureStatic("skins", skins); await ensureStatic("minis", minis);
+    st.textContent = "";
+  } catch (e) { st.innerHTML = '<span class="err">Hata: ' + esc(e.message) + "</span>"; }
+  renderHunter();
+}
+function bitInfo(b) {
+  const kind = { Item: "items", Skin: "skins", Minipet: "minis" }[b.type];
+  const nm = kind && stat[kind][b.id] ? stat[kind][b.id].name : (b.text || (b.type + " " + (b.id || "")));
+  return { key: (b.type || "text").toLowerCase().replace("minipet", "mini") + ":" + (b.id != null ? b.id : nm), name: nm, text: b.text || "" };
+}
+function renderHunter() {
+  const sel = state.hunterFilter, tname = Object.fromEntries(DATA.targets.map(t => [t.key, t.name]));
+  // en az kalan üstte, bitenler en altta
+  const leftOf = h => { const d = stat.ach[h.ach], a = snap && snap.ach[h.ach]; if (!d) return 1e6; if (a && a.done) return 1e7; const n = d.tiers.length ? d.tiers[d.tiers.length - 1].count : (d.bits.length || 1); return n - (a ? a.cur : 0); };
+  const on = new Set(tgtPrefs().filter(x => x.enabled).map(x => x.t.key));
+  const list = DATA.hunter.filter(h => on.has(h.target) && (!sel || h.target === sel)).sort((x, y) => leftOf(x) - leftOf(y));
+  $("#hunterBox").innerHTML = list.map(h => {
+    const def = stat.ach[h.ach];
+    if (!def) return `<div class="card"><h2>${esc(h.title)}</h2><div class="muted small">Yüklenmedi — "Listeyi yükle".</div></div>`;
+    const a = snap && snap.ach[h.ach];
+    const needN = def.tiers.length ? def.tiers[def.tiers.length - 1].count : (def.bits.length || 1);
+    let rows = [], haveN = 0;
+    if (h.kind === "bits") {
+      const got = new Set(a ? a.bits : []);
+      haveN = a ? (a.done ? needN : a.cur) : 0;
+      def.bits.forEach((b, i) => { if (a && a.done) return; if (got.has(i)) return; const bi = bitInfo(b); rows.push(Object.assign(bi, { hint: b.text && b.text !== bi.name ? b.text : "" })); });
+    } else {
+      const ids = (stat.cats[h.cat] || []).filter(id => id !== h.ach);
+      for (const id of ids) { const d = stat.ach[id]; if (!d || d.flags.includes("Daily") || d.flags.includes("Weekly") || d.flags.includes("Repeatable") || d.flags.includes("CategoryDisplay")) continue; const x = snap && snap.ach[id]; if (x && x.done) { haveN++; continue; } rows.push({ key: "ach:" + id, name: d.name, hint: d.req || d.desc, achId: id }); }
+      if (a && a.max) haveN = a.done ? needN : a.cur;   // meta'nın kendi sayacı (kategoride sayılmayan achievement'lar olabilir)
+    }
+    const left = Math.max(0, needN - haveN), done = a && a.done;
+    rows = rows.map(r => {
+      const dataTag = DATA.hunterTags[r.key], man = state.diff[r.key], au = autoTags(r.name + " " + r.hint);
+      const d = dataTag && dataTag.d || man || au.d;
+      return Object.assign(r, { d, dataTag, man, au });
+    }).sort((x, y) => (x.d || 9) - (y.d || 9));
+    return `<div class="card"><h2>${esc(h.title)} <span class="pill">${esc(tname[h.target] || "")}</span></h2>
+      <div class="small">${done ? '<span class="okc">Tamamlandı</span>' : `<b>${fmt(haveN)}/${fmt(needN)}</b> · <b class="warnc">${fmt(left)} tane daha lazım</b>`} · <a href="${wikiUrl(def.name)}" target="_blank" rel="noopener">wiki</a></div>
+      ${h.why ? `<div class="small" style="margin:2px 0">${esc(h.why)}</div>` : ""}
+      ${def.req ? `<div class="small muted">${esc(def.req)}</div>` : ""}
+      ${done ? "" : `<ul class="hunt">${rows.map(r => `<li><select data-dk="${esc(r.key)}" title="Zorluk">${["", 1, 2, 3, 4, 5].map(v => `<option value="${v}" ${(r.man || "") == v ? "selected" : ""}>${v === "" ? "–" : v}</option>`).join("")}</select>
+        <div><div><a href="${wikiUrl(r.name)}" target="_blank" rel="noopener">${esc(r.name)}</a> <span class="pill">zorluk ${r.d || "?"}</span></div>
+        <div>${(r.dataTag ? r.dataTag.tags.map(t => `<span class="tag">${esc(t)}</span>`) : r.au.tags.map(t => `<span class="tag uv">oto: ${esc(t)}</span>`)).join("")}</div>
+        <div class="small muted">${esc(r.dataTag && r.dataTag.tip || r.hint || "")}</div></div></li>`).join("")}</ul>`}</div>`;
+  }).join("");
+}
+document.addEventListener("change", e => {
+  const s = e.target; if (!s.matches || !s.matches("select[data-dk]")) return;
+  if (s.value) state.diff[s.dataset.dk] = +s.value; else delete state.diff[s.dataset.dk];
+  saveState(); renderHunter();
+});
+
+// =================== Render: Ayarlar ===================
+function renderSettings() {
+  $("#keyInput").value = apiKey ? "••••••••" + apiKey.slice(-6) : "";
+  const req = ["account", "progression", "inventories", "wallet", "unlocks", "characters"];
+  if (snap && apiKey) {
+    const miss = req.filter(r => !snap.scopes.includes(r));
+    $("#keyInfo").innerHTML = `Hesap: <b>${esc(snap.name)}</b> · Yetkiler: ${snap.scopes.map(esc).join(", ")}<br>` +
+      (miss.length ? `<span class="err">Eksik yetki: ${miss.join(", ")} — bu verilere bağlı bölümler manuel kalır.</span>` : '<span class="okc">Gerekli tüm yetkiler var.</span>') +
+      (snap.scopes.includes("tradingpost") ? "" : ' <span class="muted">(tradingpost yok — opsiyonel)</span>') +
+      (snap.errors.length ? `<div class="err">Hatalar: ${snap.errors.map(esc).join(" · ")}</div>` : "");
+  } else $("#keyInfo").textContent = apiKey ? "Kontrol için Yenile." : "Key yok.";
+  const tps = tgtPrefs();
+  $("#gphInput").value = gph();
+  $("#tgtSettings").innerHTML = tps.map((tp, i) => `<div class="trow">
+    <input type="checkbox" data-tk="${tp.t.key}" ${tp.enabled ? "checked" : ""}>
+    <div class="nm">${esc(tp.t.name)} <span class="pill">${esc(tp.t.slot)}</span></div>
+    ${P[tp.t.root] && P[tp.t.root].id && tp.t.buyDefault != null ? `<label class="small"><input type="checkbox" data-tb="${tp.t.key}" ${tp.buy ? "checked" : ""}> hazır al</label>` : ""}
+    <label class="small">kopya <input type="number" min="1" max="8" value="${tp.count}" data-tc="${tp.t.key}" style="width:56px"></label>
+    <button class="btn" data-up="${i}" ${i === 0 ? "disabled" : ""}>↑</button><button class="btn" data-down="${i}" ${i === tps.length - 1 ? "disabled" : ""}>↓</button></div>`).join("");
+}
+document.addEventListener("change", e => {
+  if (e.target.id !== "gphInput") return;
+  const v = Math.max(1, Math.min(200, +e.target.value || DATA.goldPerHour)); state.gph = v; saveState(); renderAll();
+});
+function setTgt(key, patch) { state.targets[key] = Object.assign(state.targets[key] || {}, patch); saveState(); }
+$("#tgtSettings").addEventListener("change", e => {
+  const el = e.target;
+  if (el.dataset.tk) setTgt(el.dataset.tk, { enabled: el.checked });
+  if (el.dataset.tc) setTgt(el.dataset.tc, { count: Math.max(1, Math.min(8, +el.value || 1)) });
+  if (el.dataset.tb) setTgt(el.dataset.tb, { buy: el.checked });
+  renderAll();
+});
+$("#tgtSettings").addEventListener("click", e => {
+  const el = e.target; if (el.dataset.up == null && el.dataset.down == null) return;
+  const tps = tgtPrefs(), i = +(el.dataset.up != null ? el.dataset.up : el.dataset.down), j = el.dataset.up != null ? i - 1 : i + 1;
+  [tps[i], tps[j]] = [tps[j], tps[i]];
+  tps.forEach((tp, k) => setTgt(tp.t.key, { order: k }));
+  renderAll();
+});
+$("#keySave").onclick = () => {
+  const v = $("#keyInput").value.trim();
+  if (!v || v.startsWith("••")) return;
+  if (!/^[A-F0-9-]{60,80}$/i.test(v)) { $("#keyInfo").innerHTML = '<span class="err">Bu bir GW2 API key gibi görünmüyor.</span>'; return; }
+  apiKey = v; lsSet(LS.key, v); refresh();
+};
+$("#keyDel").onclick = () => {
+  if (!confirm("API key ve hesap verisi bu tarayıcıdan silinsin mi?")) return;
+  apiKey = ""; snap = null; localStorage.removeItem(LS.key); localStorage.removeItem(LS.snap); renderAll(); setStatus("API key yok — manuel mod");
+};
+$("#expBtn").onclick = () => { $("#ioBox").value = JSON.stringify({ app: "legendary-hedefler", v: 1, state }, null, 1); };
+$("#impBtn").onclick = () => {
+  try {
+    const j = JSON.parse($("#ioBox").value);
+    if (!j || j.app !== "legendary-hedefler" || !j.state) throw new Error("Bu dosyaya ait bir yedek değil");
+    state = Object.assign(state, j.state); saveState(); renderAll(); alert("İçe aktarıldı.");
+  } catch (e) { alert("Okunamadı: " + e.message); }
+};
+$("#cacheBtn").onclick = () => { stat = { items: {}, skins: {}, minis: {}, ach: {}, cats: {} }; prices = { ts: 0, p: {} }; localStorage.removeItem(LS.stat); localStorage.removeItem(LS.price); alert("Önbellek temizlendi. Yenile'ye bas."); };
+
+// =================== Genel ===================
+function renderStatus() {
+  if (!apiKey) return setStatus("API key yok — manuel mod");
+  if (!snap) return setStatus("Henüz okunmadı — Yenile");
+  const t = new Date(snap.ts);
+  setStatus(`Son güncelleme: ${t.toLocaleString("tr-TR", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" })}${snap.errors.length ? ' · <span class="err">' + snap.errors.length + " hata (Ayarlar)</span>" : ""}`);
+}
+function renderAll() { renderStatus(); renderToday(); renderRecs(); renderTargets(); renderSettings(); if (Object.keys(stat.ach).length) renderHunter(); }
+
+$("#nav").addEventListener("click", e => {
+  const b = e.target.closest("button[data-tab]"); if (!b) return;
+  document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x === b));
+  document.querySelectorAll("section.tab").forEach(s => s.classList.toggle("on", s.id === "tab-" + b.dataset.tab));
+  if (b.dataset.tab === "hunter" && !DATA.hunter.some(h => stat.ach[h.ach])) loadHunter();
+});
+$("#refreshBtn").onclick = () => refresh();
+$("#hunterLoad").onclick = () => loadHunter();
+$("#hunterFilter").innerHTML = '<option value="">Tümü</option>' + [...new Set(DATA.hunter.map(h => h.target))].map(k => `<option value="${k}">${esc((DATA.targets.find(t => t.key === k) || {}).name || k)}</option>`).join("");
+$("#hunterFilter").value = state.hunterFilter || "";
+$("#hunterFilter").onchange = e => { state.hunterFilter = e.target.value; saveState(); renderHunter(); };
+$("#dataAsOf").textContent = DATA.meta.asOf;
+
+renderAll();
+tick(); setInterval(tick, 1000);
+// açılışta: veri yoksa ya da 10 dakikadan eskiyse otomatik yenile
+if (apiKey && (!snap || Date.now() - snap.ts > 600000)) refresh();
+</script>
+</body>
+</html>
