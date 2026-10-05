@@ -286,6 +286,16 @@ const DATA = {
     "Gift of Crystalline Magic": { id: 91124, src: "100 Kralkatite Ore + 100 Difluorite Crystal + 100 Inscribed Shard + Bottle of Elonian Wine" },
     "Gift of Ephemeral Magic": { id: 91112, src: "100 Lump of Mistonium + 100 Branded Mass + 100 Mistborn Mote + Bottle of Elonian Wine" },
 
+    // ---- Vision koleksiyonlarının gizli şartları (wiki, 6 Ekim 2026) ----
+    "Brandstone Research": { ach: 4000, src: "7 gün sürer (günde bir adım). Bitince Yasna Astral silah tariflerini satar.", tg: true },
+    "Astral weapon recipes": { src: "Yasna (The Astralarium): 6 silah tarifi × 10 Kralkatite Ore + Recipe: Kralkatite Ingot 10 Kralkatite Ore", in: [["Kralkatite Ore", 70], ["Brandstone Research", 1]] },
+    "The Convergence of Sorrow I: Elegy": { ach: 4376, src: "Elegy zırh koleksiyonu; bitince Amira'dan Vision of Equipment: Elegy Armor alınır" },
+    "Lasting Bonds: What Comes Next": { ach: 4112, src: "Reinforced Olmakhan Bandolier'ı veren koleksiyon (Sandswept Isles)" },
+    "Mist Shard armor (heavy, 6 parça)": { src: "6 achievement'ın her biri bir Tier 1 Mist Shard parçası verir; hepsinde aynı ağırlığı seçtiysen craft gerekmez. Karışık seçtiysen eksik parçayı 25 Mistborn Mote ile craft et.", in: [["Mistborn Mote", 150]] },
+    "Mistborn Mote": { id: 90783 },
+    "Kralkatite Ore": { id: 86069 },
+    "Powdered Rose Quartz": { id: 86269 },
+
     // ---- Coalescence ----
     "Coalescence": { id: 91234, src: "Mystic Forge", in: [["Hateful Sworl", 1], ["Gift of Patience", 1], ["Mystic Tribute", 1], ["Gift of Compassion", 1]], wiki: "Coalescence" },
     "Hateful Sworl": { id: 86104, src: "Coalescence I ödülü", in: [["Coalescence I: Unbridled", 1]] },
@@ -518,7 +528,8 @@ const DATA = {
       gates: [ { label: "Funerary Incense", item: 86093, need: 250, perDay: 8, est: true, note: "Vabbi'de 8 heart vendor × günde 1; Primeval Steward'dan daha hızlı ama Elegy Mosaic/Trade Contract pahalı" }, { label: "Legendary Insight", cur: 70, need: 150, perDay: 4.5, est: true, note: "Strike-only ~31/hafta: 15 encounter + ~10 bounty + 6 quickplay" } ] },
     { key: "vision", sg: "accessory", need: [{ m: "open", kind: "grind", why: "koleksiyonlar, metalar, harita işleri" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track; başka kaynağı yok)" }], name: "Vision", root: "Vision", count: 1, slot: "Accessory 2", mode: "Açık dünya (LS4)",
       gold: "~1.900-2.400 altın",
-      why: "Stella Radians ve Strife Unending'den kısa; LS4 haritalarında oynarken koleksiyonlar kendiliğinden ilerler.", gates: [] },
+      why: "Stella Radians ve Strife Unending'den kısa; LS4 haritalarında oynarken koleksiyonlar kendiliğinden ilerler.",
+      gates: [ { label: "Brandstone Research (günde 1 adım)", steps: [[4000, 7]], perDay: 1 } ] },
     { key: "endless", sg: "ring", need: [{ m: "open", kind: "grind", why: "koleksiyonlar, metalar, harita işleri" }, { m: "dungeon", kind: "once", h: 5, why: "2 Gift of Ascalon: Ascalonian Catacombs explorable 5 kez + 1.000 Tales (8 farklı path/gün ≈ 950 Tales)" }], name: "Endless Summer", root: "Endless Summer", count: 1, slot: "Ring 1", mode: "Açık dünya (VoE), solo",
       gold: "~1.430 altın + 1.000 Tales + ~1,2M karma",
       why: "Mystic Tribute yok. ~4.000 Rift Essence ister — Obsidian'la çakışır, Obsidian'dan sonra.", gates: [] },
@@ -865,6 +876,398 @@ const DATA = {
     "item:81035": { d: 2, tags: ["toplama", "zıplama"], tip: "3 Fire Orchid Blossom → Rosewood (Ancient Hollow üstündeki çıkıntı)." }
   }
 };
+
+// ---- Koleksiyon içerikleri (otomatik üretildi: GW2 API tarifleri + wiki vendor verisi; 6 Ekim 2026) ----
+// bits: achievement -> [[parça, adet, bit sırası]]. Sadece henüz toplanmamış parçalar hesaplara girer.
+// Elle düzeltmek için: aynı adı DATA.parts'ta tanımla (DATA.parts önce gelir), ya da buradaki satırı düzelt.
+const COLLECTIONS = {
+  parts: {
+    "Astral Ward Heavy Helm": {"id": 100026, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Gift of Fangs", 1], ["Pouch of Stardust", 2], ["Research Note", 500], ["Purified Rift Essence", 1]]},
+    "Rift Hunter Heavy Helm": {"id": 100884, "src": "SotO hikayesi (Rift Hunter kutuları) ya da SotO reward track"},
+    "Oneiros-Spun Heavy Helm": {"id": 101229, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Research Note", 500], ["Gift of Dust", 1], ["Clot of Congealed Screams", 1], ["Purified Rift Essence", 1]]},
+    "Lifeblood of Ignaxious": {"id": 101585, "src": "Boss event, bir kez: Defeat Ignaxious (Heitor's Gate, Inner Nayos)"},
+    "Astral Ward Heavy Shoulders": {"id": 100282, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Research Note", 500], ["Gift of Dust", 1], ["Case of Captured Lightning", 2], ["Purified Rift Essence", 1]]},
+    "Rift Hunter Heavy Shoulders": {"id": 100804, "src": "SotO hikayesi (Rift Hunter kutuları) ya da SotO reward track"},
+    "Oneiros-Spun Heavy Shoulders": {"id": 101256, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Research Note", 500], ["Gift of Bones", 1], ["Clot of Congealed Screams", 1], ["Purified Rift Essence", 1]]},
+    "Lifeblood of Galene the Seething": {"id": 101502, "src": "Boss event, bir kez: Defeat Galene the Seething (Droknar's Light, Skywatch Archipelago)"},
+    "Astral Ward Heavy Coat": {"id": 100349, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Pouch of Stardust", 2], ["Research Note", 500], ["Gift of Scales", 1], ["Purified Rift Essence", 1]]},
+    "Rift Hunter Heavy Coat": {"id": 100592, "src": "SotO hikayesi (Rift Hunter kutuları) ya da SotO reward track"},
+    "Oneiros-Spun Heavy Coat": {"id": 101275, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Research Note", 500], ["Clot of Congealed Screams", 1], ["Gift of Blood", 1], ["Purified Rift Essence", 1]]},
+    "Lifeblood of Nourys, Eyes of the Abyss": {"id": 101438, "src": "Boss event, bir kez: Defeat Nourys (The World Spire, Amnytas meta)"},
+    "Astral Ward Heavy Gloves": {"id": 100459, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Research Note", 500], ["Case of Captured Lightning", 2], ["Gift of Venom", 1], ["Purified Rift Essence", 1]]},
+    "Rift Hunter Heavy Gloves": {"id": 100252, "src": "SotO hikayesi (Rift Hunter kutuları) ya da SotO reward track"},
+    "Oneiros-Spun Heavy Gloves": {"id": 101249, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Research Note", 500], ["Gift of Claws", 1], ["Clot of Congealed Screams", 1], ["Purified Rift Essence", 1]]},
+    "Lifeblood of Pherus the Subjugator": {"id": 101490, "src": "Boss event, bir kez: Defeat Pherus the Subjugator (Nyedra, Inner Nayos)"},
+    "Astral Ward Heavy Leggings": {"id": 100162, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Pouch of Stardust", 2], ["Research Note", 500], ["Gift of Bones", 1], ["Purified Rift Essence", 1]]},
+    "Rift Hunter Heavy Leggings": {"id": 100759, "src": "SotO hikayesi (Rift Hunter kutuları) ya da SotO reward track"},
+    "Oneiros-Spun Heavy Leggings": {"id": 101280, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Research Note", 500], ["Gift of Venom", 1], ["Clot of Congealed Screams", 1], ["Purified Rift Essence", 1]]},
+    "Lifeblood of Knaebelag the Terror": {"id": 101471, "src": "Boss event, bir kez: The Fangs That Gnash metası (Nyedra Surrounds, Inner Nayos)"},
+    "Astral Ward Heavy Boots": {"id": 100392, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Research Note", 500], ["Case of Captured Lightning", 2], ["Gift of Claws", 1], ["Purified Rift Essence", 1]]},
+    "Rift Hunter Heavy Boots": {"id": 100890, "src": "SotO hikayesi (Rift Hunter kutuları) ya da SotO reward track"},
+    "Oneiros-Spun Heavy Boots": {"id": 101210, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Research Note", 500], ["Clot of Congealed Screams", 1], ["Gift of Totems", 1], ["Purified Rift Essence", 1]]},
+    "Lifeblood of Myros the Spiteful": {"id": 101459, "src": "Boss event, bir kez: Kryptis devriye liderleri (The Bleeding Wastes, Inner Nayos)"},
+    "Sentient Seed": {"id": 81781, "src": "Vendor: Gleam of Sentience", "in": [["Unbound Magic", 1000]]},
+    "Unbound Magic": {"cur": 32, "src": "Wallet"},
+    "Bloodstone Fen Hero": {"id": 81932, "src": "Bloodstone Fen Master ödülü"},
+    "Ember Bay Hero": {"id": 81806, "src": "Ember Bay Master ödülü"},
+    "Bitterfrost Frontier Hero": {"id": 81635, "src": "Bitterfrost Frontier Master ödülü"},
+    "Lake Doric Hero": {"id": 82029, "src": "Lake Doric Master ödülü"},
+    "Draconis Mons Hero": {"id": 81896, "src": "Draconis Mons Master ödülü"},
+    "Siren's Landing Hero": {"id": 81656, "src": "Siren's Landing Master ödülü"},
+    "Druid Stone": {"id": 81007, "src": "Drop / event (wiki: Druid Stone)"},
+    "Element of the Wardbough": {"id": 81052, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Wardbough's Runestone": {"id": 81168, "src": "Kodama in Draconis Mons would be interested in this."},
+    "Element of the Arbor": {"id": 81114, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Arboreal Runestone": {"id": 81062, "src": "Kodama in Draconis Mons would be interested in this."},
+    "Element of the Oakhearts": {"id": 81050, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Oakheart's Runestone": {"id": 81064, "src": "Kodama in Draconis Mons would be interested in this."},
+    "Living Druid Stone": {"id": 81089, "src": "Awakening the Druid Stone ödülü"},
+    "Element of the Saurians": {"id": 81010, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Saurian Runestone": {"id": 81033, "src": "Kodama in Draconis Mons would be interested in this."},
+    "Saurian Rest": {"id": 81134, "src": "Drop / event (wiki: Saurian Rest)"},
+    "Element of the Empire": {"id": 81174, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Imperial Runestone": {"id": 81032, "src": "Kodama in Draconis Mons would be interested in this."},
+    "Imperial Rest": {"id": 81088, "src": "Drop / event (wiki: Imperial Rest)"},
+    "Element of Webby": {"id": 81043, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Webby Runestone": {"id": 81146, "src": "Kodama in Draconis Mons would be interested in this."},
+    "Webby Rest": {"id": 81131, "src": "Drop / event (wiki: Webby Rest)"},
+    "Element of the Wurm": {"id": 81015, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Wurm Runestone": {"id": 81059, "src": "Kodama in Draconis Mons would be interested in this."},
+    "Wurm Rest": {"id": 81069, "src": "Drop / event (wiki: Wurm Rest)"},
+    "Element of Arcanum": {"id": 81083, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Arcanum Runestone": {"id": 81196, "src": "Kodama in Draconis Mons would be interested in this."},
+    "Arcanum Rest": {"id": 81137, "src": "Drop / event (wiki: Arcanum Rest)"},
+    "Blooming Druid Stone": {"id": 81143, "src": "Sprouting the Druid Stone ödülü"},
+    "Heavy Houndskin Mantle": {"id": 81049, "src": "Bölüm mastery'sinin ödül kutusu ya da haritanın reward track'i (Mastery kartı)"},
+    "Element of Aestus": {"id": 81058, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Aestus Runestone": {"id": 81047, "src": "Bring the Aestus Runestone, Ignis Runestone, and Desecrator Runestone to Kodama in Draconis Mons."},
+    "Element of Ignis": {"id": 81110, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Ignis Runestone": {"id": 81165, "src": "Bring the Aestus Runestone, Ignis Runestone, and Desecrator Runestone to Kodama in Draconis Mons."},
+    "Element of the Desecrator": {"id": 81041, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Desecrator Runestone": {"id": 81066, "src": "Bring the Aestus Runestone, Ignis Runestone, and Desecrator Runestone to Kodama in Draconis Mons."},
+    "Element of Fire": {"id": 81118, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Volcanic Runestone": {"id": 81023, "src": "Bring a Volcanic Runestone, a Glacial Runestone, a Charged Runestone, and an Earthen Runestone to Kodama in Draconis Mons."},
+    "Element of Water": {"id": 81094, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Glacial Runestone": {"id": 81195, "src": "Bring a Volcanic Runestone, a Glacial Runestone, a Charged Runestone, and an Earthen Runestone to Kodama in Draconis Mons."},
+    "Element of Air": {"id": 80999, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Charged Runestone": {"id": 81086, "src": "Bring a Volcanic Runestone, a Glacial Runestone, a Charged Runestone, and an Earthen Runestone to Kodama in Draconis Mons."},
+    "Element of Earth": {"id": 81105, "src": "Vendor: Supplymaster Hanjo (Mariner Landing)", "in": [["Unbound Magic", 250]]},
+    "Earthen Runestone": {"id": 81160, "src": "Bring a Volcanic Runestone, a Glacial Runestone, a Charged Runestone, and an Earthen Runestone to Kodama in Draconis Mons."},
+    "Bloodstone Chip": {"id": 81804, "src": "Salvage for unbound magic."},
+    "Hablion's Dignity": {"id": 82025, "src": "Salvage for unbound magic."},
+    "White Mantle Crest": {"id": 81755, "src": "Salvage for unbound magic."},
+    "Jade Core": {"id": 81704, "src": "Salvage for unbound magic."},
+    "Aged Ectoplasm": {"id": 81986, "src": "Salvage for unbound magic."},
+    "Living Bloodstone": {"id": 81862, "src": "Salvage for unbound magic."},
+    "Pristine Blood Ruby": {"id": 81762, "src": "Vendor: Natto (Pride of the Pact)", "in": [["Unbound Magic", 5000], ["Blood Ruby", 50]]},
+    "Strange Residue": {"id": 81929, "src": "Salvage for unbound magic."},
+    "Aerial Assault": {"id": 81882, "src": "Drop / event (wiki: Aerial Assault)"},
+    "Rift Residue": {"id": 81938, "src": "Salvage for unbound magic."},
+    "Shattered Guardian Binding": {"id": 81890, "src": "Salvage for unbound magic."},
+    "Heavy Dragonscale Epaulets": {"id": 79468, "src": "Bölüm mastery'sinin ödül kutusu ya da haritanın reward track'i (Mastery kartı)"},
+    "Petrified Burl": {"id": 81646, "src": "Salvage for unbound magic."},
+    "Pyroclastic Core": {"id": 81671, "src": "Salvage for unbound magic."},
+    "Flask of Tears": {"id": 81791, "src": "Salvage for unbound magic."},
+    "Friend of the Circus": {"id": 81794, "src": "Vendor: Vice Chief Hernandez (Osprey Pillars)", "in": [["Karma", 7000]]},
+    "Friend of the Researchers": {"id": 81620, "src": "Vendor: Research Assistant Ulaa (Lava Flats)", "in": [["Karma", 7000]]},
+    "Friend of the Skritt": {"id": 81841, "src": "Vendor: Second-to-Last-Or-So Mate Bowz (Skritt Anchorage)", "in": [["Karma", 7000]]},
+    "Friend of Science": {"id": 81775, "src": "Vendor: Scientist Vratt (Fractured Caldera)", "in": [["Karma", 7000]]},
+    "Mursaat Investigator": {"id": 81920, "src": "Vendor: Explorer Rakk (Caliph's Steps)", "in": [["Karma", 7000]]},
+    "Shiny Rock": {"id": 81924, "src": "Salvage for unbound magic."},
+    "Tarnished Coin": {"id": 81682, "src": "Salvage for unbound magic."},
+    "Volcanic Scale": {"id": 82058, "src": "Salvage for unbound magic."},
+    "Bottle of Skritt Spirits": {"id": 81609, "src": "Salvage for unbound magic."},
+    "Slubling Tail": {"id": 81760, "src": "Salvage for unbound magic."},
+    "Molten Domination": {"id": 81652, "src": "Salvage for unbound magic."},
+    "Heavy Glacial Gauntlets": {"id": 79818, "src": "Bölüm mastery'sinin ödül kutusu ya da haritanın reward track'i (Mastery kartı)"},
+    "Plump Winterberry": {"id": 81772, "src": "Salvage for unbound magic."},
+    "Frozen Winterberry": {"id": 81640, "src": "Salvage for unbound magic."},
+    "Friend of the Grawl": {"id": 81926, "src": "Vendor: Sun Warming (Brakbrak Ice Snarl)", "in": [["Karma", 7000]]},
+    "Protector of Griffons": {"id": 81868, "src": "Vendor: Woomulla (Griffon Old Growth)", "in": [["Karma", 7000]]},
+    "Friend of Quaggans": {"id": 81921, "src": "Vendor: Farmer Simooba (Dragon's Teeth Hot Springs)", "in": [["Karma", 7000]]},
+    "Enemy of the Svanir": {"id": 81904, "src": "Vendor: Svanir Seer (Renown Heart NPC) (The Svanir Hive)", "in": [["Karma", 7000]]},
+    "Corrupted Griffon Talon": {"id": 81710, "src": "Salvage for unbound magic."},
+    "Corrupted Wolfmaster Whistle": {"id": 81649, "src": "Salvage for unbound magic."},
+    "Icebrood Goliath Sinew": {"id": 81694, "src": "Salvage for unbound magic."},
+    "Icebrood Norn Pauldrons": {"id": 81657, "src": "Salvage for unbound magic."},
+    "Icebrood Troll Tooth": {"id": 81648, "src": "Salvage for unbound magic."},
+    "Crystallized Suet": {"id": 82050, "src": "Salvage for unbound magic."},
+    "Sparking Jade Shard": {"id": 81773, "src": "Salvage for unbound magic."},
+    "Frontline Defender": {"id": 81983, "src": "Vendor: Lieutenant Bran (Doric's Landing)", "in": [["Karma", 7000]]},
+    "Fort Evennia Infiltrator": {"id": 81747, "src": "Vendor: Exemplar Ylan (Fort Evennia)", "in": [["Karma", 7000]]},
+    "Friend of Noran": {"id": 82065, "src": "Vendor: Noran (Harvest Cascades)", "in": [["Karma", 7000]]},
+    "Friend of Cin Fursarai": {"id": 81934, "src": "Vendor: Cin Fursarai (Lakeside Bazaar)", "in": [["Karma", 7000]]},
+    "Friend of New Loamhurst": {"id": 81982, "src": "Vendor: Elder Vern (New Loamhurst)", "in": [["Karma", 7000]]},
+    "Friend of Saidra's Haven": {"id": 81712, "src": "Vendor: Baron Jon Xander (Saidra's Haven)", "in": [["Karma", 7000]]},
+    "Bloodstone-Warped Hoof": {"id": 81976, "src": "Salvage for unbound magic."},
+    "Immelhoof's Heart": {"id": 82021, "src": "Salvage for unbound magic."},
+    "Noran's Survival Kit": {"id": 81702, "src": "Salvage for unbound magic."},
+    "Jade Cannon Controller": {"id": 81817, "src": "Salvage for unbound magic."},
+    "Pristine White Mantle": {"id": 81700, "src": "Salvage for unbound magic."},
+    "Seraph Seraph Protector": {"id": 80526, "src": "Vendor: Lieutenant Bran (Doric's Landing)", "in": [["Karma", 210000], ["Jade Shard", 50]]},
+    "Seraph Bloodstone Savant's Staff": {"id": 80304, "src": "Vendor: Exemplar Ylan (Fort Evennia)", "in": [["Karma", 210000], ["Jade Shard", 50]]},
+    "Ebon Vanguard Badge": {"id": 81686, "src": "Salvage for unbound magic."},
+    "The Wayfarer's Henge": {"id": 81097, "src": "A Henge Away from Home ödülü"},
+    "Scouting Party Supporter": {"id": 81681, "src": "Vendor: Tactician Tunelle (Savage Rise)", "in": [["Karma", 7000]]},
+    "Fiery Liberator": {"id": 81894, "src": "Vendor: Escaped Prisoner Arissea (Heathen's Hold)", "in": [["Karma", 7000]]},
+    "Enemy of the Inquest": {"id": 82031, "src": "Vendor: Mark I Golemite (Renown Heart NPC) (Rata Arcanum)", "in": [["Karma", 7000]]},
+    "Friend of Golems": {"id": 82046, "src": "Vendor: Z.O.X. (Ancient Hollow)", "in": [["Karma", 7000]]},
+    "Searing Ascender": {"id": 81613, "src": "Salvage for unbound magic."},
+    "Ancient Asuran Wrench": {"id": 81698, "src": "Salvage for unbound magic."},
+    "Depleted Power Source": {"id": 81697, "src": "Salvage for unbound magic."},
+    "Ignis Heart": {"id": 81627, "src": "Salvage for unbound magic."},
+    "Aestus Heart": {"id": 81843, "src": "Salvage for unbound magic."},
+    "Bloodstone-Charged Lava Wurm Scale": {"id": 81891, "src": "Salvage for unbound magic."},
+    "Spirit Bough": {"id": 81763, "src": "Salvage for unbound magic."},
+    "Albino Orchid Blossom": {"id": 81744, "src": "Salvage for unbound magic."},
+    "Heavy Mursaat Brogans": {"id": 81849, "src": "Bölüm mastery'sinin ödül kutusu ya da haritanın reward track'i (Mastery kartı)"},
+    "Favor of Dwayna": {"id": 81708, "src": "Vendor: King Zoran (Dwayna's Reliquary)", "in": [["Karma", 7000]]},
+    "Favor of Balthazar": {"id": 81949, "src": "Vendor: Queen Yasamin (Balthazar's Reliquary)", "in": [["Karma", 7000]]},
+    "Favor of Grenth": {"id": 82047, "src": "Vendor: Queen Mahtab (Grenth's Reliquary)", "in": [["Karma", 7000]]},
+    "Favor of Melandru": {"id": 81771, "src": "Vendor: King Reza (Melandru's Reliquary)", "in": [["Karma", 7000]]},
+    "Favor of Lyssa": {"id": 81795, "src": "Vendor: Queen Bahar (Lyssa's Reliquary)", "in": [["Karma", 7000]]},
+    "Unchained Heart": {"id": 81844, "src": "Salvage for unbound magic."},
+    "Horrid Residue": {"id": 82020, "src": "Salvage for unbound magic."},
+    "Colossal Brazier": {"id": 81734, "src": "Salvage for unbound magic."},
+    "Orrian Nacre": {"id": 81964, "src": "Salvage for unbound magic."},
+    "Orrian Gorilla Sinew": {"id": 81695, "src": "Salvage for unbound magic."},
+    "Orrian Venom Glands": {"id": 81668, "src": "Salvage for unbound magic."},
+    "Orrian Wraith Bindings": {"id": 81907, "src": "Salvage for unbound magic."},
+    "Orrian Drake Scale": {"id": 82024, "src": "Salvage for unbound magic."},
+    "Token of Affection": {"id": 79731, "src": "This item only has value as part of a collection."},
+    "Dragon Hatchling Doll Frame": {"id": 79817, "src": "TP"},
+    "Gossamer Stuffing": {"id": 79763, "src": "TP"},
+    "Dragon Hatchling Doll Hide": {"id": 79790, "src": "TP"},
+    "Dragon Hatchling Doll Eye": {"id": 79726, "src": "TP"},
+    "Dragon Hatchling Doll Adornments": {"id": 79795, "src": "TP"},
+    "Dragon Hatchling Doll": {"id": 79812, "src": "Take this to Aurene to complete the Gift of Aurene collection."},
+    "Heavy Corsair Turban": {"id": 85882, "src": "Bölüm mastery'sinin ödül kutusu ya da haritanın reward track'i (Mastery kartı)"},
+    "Vision of Dragons: Aurene": {"id": 91000, "src": "Activate a memory crystal while riding on your skyscale. Hint: Somewhere near the Mordant Crescent Great Hall in the Domain of Istan."},
+    "Vision of Allies: Taimi": {"id": 90972, "src": "Taimi keeps studious and thorough notes. Hint: Somewhere near Chalon Docks Waypoint in the Domain of Istan."},
+    "Vision of Enemies: Warden Amala": {"id": 91052, "src": "Memory Essence Encapsulator elindeyken: A race against time, again and again... Hint: Defeat Warden Amala in the Mordant Crescent Great Hall while holding a Memory Essence Encapsulator in your inventory.", "in": [["Memory Essence Encapsulator", 1]]},
+    "Vision of Landscapes: Domain of Istan": {"id": 91030, "src": "What better than to see and be seen? Hint: Use your skyscale mount to access a rift near the Astralarium in the Domain of Istan."},
+    "Vision of Equipment: Astral Weapons": {"id": 90975, "src": "6 farklı Astral ya da Stellar silah craft et (fiyat örnek olarak dagger ile); sonra Yasna'dan al · Vendor: Yasna (The Astralarium)", "in": [["Coin", 50000], ["Marshal's Astral Razor", 6], ["Astral weapon recipes", 1]]},
+    "Coin": {"cur": 1, "src": "Wallet"},
+    "Vision of Action: Domain of Istan": {"id": 91042, "src": "Hint: Stop the supply of deathly materials."},
+    "Vision of Allies: Rox": {"id": 91114, "src": "Hint: Somewhere near Jemandi Market in the Sandswept Isles."},
+    "Vision of Enemies: Kuda's Subjects": {"id": 91003, "src": "Memory Essence Encapsulator elindeyken: Hint: Defeat Kuda's test subjects within the Specimen Chamber while holding a Memory Essence Encapsulator in your inventory.", "in": [["Memory Essence Encapsulator", 1]]},
+    "Vision of Landscapes: Sandswept Isles": {"id": 91040, "src": "Hint: Use your skyscale to access a rift near the Iron Whale in the Sandswept Isles."},
+    "Vision of Equipment: Olmakhan Bandolier": {"id": 91025, "src": "Reinforced Olmakhan Bandolier'ı edin (Trance Stone'dan sonra yapılırsa kendiliğinden gelir) · Vendor: Ethall (Atholma)", "in": [["Volatile Magic", 10], ["Coin", 8000], ["Reinforced Olmakhan Bandolier", 1]]},
+    "Volatile Magic": {"cur": 45, "src": "Wallet"},
+    "Vision of Action: Sandswept Isles": {"id": 91072, "src": "Hint: Help the youth learn to provide."},
+    "Heavy Corsair Jerkin": {"id": 87619, "src": "Bölüm mastery'sinin ödül kutusu ya da haritanın reward track'i (Mastery kartı)"},
+    "Vision of Allies: Blish": {"id": 91049, "src": "Hint: Somewhere near the Allied Encampment in the Domain of Kourna."},
+    "Vision of Enemies: Olori Ogun": {"id": 91068, "src": "Memory Essence Encapsulator elindeyken: Hint: Defeat Troopmarshal Olori Ogun in the Domain of Kourna while holding a Memory Essence Encapsulator in your inventory.", "in": [["Memory Essence Encapsulator", 1]]},
+    "Vision of Landscapes: Domain of Kourna": {"id": 91076, "src": "Hint: Use your skyscale to access a rift near the highest point of the Allied Encampment within the Domain of Kourna."},
+    "Banner of the Commander": {"id": 88057, "src": "Craft: Leatherworker/Armorsmith/Tailor 500", "in": [["Lacquered Banner Pole", 1], ["Banner Pennon", 1], ["Orichalcum Ingot", 25], ["Unidentified Dye", 20]]},
+    "Lacquered Banner Pole": {"id": 87668, "src": "Vendor: Lady Camilla (Allied Encampment)", "in": [["Vial of Awakened Blood", 1], ["Glob of Ectoplasm", 10], ["Ancient Wood Log", 10], ["Inscribed Shard", 100]]},
+    "Vial of Awakened Blood": {"id": 88023, "src": "Vendor: Lady Camilla (Allied Encampment)", "in": [["Coin", 10000]]},
+    "Ancient Wood Log": {"id": 19725, "src": "TP"},
+    "Inscribed Shard": {"id": 87645, "src": "Vendor: Durmand Priory Emissary (Hall of Monuments)", "in": [["Green Prophet Shard", 2]]},
+    "Green Prophet Shard": {"cur": 53, "src": "Wallet"},
+    "Banner Pennon": {"id": 87925, "src": "Craft: Leatherworker/Armorsmith/Tailor 400", "in": [["Bolt of Gossamer", 5], ["Spool of Gossamer Thread", 100], ["Glob of Ectoplasm", 5], ["Olmakhan Latigo Strap", 5]]},
+    "Spool of Gossamer Thread": {"id": 19790, "src": "TP"},
+    "Olmakhan Latigo Strap": {"id": 87153, "src": "Vendor: Ethall (Atholma)", "in": [["Volatile Magic", 250]]},
+    "Vision of Action: Domain of Kourna": {"id": 91105, "src": "Hint: Perform an ancient ritual with unlikely allies."},
+    "Updated Record of Joko's Deeds": {"id": 91013, "src": "Vendor: Trader Hyacinth (Yatendi Village)", "in": [["Volatile Magic", 50], ["Coin", 8]]},
+    "Vision of Allies: Braham": {"id": 90965, "src": "Hint: Somewhere near Mirza's Rest in Jahai Bluffs."},
+    "Vision of Enemies: Death-Branded Shatterer": {"id": 91126, "src": "Memory Essence Encapsulator elindeyken: Hint: Defeat the Death-Branded Shatterer within Jahai Bluffs while holding a Memory Essence Encapsulator in your inventory.", "in": [["Memory Essence Encapsulator", 1]]},
+    "Vision of Landscapes: Jahai Bluffs": {"id": 91069, "src": "Hint: Use your skyscale to access a rift high above the Displaced Towers in Jahai Bluffs."},
+    "Vision of Equipment: Elegy Armor": {"id": 91082, "src": "The Convergence of Sorrow I: Elegy bitince Amira'dan al · Vendor: Amira (Sun's Refuge)", "in": [["Coin", 80], ["The Convergence of Sorrow I: Elegy", 1]]},
+    "Vision of Action: Jahai Bluffs": {"id": 90973, "src": "Hint: Thwart an imposter's sinister plans."},
+    "Heavy Corsair Leggings": {"id": 88479, "src": "Bölüm mastery'sinin ödül kutusu ya da haritanın reward track'i (Mastery kartı)"},
+    "Vision of Allies: Caithe": {"id": 91021, "src": "Hint: Somewhere near History's End Waypoint in Thunderhead Peaks."},
+    "Vision of Enemies: Wrathbringer": {"id": 91132, "src": "Memory Essence Encapsulator elindeyken: Hint: Defeat the Wrathbringer in Thunderhead Keep while holding a Memory Essence Encapsulator in your inventory.", "in": [["Memory Essence Encapsulator", 1]]},
+    "Vision of Landscapes: Thunderhead Peaks": {"id": 91106, "src": "Hint: Use your skyscale to access a rift near the Weeping Sisters in Thunderhead Peaks."},
+    "Vision of Equipment: Dragonsblood Weapons": {"id": 90955, "src": "6 FARKLI türde Dragonsblood silah craft et (fiyat örnek olarak dagger ile); sonra Forge Master Hilina'dan al · Vendor: Forge Master Hilina (The Forge)", "in": [["Coin", 50000], ["Dragonsblood Dagger", 6]]},
+    "Vision of Action: Thunderhead Peaks": {"id": 91036, "src": "Hint: Come to the aid of a peaceful people."},
+    "Heavy Corsair Boots": {"id": 90472, "src": "Bölüm mastery'sinin ödül kutusu ya da haritanın reward track'i (Mastery kartı)"},
+    "Vision of Allies: Zafirah": {"id": 91020, "src": "Hint: Somewhere near the Pact Outpost in Dragonfall."},
+    "Vision of Enemies: Ley-Infused Enemy": {"id": 91071, "src": "Memory Essence Encapsulator elindeyken: Hint: Defeat a ley-infused enemy while holding a Memory Essence Encapsulator in your inventory.", "in": [["Memory Essence Encapsulator", 1]]},
+    "Vision of Landscapes: Dragonfall": {"id": 91093, "src": "Hint: Use your skyscale to access a rift near the Necrotic Coast within Dragonfall."},
+    "Vision of Equipment: Dragon Champion Armor": {"id": 91092, "src": "Bir ağırlıkta Tier 1 Mist Shard seti; sonra Traveling Elonian Trader'dan al · Vendor: Traveling Elonian Trader (Pact Command)", "in": [["Coin", 50000], ["Mist Shard armor (heavy, 6 parça)", 1]]},
+    "Vision of Action: Dragonfall": {"id": 91009, "src": "Hint: Collect strategic resources for the war effort."},
+    "Kralkatite Research": {"id": 85639, "src": "Drop / event (wiki: Kralkatite Research)"},
+    "Branded Residue Research": {"id": 85663, "src": "Drop / event (wiki: Branded Residue Research)"},
+    "Miasma Research": {"id": 86126, "src": "Drop / event (wiki: Miasma Research)"},
+    "Powdered Gemstone Research": {"id": 85851, "src": "Drop / event (wiki: Powdered Gemstone Research)"},
+    "Treatise on Astral Alignments": {"id": 86386, "src": "Drop / event (wiki: Treatise on Astral Alignments)"},
+    "Mirror Calibration Readings": {"id": 86078, "src": "Drop / event (wiki: Mirror Calibration Readings)"},
+    "Blazing Kralkatite": {"id": 85973, "src": "Drop / event (wiki: Blazing Kralkatite)"},
+    "Amira's Lament": {"id": 88490, "src": "Drop / event (wiki: Amira's Lament)"},
+    "Unreadable Words": {"id": 88892, "src": "Find Zor's memorial."},
+    "Field Notes on Wrecked Memorials": {"id": 88482, "src": "Drop / event (wiki: Field Notes on Wrecked Memorials)"},
+    "Amira's Complaint": {"id": 88821, "src": "Speak with Amira."},
+    "Notes on a Sunspear": {"id": 88488, "src": "Speak with the Sunspear's superior."},
+    "Further Notes on a Sunspear": {"id": 88932, "src": "Drop / event (wiki: Further Notes on a Sunspear)"},
+    "Child's Toy": {"id": 88782, "src": "A wooden roller beetle."},
+    "Portrait of a Wife": {"id": 88960, "src": "An oil painting, simply done."},
+    "Harsh Words": {"id": 88524, "src": "Drop / event (wiki: Harsh Words)"},
+    "Commission": {"id": 88945, "src": "Drop / event (wiki: Commission)"},
+    "Memorial for a Soldier": {"id": 88593, "src": "An inscription on this memorial says, \"For Zor, who fought for Elona.\""},
+    "Memorial for a Laborer": {"id": 88659, "src": "An inscription on this memorial says, \"For Zor, who tended garden and field.\""},
+    "Memorial for a Friend": {"id": 88542, "src": "An inscription on this memorial says, \"For Zor, who listened to everyone's troubles.\""},
+    "Memorial for a Peacemaker": {"id": 88639, "src": "An inscription on this memorial says, \"For Zor, who calmed all arguments.\""},
+    "Memorial for a Wanderer": {"id": 88950, "src": "An inscription on this memorial says, \"For Zor, who walked down the canyons, singing.\""},
+    "Memorial for a Brother": {"id": 88486, "src": "An inscription on this memorial says, \"For Zor, who looked after his older sister.\""},
+    "Memorial for a Wife and Son": {"id": 88548, "src": "Drop / event (wiki: Memorial for a Wife and Son)"},
+    "Invitation": {"id": 88787, "src": "Drop / event (wiki: Invitation)"},
+    "Convergence": {"id": 88870, "src": "Drop / event (wiki: Convergence)"},
+    "Endings and Beginnings": {"id": 88931, "src": "Drop / event (wiki: Endings and Beginnings)"},
+    "Pocketed Olmakhan Bandolier": {"id": 86993, "src": "Craft: Leatherworker/Armorsmith/Tailor 500", "in": [["Handwoven Olmakhan Bandolier", 1], ["Olmakhan Latigo Strap", 4], ["Supreme Rune of Holding", 5], ["Olmakhan Charm", 1]]},
+    "Handwoven Olmakhan Bandolier": {"id": 87217, "src": "Craft: Leatherworker/Armorsmith/Tailor 500", "in": [["Simple Olmakhan Bandolier", 2], ["Olmakhan Latigo Strap", 4], ["Supreme Rune of Holding", 1], ["Olmakhan Charm", 1]]},
+    "Simple Olmakhan Bandolier": {"id": 87038, "src": "Craft: Armorsmith 400", "in": [["Orichalcum Ingot", 10], ["Superior Rune of Holding", 1], ["Olmakhan Charm", 1]]},
+    "Superior Rune of Holding": {"id": 13009, "src": "TP"},
+    "Olmakhan Charm": {"id": 87150, "src": "Craft: Leatherworker/Armorsmith/Tailor 400", "in": [["Ley-Infused Sand", 50], ["Glob of Ectoplasm", 1], ["Foxfire Cluster", 100], ["Fury-Scorched Stone", 10]]},
+    "Ley-Infused Sand": {"id": 83284, "src": "TP"},
+    "Foxfire Cluster": {"id": 66933, "src": "TP"},
+    "Fury-Scorched Stone": {"id": 86967, "src": "Used in crafting Olmakhan bandoliers. Can also be salvaged for volatile magic."},
+    "Supreme Rune of Holding": {"id": 83410, "src": "TP"},
+    "\"Hope for Tomorrow\"": {"id": 87281, "src": "Consumed automatically when acquired. Grants a small amount of volatile magic.Traditional Olmakhan song. \"May the sun shine on all our tomorrows, once this storm passes...\""},
+    "Starcaller's Aetheric Gland": {"id": 87170, "src": "Consumed automatically when acquired. Grants a small amount of volatile magic.Probably best handled from long distance and behind aegis."},
+    "Seneb the Desecrated's Locket": {"id": 87199, "src": "Consumed automatically when acquired. Grants a small amount of volatile magic.The powerful mummy wore this locket, with a picture of an unknown child inside."},
+    "Nakis's Bracelet": {"id": 87162, "src": "Consumed automatically when acquired. Grants a small amount of volatile magic.Nakis's simple prayer beads, stolen from him by the Inquest."},
+    "Zohaqan's Letter": {"id": 87108, "src": "Consumed automatically when acquired. Grants a small amount of volatile magic.\"My darling Nakis, my tender Nakis, my clever Nakis...you're right. Let's go. We'll flee tomorrow.\""},
+    "Olmakhan Bow of Force": {"id": 87181, "src": "Drop / event (wiki: Olmakhan Bow of Force)"},
+    "\"Shadow and Sun\"": {"id": 87127, "src": "Consumed automatically when acquired. Grants a small amount of volatile magic.Traditional Olmakhan song. \"As shadows fall, the sun only rises higher...\""},
+    "Transcendental Binding": {"id": 85852, "src": "Vendor: Qadim's Portable Magnetite Shard Exchange/Hall of Chains", "in": [["Magnetite Shard", 1], ["Coin", 2112]]},
+    "Magnetite Shard": {"cur": 28, "src": "Wallet"},
+    "Transcendental Ink": {"id": 86383, "src": "Vendor: Qadim's Portable Magnetite Shard Exchange/Hall of Chains", "in": [["Magnetite Shard", 1], ["Coin", 2112]]},
+    "Transcendental Parchment": {"id": 85855, "src": "Vendor: Qadim's Portable Magnetite Shard Exchange/Hall of Chains", "in": [["Magnetite Shard", 1], ["Coin", 2112]]},
+    "Meditation Logbook": {"id": 85731, "src": "Mystic Forge", "in": [["Transcendental Ink", 1], ["Transcendental Binding", 1], ["Transcendental Parchment", 1], ["Pulsing Brandspark", 100]]},
+    "Pulsing Brandspark": {"id": 82678, "src": "TP"},
+    "Meditation Log: Crystal Oasis": {"id": 86381, "src": "\"These bleached bones... A sentinel of Kormir?\""},
+    "Meditation Log: Desert Highlands": {"id": 86339, "src": "Falling water echoes over the stones, set by dwarves long forgotten, recently remembered."},
+    "Meditation Log: Elon Riverlands": {"id": 85937, "src": "A quiet place for rest in the graveyard of stone, albeit modestly damp."},
+    "Meditation Log: The Desolation": {"id": 85787, "src": "Beware the danger of secrets kept."},
+    "Meditation Log: Domain of Vabbi": {"id": 85953, "src": "Despite the Branding, this city is still an architectural marvel."},
+    "Meditation Log: Completed Log": {"id": 85869, "src": "Your journey of self has come to an end, for now..."},
+    "Twisted Essence of Generosity": {"id": 91242, "src": "To exist, we must destroy those around us. Hint: To acquire, defeat Cardinal Adina in the Key of Ahdashim raid."},
+    "Twisted Essence of Resolve": {"id": 91258, "src": "Fight every battle. Hint: To acquire, defeat Cardinal Sabir in the Key of Ahdashim raid."},
+    "Twisted Essence of Trust": {"id": 91256, "src": "Success is solitary. Hint: To acquire, defeat Qadim the Peerless in the Key of Ahdashim raid."},
+    "Worn Meditation Logbook": {"id": 91213, "src": "Vendor: Qadim's Portable Magnetite Shard Exchange/The Key of Ahdashim", "in": [["Magnetite Shard", 10]]},
+    "Purified Essence of Generosity": {"id": 91161, "src": "The ink on this page glows brightly and reads, \"To exist, we must share ourselves with those around us. Hint: Offer your wisdom to the goddess."},
+    "Purified Essence of Resolve": {"id": 91268, "src": "The ink on this page glows brightly and reads, \"Not every battle must be fought. Not every battle must be won.\" Hint: Offer your wisdom to the goddess."},
+    "Purified Essence of Trust": {"id": 91188, "src": "The ink on this page glows brightly and reads, \"One cannot succeed by themselves in this world.\" Hint: Offer your wisdom to the goddess."},
+    "Infused Meditation Log Book": {"id": 91214, "src": "This book hums as you flip through its pages."},
+    "Alembic Apparatus": {"id": 88975, "src": "Vendor: Qadim's Portable Magnetite Shard Exchange/Mythwright Gambit", "in": [["Magnetite Shard", 100], ["Coin", 100000]]},
+    "Bottle of Rage (Empty)": {"id": 88797, "src": "The faintest air of rage clings to this otherwise empty vessel. Rage burns and consumes, not unlike a fire."},
+    "Bottle of Rage (Filled)": {"id": 88972, "src": "This bottle is hot to the touch, filled with malice and hatred."},
+    "Bottle of Contempt (Empty)": {"id": 88718, "src": "You would much rather not be carrying this jar. The searing fire of rage bubbles over into a cauldron of contempt."},
+    "Bottle of Contempt (Filled)": {"id": 88741, "src": "Every moment you possess this jar, you are filled with a nearly overwhelming sense of unease and discomfort."},
+    "Bottle of Surprise (Empty)": {"id": 88662, "src": "The vessel contains the vaguest hints of unpredictability."},
+    "Bottle of Surprise (Filled)": {"id": 88772, "src": "There is something curiously and perpetually astounding about this jar."},
+    "Bottle of Fear (Empty)": {"id": 88533, "src": "Holding this empty bottle, you feel slightly uncomfortable, as if something watches you from afar. Abandoned long ago, but only recently realized."},
+    "Bottle of Fear (Filled)": {"id": 88697, "src": "Every moment you hold this jar, you feel something terrifying stalking behind you."},
+    "Bottle of Anguish (Empty)": {"id": 88925, "src": "If not careful, you can spend much longer staring into the open mouth of this empty jar than you had intended. Grief, tortured and twisted, all too easily becomes thorned malice."},
+    "Bottle of Anguish (Filled)": {"id": 88861, "src": "You feel a tremendous weight holding this vessel—one of regret and uncertainty."},
+    "Bottle of Excitement (Empty)": {"id": 88832, "src": "You simply cannot wait to find the material that belongs in this jar. Who would have thought education could be so thrilling?"},
+    "Bottle of Excitement (Filled)": {"id": 88769, "src": "Your mood is raised significantly thanks to your possession of this jar."},
+    "Bottle of Joy (Empty)": {"id": 88785, "src": "This jar seems to possess the faintest traces of positivity, but is otherwise devoid of contents. Unbridled joy is the domain of youth."},
+    "Bottle of Joy (Filled)": {"id": 88584, "src": "Nearly weightless and possessed of some sort of bubbly energy, this jar is very pleasing to hold."},
+    "Bottle of Shame (Empty)": {"id": 88835, "src": "You cannot help but hide this jar from others. Impulsive choices can cause regret to crystallize."},
+    "Bottle of Shame (Filled)": {"id": 88887, "src": "You feel strangely guilty possessing this jar, as if a terrible secret weighs on you."},
+    "Alchemical Alembic Complete": {"id": 88879, "src": "Filling the jars has lead to a startling conclusion."},
+    "Defender of Ascalon": {"id": 70580, "src": "Vendor: BUY-2046 PFR (Mistlock Observatory)", "in": [["Pristine Fractal Relic", 20]]},
+    "Charr-Nip": {"id": 76329, "src": "Vendor: BUY-4373 (Mistlock Observatory)", "in": [["Fractal Relic", 100], ["Coin", 8000]]},
+    "Swampland Challenge Mote": {"id": 75039, "src": "Complete the Swampland Challenge (scale 1–20)! Beat Bloomhunger with an 80% reduction to all healing! To activate challenge mode, speak with the challenge mote near the beginning of the fractal. A party vote is required "},
+    "Aquatic Ruin Challenge Mote": {"id": 76918, "src": "Complete the Aquatic Ruins Challenge (scale 1–20)! Beat the Jellyfish Beast with an 80% reduction to all healing! To activate challenge mode, speak with the challenge mote near the beginning of the fractal. A party vote "},
+    "Jade Kraken Timed Mote": {"id": 70523, "src": "Complete the Jade Maw timed challenge (scale 20)! Beat the Jade Maw in less than five minutes!"},
+    "Ascalonian Fractal Field Research Paper": {"id": 75871, "src": "Complete daily recommended fractals to obtain fractal research pages. Combine the pages into a completed journal and exchange it for an Ascalonian Fractal Research Paper from the Ascalonian Fractal Field Researcher locat"},
+    "Burning Frozen Core": {"id": 71165, "src": "Obtain the Gigantic Ice Elemental Core from the remains of the giant ice elemental in Wayfarer Foothills. Bring it to the heart of the volcano core inside the Fractals of the Mists and imbue it in the lava. This item onl"},
+    "Charged Clump of Swamp Moss": {"id": 71158, "src": "Defeat the Swampland fractal boss and collect a sample of the peculiar swamp moss. Take it to the Opticalium in Metrica Province and charge it using their special station. This item only has value as part of a collection"},
+    "Prototype Fractal Capacitor": {"id": 37050, "src": "Vendor: BUY-4373 (Mistlock Observatory)", "in": [["Fractal Relic", 1350], ["Coin", 2112]]},
+    "Unstable Magically Charged Infusion Sample": {"id": 76172, "src": "Created by combining a +4 Agony Infusion with the magical fissure located in Bloomhunger's domain in the Swampland fractal. This item only has value as part of a collection."},
+    "Aetherblade Recruitment Form": {"id": 71281, "src": "Vendor: Aetherblade Quartermaster (Captain Mai Trin Boss Fractal)", "in": [["Ball of Dark Energy", 1]]},
+    "Dredge Spiral Drill": {"id": 75816, "src": "Vendor: BUY-2046 PFR (Mistlock Observatory)", "in": [["Pristine Fractal Relic", 30]]},
+    "Glob of Molten Fire": {"id": 76417, "src": "Vendor: BUY-4373 (Mistlock Observatory)", "in": [["Fractal Relic", 200], ["Coin", 8000]]},
+    "Uncategorized Challenge Mote": {"id": 72905, "src": "Complete the Uncategorized Challenge (scale 21–50)! Beat the raving asura with an 80% reduction to all healing! To activate challenge mode, speak with the challenge mote near the beginning of the fractal. A party vote is"},
+    "Snowblind Challenge Mote": {"id": 75477, "src": "Complete the Snowblind Challenge (scale 21–50)! Beat Shaman Lornarr Dragonseeker with an 80% reduction to all healing! To activate challenge mode, speak with the challenge mote near the beginning of the fractal. A party "},
+    "Thaumanova Reactor Timed Mote": {"id": 77109, "src": "Complete the Thaumanova Reactor timed challenge (scale 15)! Complete the fractal in under 20 minutes."},
+    "Molten Alliance Fractal Field Research Paper": {"id": 76623, "src": "Complete Daily Recommended Fractals to obtain Fractal Research Pages. Combine the pages into a completed journal and exchange it for a Molten Alliance Fractal Research Paper from the Molten Alliance Field Researcher loca"},
+    "Jade Maw Fang": {"id": 76964, "src": "Obtain a Vinewrath Tendril from the Mordrem Vinewrath boss encounter in the Silverwastes. Trade it to the Frozen Jade Researcher located in the Solid Ocean fractal inside the Fractals of the Mists. This item only has val"},
+    "Pollenated Ice Elemental Core": {"id": 75164, "src": "Obtain an Ice Elemental Core from the remains of Shaman Lornarr Dragonseeker in the Snowblind fractal. Take it to a pollenated spore beneath one of the towers in the Silverwastes and imbue it. This item only has value as"},
+    "Beta Fractal Capacitor (Infused)": {"id": 49381, "src": "Mystic Forge", "in": [["Glob of Coagulated Mists Essence", 1], ["Gift of Ascension", 1], ["Glob of Ectoplasm", 250], ["Prototype Fractal Capacitor", 1]]},
+    "Glob of Coagulated Mists Essence": {"id": 38023, "src": "Vendor: INFUZ-5959 (Mistlock Observatory)", "in": [["Coin", 9600], ["Fractal Relic", 100]]},
+    "Weak Magically Charged Infusion Sample": {"id": 73755, "src": "Created by combining a +6 Agony Infusion with the mist geyser located in the Molten Furnace fractal. This item only has value as part of a collection."},
+    "Aetherblade Handbook": {"id": 75887, "src": "Vendor: Aetherblade Quartermaster (Captain Mai Trin Boss Fractal)", "in": [["Ball of Dark Energy", 2]]},
+    "Inquest Dragon Energy Research Cube": {"id": 74878, "src": "Vendor: BUY-2046 PFR (Mistlock Observatory)", "in": [["Pristine Fractal Relic", 40]]},
+    "Essence of Subject 2": {"id": 70980, "src": "Vendor: BUY-4373 (Mistlock Observatory)", "in": [["Coin", 8000], ["Fractal Relic", 400]]},
+    "Volcanic Challenge Mote": {"id": 74889, "src": "Complete the Volcanic Challenge (scale 21–50)! Beat the grawl shaman with an 80% reduction to all healing! To activate challenge mode, speak with the challenge mote near the beginning of the fractal. A party vote is requ"},
+    "Cliffside Challenge Mote": {"id": 71427, "src": "Complete the Cliffside Challenge (scale 21–50)! Beat the Archdiviner with an 80% reduction to all healing! To activate challenge mode, speak with the challenge mote near the beginning of the fractal. A party vote is requ"},
+    "Molten Boss Timed Mote": {"id": 72120, "src": "Complete the Molten Boss timed challenge (scale 10)! Beat the boss in under five minutes!"},
+    "Thaumanova Fractal Field Research Paper": {"id": 73929, "src": "Complete Daily Recommended Fractals to obtain Fractal Research Pages. Combine the pages into a completed journal and exchange it for a Thaumonova Fractal Research Paper from the Thaumanova Field Researcher located at the"},
+    "Old Tom's Vital Reading (He's Dead)": {"id": 72521, "src": "Collect Vexa's Golem Diagnostic Reader from her lab hidden in Fireheart Rise. Interact with the remains of Old Tom in the Uncategorized fractal to analyze them. This item only has value as part of a collection."},
+    "Rabsovich's Lost Treasure": {"id": 74474, "src": "Obtain Rabsovich's Locker Key from his remains in the Underground Facility fractal. Find his locker inside the Dociu Excavation in Dredgehaunt Cliffs and take his lost treasure. This item only has value as part of a coll"},
+    "Fractal Capacitor (Infused)": {"id": 49391, "src": "Mystic Forge", "in": [["Shard of Crystallized Mists Essence", 1], ["Gift of Ascension", 1], ["Glob of Ectoplasm", 250], ["Beta Fractal Capacitor (Infused)", 1]]},
+    "Shard of Crystallized Mists Essence": {"id": 38024, "src": "Vendor: INFUZ-5959 (Mistlock Observatory)", "in": [["Coin", 28800], ["Fractal Relic", 300]]},
+    "Magically Charged Infusion Sample": {"id": 77266, "src": "Created by combining a +8 Agony Infusion with the mist geyser located in the Snowblind fractal. This item only has value as part of a collection."},
+    "Aetherblade Secret Handshake Tutorial Book": {"id": 75018, "src": "Vendor: Aetherblade Quartermaster (Captain Mai Trin Boss Fractal)", "in": [["Ball of Dark Energy", 3]]},
+    "Aetherblade Pirate Eye Patch": {"id": 73681, "src": "Vendor: BUY-2046 PFR (Mistlock Observatory)", "in": [["Pristine Fractal Relic", 50]]},
+    "Aetherblade Airship Steering Wheel": {"id": 72794, "src": "Vendor: BUY-4373 (Mistlock Observatory)", "in": [["Coin", 8000], ["Fractal Relic", 600]]},
+    "Underground Facility Challenge Mote": {"id": 71082, "src": "Complete the Underground challenge (scale 51–100). Beat the Dredge Power Suit with an 80% reduction to all healing. To activate challenge mode, speak with the challenge mote near the beginning of the fractal. A party vot"},
+    "Aetherblade Challenge Mote": {"id": 75268, "src": "Complete the Aetherblade challenge (scale 51–100). Beat Engineer Frizz with an 80% reduction to all healing. To activate challenge mode, speak with the challenge mote near the beginning of the fractal. A party vote is re"},
+    "Mai Trin Timed Mote": {"id": 70910, "src": "Complete the Mai Trin timed challenge (scale 76–100)! Beat Mai Trin in under 25 minutes! This item only has value as part of a collection."},
+    "Aetherblade Fractal Field Research Paper": {"id": 71444, "src": "Complete Daily Recommended Fractals to obtain Fractal Research Pages. Combine the pages into a completed journal and exchange it for an Aetherblade Fractal Research Paper from the Aetherblade Field Researcher located at "},
+    "Jungle Wurm Omelet (Mossman Style)": {"id": 74065, "src": "Obtain a jungle wurm egg by defeating the Greater Nightmare Vine in Twilight Arbor. Bring it to the Mossman's hut in the Swampland fractal. This item only has value as part of a collection. Consume to add to collection."},
+    "Charged Archdiviner's Mallet": {"id": 71533, "src": "Take the Archdiviner's Mallet from his remains at the top of the Cliffside fractal. Jump into the middle of the exploded Thaumanova Reactor in Metrica Province to charge it. This item only has value as part of a collecti"},
+    "Explosive Magically Charged Infusion Sample": {"id": 76030, "src": "Created by combining a +10 Agony Infusion with the magical fissure located in the Cliffside fractal. This item only has value as part of a collection."},
+    "Aetherblade Diploma": {"id": 77141, "src": "Vendor: Aetherblade Quartermaster (Captain Mai Trin Boss Fractal)", "in": [["Ball of Dark Energy", 3]]},
+    "Lessons in Arbology": {"id": 72757, "src": "After defeating Captain Ashym, take a Gift of Wood to the Ascalonian woodcutter, located inside the Urban Battleground fractal. This item only has value as part of a collection."},
+    "Lessons in Metallurgy": {"id": 71597, "src": "Take a Gift of Metal to the dredge weaponsmith's workbench located inside the Molten Furnace fractal. This item only has value as part of a collection."},
+    "Theory of Ad Infinitum": {"id": 75962, "src": "Unlocks the collection Ad Infinitum."},
+    "Marshal's Astral Razor": {"id": 85804, "src": "Craft: Weaponsmith 400", "in": [["Orichalcum Dagger Hilt", 1], ["Orichalcum Dagger Blade", 1], ["Inscription of the Spearmarshal", 1], ["Kralkatite Ingot", 50]]},
+    "Orichalcum Dagger Hilt": {"id": 12882, "src": "TP"},
+    "Orichalcum Dagger Blade": {"id": 12858, "src": "TP"},
+    "Inscription of the Spearmarshal": {"id": 83926, "src": "TP"},
+    "Kralkatite Ingot": {"id": 85828, "src": "Craft: Artificer/Weaponsmith/Huntsman 400", "in": [["Kralkatite Ore", 10], ["Powdered Rose Quartz", 10], ["Glob of Ectoplasm", 1]]},
+    "Dragonsblood Dagger": {"id": 89774, "src": "Craft: Weaponsmith 400", "in": [["Branded Mass", 10], ["Diviner's Orichalcum-Imbued Inscription", 1], ["Orichalcum Dagger Blade", 1], ["Orichalcum Dagger Hilt", 1]]},
+    "Branded Mass": {"id": 89537, "src": "Vendor: Dredge Supplier Yuliya (Dredgeways)", "in": [["Karma", 455]]},
+    "Diviner's Orichalcum-Imbued Inscription": {"id": 89735, "src": "Craft: Artificer/Weaponsmith/Huntsman 400", "in": [["Orichalcum Plated Dowel", 5], ["Branded Mass", 50], ["Glob of Ectoplasm", 5], ["Exquisite Serpentite Jewel", 3]]},
+    "Orichalcum Plated Dowel": {"id": 12988, "src": "TP"},
+    "Exquisite Serpentite Jewel": {"id": 89696, "src": "TP"},
+    "Reinforced Olmakhan Bandolier": {"id": 87225, "src": "Lasting Bonds: What Comes Next ödülü"},
+    "Memory Essence Encapsulator": {"id": 91024, "src": "Vendor: Alaleh (Chalon Docks)", "in": [["Glob of Ectoplasm", 50], ["Orichalcum Filigree", 10], ["Lesser Vision Crystal", 1], ["Xunlai Electrum Ingot", 3]]},
+    "Orichalcum Filigree": {"id": 12834, "src": "TP"}
+  },
+  bits: {
+    "Astral Thought": [["Astral Ward Heavy Helm",1,0],["Rift Hunter Heavy Helm",1,1],["Oneiros-Spun Heavy Helm",1,2],["Lifeblood of Ignaxious",1,3]],
+    "Astral Bearing": [["Astral Ward Heavy Shoulders",1,0],["Rift Hunter Heavy Shoulders",1,1],["Oneiros-Spun Heavy Shoulders",1,2],["Lifeblood of Galene the Seething",1,3]],
+    "Astral Heartbeat": [["Astral Ward Heavy Coat",1,0],["Rift Hunter Heavy Coat",1,1],["Oneiros-Spun Heavy Coat",1,2],["Lifeblood of Nourys, Eyes of the Abyss",1,3]],
+    "Astral Grasp": [["Astral Ward Heavy Gloves",1,0],["Rift Hunter Heavy Gloves",1,1],["Oneiros-Spun Heavy Gloves",1,2],["Lifeblood of Pherus the Subjugator",1,3]],
+    "Astral Stride": [["Astral Ward Heavy Leggings",1,0],["Rift Hunter Heavy Leggings",1,1],["Oneiros-Spun Heavy Leggings",1,2],["Lifeblood of Knaebelag the Terror",1,3]],
+    "Astral Footprints": [["Astral Ward Heavy Boots",1,0],["Rift Hunter Heavy Boots",1,1],["Oneiros-Spun Heavy Boots",1,2],["Lifeblood of Myros the Spiteful",1,3]],
+    "Aurora: Awakening": [["Sentient Seed",1,0],["Bloodstone Fen Hero",1,1],["Ember Bay Hero",1,2],["Bitterfrost Frontier Hero",1,3],["Lake Doric Hero",1,4],["Draconis Mons Hero",1,5],["Siren's Landing Hero",1,6]],
+    "Awakening the Druid Stone": [["Druid Stone",1,0],["Element of the Wardbough",1,1],["Wardbough's Runestone",1,2],["Element of the Arbor",1,4],["Arboreal Runestone",1,5],["Element of the Oakhearts",1,7],["Oakheart's Runestone",1,8]],
+    "Sprouting the Druid Stone": [["Living Druid Stone",1,0],["Element of the Saurians",1,1],["Saurian Runestone",1,2],["Saurian Rest",1,3],["Element of the Empire",1,4],["Imperial Runestone",1,5],["Imperial Rest",1,6],["Element of Webby",1,7],["Webby Runestone",1,8],["Webby Rest",1,9],["Element of the Wurm",1,10],["Wurm Runestone",1,11],["Wurm Rest",1,12],["Element of Arcanum",1,13],["Arcanum Runestone",1,14],["Arcanum Rest",1,15]],
+    "A Henge Away from Home": [["Blooming Druid Stone",1,0],["Heavy Houndskin Mantle",1,1],["Element of Aestus",1,2],["Aestus Runestone",1,3],["Element of Ignis",1,4],["Ignis Runestone",1,5],["Element of the Desecrator",1,6],["Desecrator Runestone",1,7],["Element of Fire",1,9],["Volcanic Runestone",1,10],["Element of Water",1,11],["Glacial Runestone",1,12],["Element of Air",1,13],["Charged Runestone",1,14],["Element of Earth",1,15],["Earthen Runestone",1,16]],
+    "Bloodstone Fen Master": [["Bloodstone Chip",1,1],["Hablion's Dignity",1,2],["White Mantle Crest",1,3],["Jade Core",1,4],["Aged Ectoplasm",1,5],["Living Bloodstone",1,6],["Pristine Blood Ruby",1,7],["Strange Residue",1,8],["Aerial Assault",1,9],["Rift Residue",1,10],["Shattered Guardian Binding",1,11]],
+    "Ember Bay Master": [["Heavy Dragonscale Epaulets",1,0],["Petrified Burl",1,1],["Pyroclastic Core",1,2],["Flask of Tears",1,3],["Friend of the Circus",1,4],["Friend of the Researchers",1,5],["Friend of the Skritt",1,6],["Friend of Science",1,7],["Mursaat Investigator",1,8],["Shiny Rock",1,9],["Tarnished Coin",1,10],["Volcanic Scale",1,11],["Bottle of Skritt Spirits",1,12],["Slubling Tail",1,13],["Molten Domination",1,14]],
+    "Bitterfrost Frontier Master": [["Heavy Glacial Gauntlets",1,0],["Plump Winterberry",1,1],["Frozen Winterberry",1,2],["Friend of the Grawl",1,3],["Protector of Griffons",1,4],["Friend of Quaggans",1,5],["Enemy of the Svanir",1,6],["Corrupted Griffon Talon",1,8],["Corrupted Wolfmaster Whistle",1,9],["Icebrood Goliath Sinew",1,10],["Icebrood Norn Pauldrons",1,11],["Icebrood Troll Tooth",1,12],["Crystallized Suet",1,13]],
+    "Lake Doric Master": [["Sparking Jade Shard",1,1],["Frontline Defender",1,2],["Fort Evennia Infiltrator",1,3],["Friend of Noran",1,4],["Friend of Cin Fursarai",1,5],["Friend of New Loamhurst",1,6],["Friend of Saidra's Haven",1,7],["Bloodstone-Warped Hoof",1,8],["Immelhoof's Heart",1,9],["Noran's Survival Kit",1,10],["Jade Cannon Controller",1,11],["Pristine White Mantle",1,12],["Seraph Seraph Protector",1,13],["Seraph Bloodstone Savant's Staff",1,14],["Ebon Vanguard Badge",1,15]],
+    "Draconis Mons Master": [["Heavy Houndskin Mantle",1,0],["The Wayfarer's Henge",1,1],["Scouting Party Supporter",1,2],["Fiery Liberator",1,3],["Enemy of the Inquest",1,4],["Friend of Golems",1,5],["Searing Ascender",1,6],["Ancient Asuran Wrench",1,7],["Depleted Power Source",1,8],["Ignis Heart",1,9],["Aestus Heart",1,10],["Bloodstone-Charged Lava Wurm Scale",1,11],["Spirit Bough",1,12],["Albino Orchid Blossom",1,13]],
+    "Siren's Landing Master": [["Heavy Mursaat Brogans",1,0],["Favor of Dwayna",1,2],["Favor of Balthazar",1,3],["Favor of Grenth",1,4],["Favor of Melandru",1,5],["Favor of Lyssa",1,6],["Unchained Heart",1,8],["Horrid Residue",1,9],["Colossal Brazier",1,10],["Orrian Nacre",1,11],["Orrian Gorilla Sinew",1,12],["Orrian Venom Glands",1,13],["Orrian Wraith Bindings",1,14],["Orrian Drake Scale",1,15]],
+    "Gift of Aurene": [["Token of Affection",1,0],["Dragon Hatchling Doll Frame",1,1],["Gossamer Stuffing",1,2],["Dragon Hatchling Doll Hide",1,3],["Dragon Hatchling Doll Eye",1,4],["Dragon Hatchling Doll Adornments",1,5],["Dragon Hatchling Doll",1,6]],
+    "Visions of Istan": [["Heavy Corsair Turban",1,0],["Vision of Dragons: Aurene",1,1],["Vision of Allies: Taimi",1,2],["Vision of Enemies: Warden Amala",1,3],["Vision of Landscapes: Domain of Istan",1,4],["Vision of Equipment: Astral Weapons",1,5],["Vision of Action: Domain of Istan",1,6]],
+    "Visions of Sandswept Isles": [["Vision of Dragons: Aurene",1,1],["Vision of Allies: Rox",1,2],["Vision of Enemies: Kuda's Subjects",1,3],["Vision of Landscapes: Sandswept Isles",1,4],["Vision of Equipment: Olmakhan Bandolier",1,5],["Vision of Action: Sandswept Isles",1,6]],
+    "Visions of Kourna": [["Heavy Corsair Jerkin",1,0],["Vision of Dragons: Aurene",1,1],["Vision of Allies: Blish",1,2],["Vision of Enemies: Olori Ogun",1,3],["Vision of Landscapes: Domain of Kourna",1,4],["Banner of the Commander",1,5],["Vision of Action: Domain of Kourna",1,6]],
+    "Visions of Jahai": [["Updated Record of Joko's Deeds",1,0],["Vision of Dragons: Aurene",1,1],["Vision of Allies: Braham",1,2],["Vision of Enemies: Death-Branded Shatterer",1,3],["Vision of Landscapes: Jahai Bluffs",1,4],["Vision of Equipment: Elegy Armor",1,5],["Vision of Action: Jahai Bluffs",1,6]],
+    "Visions of Thunderhead Peaks": [["Heavy Corsair Leggings",1,0],["Vision of Dragons: Aurene",1,1],["Vision of Allies: Caithe",1,2],["Vision of Enemies: Wrathbringer",1,3],["Vision of Landscapes: Thunderhead Peaks",1,4],["Vision of Equipment: Dragonsblood Weapons",1,5],["Vision of Action: Thunderhead Peaks",1,6]],
+    "Visions of Dragonfall": [["Heavy Corsair Boots",1,0],["Vision of Dragons: Aurene",1,1],["Vision of Allies: Zafirah",1,2],["Vision of Enemies: Ley-Infused Enemy",1,3],["Vision of Landscapes: Dragonfall",1,4],["Vision of Equipment: Dragon Champion Armor",1,5],["Vision of Action: Dragonfall",1,6]],
+    "Brandstone Research": [["Kralkatite Research",1,0],["Branded Residue Research",1,1],["Miasma Research",1,2],["Powdered Gemstone Research",1,3],["Treatise on Astral Alignments",1,4],["Mirror Calibration Readings",1,5],["Blazing Kralkatite",1,6]],
+    "The Convergence of Sorrow I: Elegy": [["Amira's Lament",1,0],["Unreadable Words",1,1],["Field Notes on Wrecked Memorials",1,2],["Amira's Complaint",1,3],["Notes on a Sunspear",1,4],["Further Notes on a Sunspear",1,5],["Child's Toy",1,6],["Portrait of a Wife",1,7],["Harsh Words",1,8],["Commission",1,9],["Memorial for a Soldier",1,10],["Memorial for a Laborer",1,11],["Memorial for a Friend",1,12],["Memorial for a Peacemaker",1,13],["Memorial for a Wanderer",1,14],["Memorial for a Brother",1,15],["Memorial for a Wife and Son",1,16],["Invitation",1,17],["Convergence",1,18],["Endings and Beginnings",1,19]],
+    "Lasting Bonds: What Comes Next": [["Pocketed Olmakhan Bandolier",1,0],["\"Hope for Tomorrow\"",1,1],["Starcaller's Aetheric Gland",1,2],["Seneb the Desecrated's Locket",1,3],["Nakis's Bracelet",1,4],["Zohaqan's Letter",1,5],["Olmakhan Bow of Force",1,6],["\"Shadow and Sun\"",1,7]],
+    "Coalescence I: Unbridled": [["Transcendental Binding",1,0],["Transcendental Ink",1,1],["Transcendental Parchment",1,2],["Meditation Logbook",1,3],["Meditation Log: Crystal Oasis",1,4],["Meditation Log: Desert Highlands",1,5],["Meditation Log: Elon Riverlands",1,6],["Meditation Log: The Desolation",1,7],["Meditation Log: Domain of Vabbi",1,8],["Meditation Log: Completed Log",1,9]],
+    "Coalescence III: Culmination": [["Twisted Essence of Generosity",1,0],["Twisted Essence of Resolve",1,1],["Twisted Essence of Trust",1,2],["Worn Meditation Logbook",1,3],["Purified Essence of Generosity",1,4],["Purified Essence of Resolve",1,5],["Purified Essence of Trust",1,6],["Infused Meditation Log Book",1,7]],
+    "Coalescence II: The Gift": [["Alembic Apparatus",1,0],["Bottle of Rage (Empty)",1,1],["Bottle of Rage (Filled)",1,2],["Bottle of Contempt (Empty)",1,3],["Bottle of Contempt (Filled)",1,4],["Bottle of Surprise (Empty)",1,5],["Bottle of Surprise (Filled)",1,6],["Bottle of Fear (Empty)",1,7],["Bottle of Fear (Filled)",1,8],["Bottle of Anguish (Empty)",1,9],["Bottle of Anguish (Filled)",1,10],["Bottle of Excitement (Empty)",1,11],["Bottle of Excitement (Filled)",1,12],["Bottle of Joy (Empty)",1,13],["Bottle of Joy (Filled)",1,14],["Bottle of Shame (Empty)",1,15],["Bottle of Shame (Filled)",1,16],["Alchemical Alembic Complete",1,17]],
+    "Ad Infinitum I: Finite Result": [["Defender of Ascalon",1,0],["Charr-Nip",1,1],["Swampland Challenge Mote",1,2],["Aquatic Ruin Challenge Mote",1,3],["Jade Kraken Timed Mote",1,4],["Ascalonian Fractal Field Research Paper",1,5],["Burning Frozen Core",1,6],["Charged Clump of Swamp Moss",1,7],["Prototype Fractal Capacitor",1,8],["Unstable Magically Charged Infusion Sample",1,9],["Aetherblade Recruitment Form",1,10]],
+    "Ad Infinitum II: Upper Bound": [["Dredge Spiral Drill",1,0],["Glob of Molten Fire",1,1],["Uncategorized Challenge Mote",1,2],["Snowblind Challenge Mote",1,3],["Thaumanova Reactor Timed Mote",1,4],["Molten Alliance Fractal Field Research Paper",1,5],["Jade Maw Fang",1,6],["Pollenated Ice Elemental Core",1,7],["Beta Fractal Capacitor (Infused)",1,8],["Weak Magically Charged Infusion Sample",1,9],["Aetherblade Handbook",1,10]],
+    "Ad Infinitum III: Unbound": [["Inquest Dragon Energy Research Cube",1,0],["Essence of Subject 2",1,1],["Volcanic Challenge Mote",1,2],["Cliffside Challenge Mote",1,3],["Molten Boss Timed Mote",1,4],["Thaumanova Fractal Field Research Paper",1,5],["Old Tom's Vital Reading (He's Dead)",1,6],["Rabsovich's Lost Treasure",1,7],["Fractal Capacitor (Infused)",1,8],["Magically Charged Infusion Sample",1,9],["Aetherblade Secret Handshake Tutorial Book",1,10]],
+    "Legendary Backpack: Ad Infinitum": [["Aetherblade Pirate Eye Patch",1,0],["Aetherblade Airship Steering Wheel",1,1],["Underground Facility Challenge Mote",1,2],["Aetherblade Challenge Mote",1,3],["Mai Trin Timed Mote",1,4],["Aetherblade Fractal Field Research Paper",1,5],["Jungle Wurm Omelet (Mossman Style)",1,6],["Charged Archdiviner's Mallet",1,7],["Explosive Magically Charged Infusion Sample",1,8],["Aetherblade Diploma",1,9],["Lessons in Arbology",1,10],["Lessons in Metallurgy",1,11],["Theory of Ad Infinitum",1,12]]
+  }
+};
+for (const [n, p] of Object.entries(COLLECTIONS.parts)) if (!DATA.parts[n]) DATA.parts[n] = p;
+for (const [a, l] of Object.entries(COLLECTIONS.bits)) if (DATA.parts[a]) DATA.parts[a].bits = l;
 </script>
 
 <header>
@@ -1130,6 +1533,14 @@ function achFrac(id) {
   if (a.done) return 1;
   return a.max ? Math.min(1, a.cur / a.max) : 0;
 }
+// koleksiyonun henüz toplanmamış parçaları (achievement bitmişse hiçbiri)
+function bitKids(p) {
+  if (!p.bits) return [];
+  const a = snap && snap.ach[p.ach];
+  if (a && a.done) return [];
+  const got = new Set(a ? a.bits || [] : []);
+  return p.bits.filter(b => !got.has(b[2])).map(b => [b[0], b[1]]);
+}
 // pool: hedef içinde aynı malzeme iki kez sayılmasın
 function prog(name, qty, pool, depth = 0) {
   const p = P[name]; if (!p || depth > 20) return 0;
@@ -1149,7 +1560,12 @@ function prog(name, qty, pool, depth = 0) {
 // eksik taban malzemeler (TP maliyeti için)
 function missingLeaves(name, qty, pool, out, depth = 0) {
   const p = P[name]; if (!p || depth > 20) return out;
-  if (p.ach) return out;
+  if (p.ach) {
+    if (achFrac(p.ach) >= 1) return out;
+    for (const [c] of (p.in || [])) missingLeaves(c, 1, pool, out, depth + 1);
+    for (const [c, q] of bitKids(p)) missingLeaves(c, q, pool, out, depth + 1);
+    return out;
+  }
   const have = Math.min(pool[name] != null ? pool[name] : (pool[name] = ownedOf(name)), qty);
   pool[name] -= have;
   const rem = qty - have; if (rem <= 0) return out;
@@ -1159,7 +1575,13 @@ function missingLeaves(name, qty, pool, out, depth = 0) {
 }
 // eksik bütün parçalar (ara ürünler dahil): hangi parçayı kendin yapman gerekecek
 function neededParts(name, qty, pool, out, depth = 0) {
-  const p = P[name]; if (!p || depth > 20 || p.ach) return out;
+  const p = P[name]; if (!p || depth > 20) return out;
+  if (p.ach) {
+    if (achFrac(p.ach) >= 1) return out;
+    for (const [c] of (p.in || [])) neededParts(c, 1, pool, out, depth + 1);
+    for (const [c, q] of bitKids(p)) neededParts(c, q, pool, out, depth + 1);
+    return out;
+  }
   const have = Math.min(pool[name] != null ? pool[name] : (pool[name] = ownedOf(name)), qty);
   pool[name] -= have;
   const rem = qty - have; if (rem <= 0) return out;
@@ -1169,7 +1591,13 @@ function neededParts(name, qty, pool, out, depth = 0) {
 }
 // brüt ihtiyaç (çakışma tablosu için)
 function grossNeed(name, qty, out, depth = 0) {
-  const p = P[name]; if (!p || depth > 20 || p.ach) return out;
+  const p = P[name]; if (!p || depth > 20) return out;
+  if (p.ach) {
+    if (achFrac(p.ach) >= 1) return out;
+    for (const [c] of (p.in || [])) grossNeed(c, 1, out, depth + 1);
+    for (const [c, q] of bitKids(p)) grossNeed(c, q, out, depth + 1);
+    return out;
+  }
   out[name] = (out[name] || 0) + qty;
   if (p.in) for (const [c, q] of p.in) grossNeed(c, q * qty, out, depth + 1);
   return out;
@@ -1188,7 +1616,8 @@ function targetCalc(tp) {
   let cost = 0, unpriced = 0;
   for (const [n, q] of Object.entries(miss)) {
     const id = P[n] && P[n].id, pr = id && prices.p[id];
-    if (pr && pr.s) cost += pr.s * q; else unpriced++;
+    if (P[n] && P[n].cur === 1) cost += q;            // Coin: doğrudan bakır
+    else if (pr && pr.s) cost += pr.s * q; else unpriced++;
   }
   const gates = (t.gates || []).map(g => gateDays(g, snap ? neededParts(t.root, tp.count, {}, {}) : null));   // ara parçalar da (ör. Funerary Incense)
   const worst = gates.reduce((a, g) => g.days != null && (!a || g.days > a.days) ? g : a, null);
@@ -1411,11 +1840,14 @@ function nodeHtml(name, qty, depth) {
   const p = P[name]; if (!p) return `<li><span class="err">${esc(name)} (veri yok)</span></li>`;
   let cnt = "";
   if (p.ach) { const f = achFrac(p.ach), a = snap && snap.ach[p.ach]; cnt = `<span class="cnt ${f >= 1 ? "ok" : "no"}">${f >= 1 ? "tamam" : a ? a.cur + "/" + a.max : "başlanmadı"}</span>`; }
+  else if (p.cur === 1) { const h = ownedOf(name); cnt = `<span class="cnt ${h >= qty ? "ok" : "no"}">${snap ? gold(h) : "?"} / ${gold(qty)}</span>`; }
   else { const h = ownedOf(name); cnt = `<span class="cnt ${h >= qty ? "ok" : "no"}">${snap ? fmt(h) : "?"} / ${fmt(qty)}</span>`; }
   const pr = p.id && prices.p[p.id] && prices.p[p.id].s ? `<span class="pill">TP ${gold(prices.p[p.id].s)}</span>` : "";
   const kids = p.in && depth < 8 && !(snap && !p.ach && ownedOf(name) >= qty)
     ? `<ul>${p.in.map(([c, q]) => nodeHtml(c, p.ach ? 1 : q * qty, depth + 1)).join("")}</ul>` : "";
-  return `<li><div class="node"><a href="${partWiki(name, p)}" target="_blank" rel="noopener">${esc(name)}</a>${p.ach ? '<span class="tag">achievement</span>' : ""}${cnt}${pr}${p.tg ? '<span class="tag tg">timegate</span>' : ""}${p.uv ? '<span class="tag uv">doğrulanmadı</span>' : ""}<span class="small muted">${esc(p.src || "")}</span></div>${kids}</li>`;
+  const bk = p.ach && depth < 8 && achFrac(p.ach) < 1 ? bitKids(p) : [];
+  const bitsHtml = bk.length ? `<details class="how"><summary>Koleksiyon: ${bk.length} eksik parça</summary><ul>${bk.map(([c, q]) => nodeHtml(c, q, depth + 1)).join("")}</ul></details>` : "";
+  return `<li><div class="node"><a href="${partWiki(name, p)}" target="_blank" rel="noopener">${esc(name)}</a>${p.ach ? '<span class="tag">achievement</span>' : ""}${cnt}${pr}${p.tg ? '<span class="tag tg">timegate</span>' : ""}${p.uv ? '<span class="tag uv">doğrulanmadı</span>' : ""}<span class="small muted">${esc(p.src || "")}</span></div>${kids}${bitsHtml}</li>`;
 }
 // mastery durumu: hedefin seviyesine kadar eksik seviyeler, puan ve XP
 function masteryState(m) {
@@ -1555,6 +1987,7 @@ function hunterList() {
     const p = P[name]; if (!p || depth > 14) return;
     if (p.ach && !seen.has(p.ach)) seen.set(p.ach, { ach: p.ach, target: key, name });
     for (const [c] of (p.in || [])) walk(c, key, depth + 1);
+    for (const b of (p.bits || [])) walk(b[0], key, depth + 1);
   };
   for (const tp of tgtPrefs().filter(x => x.enabled && !x.buy)) walk(tp.t.root, tp.t.key, 0);
   return [...seen.values()].map(x => {
