@@ -563,8 +563,8 @@ const DATA = {
   groups: [
     { id: "soto", title: "SotO turu — Wizard's Tower", note: "Lion's Arch'tan Wizard's Tower portalı. Obsidian zırhın neredeyse bütün günlük kapıları burada. ~1-1,5 saat, saatli metalara göre planla." },
     { id: "ls3", title: "LS3 turu — Aurora", note: "Draconis Mons, Bitterfrost Frontier, Siren's Landing. ~30-45 dk, solo, saat yok." },
-    { id: "pof", title: "PoF turu — Coalescence", note: "Domain of Vabbi kalp vendor'ları ve bounty'ler. ~20-30 dk, solo." },
-    { id: "raid", title: "Raid / strike — Lion's Arch Aerodrome", note: "Coalescence için Legendary Insight. Grup (LFG)." },
+    { id: "pof", title: "PoF turu — Domain of Vabbi", note: "Kalp vendor'ları ve bounty'ler. ~20-30 dk, solo." },
+    { id: "raid", title: "Raid / strike — Lion's Arch Aerodrome", note: "Raid encounter'ları: Legendary Insight ve Magnetite (clover). Grup (LFG)." },
     { id: "frac", title: "Fractal — Lion's Arch, Fort Marriner", note: "Ad Infinitum sayfaları + clover için Fractal Relic. Grup (LFG)." },
     { id: "any", title: "Her yerden", note: "" }
   ],
@@ -646,7 +646,7 @@ const DATA = {
             "Karakter başına günde 2 sandık; Cipher sadece Siren's Landing Master koleksiyonu açıkken düşer."],
       wiki: "Ancient_Cipher" },
     { id: "incense", mode: "open", group: "pof", needsPart: "Funerary Incense", title: "Funerary Incense: Vabbi heart vendor'ları", kind: "tg", count: 8,
-      serves: "Coalescence → Gift of Desert Mastery (250 Funerary Incense)", time: "~15 dk, solo",
+      serves: "Funerary Incense", time: "~15 dk, solo",
       how: ["Domain of Vabbi'de 8 heart vendor'ın her biri hesap başına günde 1 Funerary Incense satar: Amusement Adjunct Cagri, Director Abioye Bayu (Garden of Seborhin), Awakened Servant Tooraj (Vehjin Mines), Distinguished Professor Nazimi (Vehtendi Academy), Embalmer Boran, Supreme Training Specialist Tozan (The Necropolis), Fallen Awakened Soldier (The Foundry), Prince Bakkal (Vehjin Palace).",
             "Her biri: 5 Trade Contract + 1 Amalgamated Gemstone + 1 Obsidian Shard + 1 Glob of Ectoplasm. Heart'ı bitmiş vendor satar.",
             "Daha hızlı ama pahalı yol: Desert Highlands, Tomb of the Primeval Kings'teki Primeval Steward sınırsız satar (Trade Contract yerine 100 Trade Contract ya da 3 Elegy Mosaic)."],
@@ -704,7 +704,7 @@ const DATA = {
       serves: "Ad Infinitum → Research Page", time: "",
       how: ["Haftalık fractal achievement'ları: Fractal Fighter's Cache'ten 2 Research Page."],
       wiki: "Fractal_Research_Page" },
-    { id: "w_gob", mode: "wvw", required: true, needsPart: "Gift of Battle", group: "any", title: "WvW: Gift of Battle reward track (Aurora ve Vision için birer tane, şart)", kind: "bn",
+    { id: "w_gob", mode: "wvw", required: true, needsPart: "Gift of Battle", group: "any", title: "WvW: Gift of Battle reward track (tek kaynağı bu)", kind: "bn",
       serves: "Aurora, Vision, her silah → Gift of Battle", time: "track başına ~6-8,5 saat WvW",
       how: ["WvW paneli (B) → Reward Tracks → 'Gift of Battle Item Reward Track' → Activate.",
             "Eternal Battlegrounds ya da Borderlands'te participation'ı açık tut (kill, kale, event). 20.000 puanda son ödül Gift of Battle.",
@@ -1270,8 +1270,13 @@ function updateScheds() {
 function renderTaskList(el, tasks, bucket) {
   const store = state.checks[bucket].d;
   const on = new Set(tgtPrefs().filter(x => x.enabled).map(x => x.t.key));
-  const needed = {}, pool = {};   // craft edilen açık hedeflerde hâlâ EKSİK olan parçalar (sendekiler düşülür)
-  for (const tp of craftOnly(tgtPrefs().filter(x => x.enabled))) neededParts(tp.t.root, tp.count, pool, needed);
+  const needed = {}, pool = {}, neededBy = {};   // craft edilen açık hedeflerde hâlâ EKSİK olan parçalar (sendekiler düşülür) ve hangi hedefte
+  for (const tp of craftOnly(tgtPrefs().filter(x => x.enabled))) {
+    neededParts(tp.t.root, tp.count, pool, needed);
+    for (const n of Object.keys(neededParts(tp.t.root, tp.count, {}, {}))) (neededBy[n] = neededBy[n] || []).push(tp.t.name);
+  }
+  // needsPart görevlerinde "neye yarar" açık hedeflerden hesaplanır (kapanan hedefin adı kalmasın); tgt görevleri zaten o hedef kapanınca gizlenir
+  const servesOf = t => !t.tgt && t.needsPart && neededBy[t.needsPart] ? neededBy[t.needsPart].join(", ") + " → " + t.needsPart : t.serves;
   const bitDone = t => { if (!t.untilBit || !snap) return false; const [a, i, item] = t.untilBit; const x = snap.ach[a];
     return !!((x && (x.done || (x.bits || []).includes(i))) || (item && snap.owned[item] > 0)); };
   const rows = tasks.filter(t => !bitDone(t) && !(t.needsPart && !needed[t.needsPart] && !(t.whileAch && achFrac(t.whileAch) < 1)) && !(t.untilAch && achFrac(t.untilAch) >= 1) && !(t.tgt && !t.tgt.some(k => on.has(k))) && (modeOn(t.mode) || t.required)).map(t => {
@@ -1291,7 +1296,7 @@ function renderTaskList(el, tasks, bucket) {
       <div class="tt">${esc(t.title)}${t.sched ? `<span class="sched" data-sched="${t.sched}"></span>` : ""}</div>
       ${t.repeat ? `<div class="small ${done ? "okc" : "muted"}">${done ? "Günlük sandık alındı — tekrar turu yine değerli: " : "Tekrarlanabilir — günlük sandıktan sonraki her tur: "}${esc(t.repeat)}</div>` : ""}
       ${t.count === "chars" ? `<div class="small muted">Kutular karakter başına: her karakterin günlük turu için bir tane. Eşya düşünce madde kendiliğinden kalkar (Yenile).</div>` : ""}
-      <div class="small muted">${esc(t.serves)}${t.time ? " · " + esc(t.time) : ""}${api}${t.uv ? ' · <span style="color:var(--uv)">kısmen doğrulanmadı</span>' : ""}</div>
+      <div class="small muted">${esc(servesOf(t))}${t.time ? " · " + esc(t.time) : ""}${api}${t.uv ? ' · <span style="color:var(--uv)">kısmen doğrulanmadı</span>' : ""}</div>
       ${t.how ? `<details class="how" data-how="${esc(hid)}" ${openHow.has(hid) ? "open" : ""}><summary>Nasıl?</summary><ol>${t.how.map(h => `<li>${esc(h)}</li>`).join("")}</ol>${t.wiki ? `<a class="small" href="${DATA.meta.wiki + t.wiki}" target="_blank" rel="noopener">wiki</a>` : ""}</details>` : ""}
     </div></li>`;
   };
