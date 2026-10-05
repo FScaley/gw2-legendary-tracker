@@ -228,6 +228,8 @@ const DATA = {
     "Gift of Magical Prosperity": { id: 100512, src: "Mystic Forge", in: [["Gift of Craftsmanship", 1], ["Mystic Clover", 9], ["Gift of Condensed Magic", 1], ["Gift of Research", 1]] },
     "Gift of Mighty Prosperity": { id: 100933, src: "Mystic Forge", in: [["Gift of Craftsmanship", 1], ["Mystic Clover", 9], ["Gift of Condensed Might", 1], ["Gift of Research", 1]] },
 
+    "Obsidian parça craft'ı": { lyhr: true, src: "Her parça Armorsmith 500 ile Wizard's Tower'da craftlanır; ya da Lyhr parça başı +10 Ecto ile yapar. Tarif: Recipe: Legendary Obsidian Armor (Lyhr 50s, mastery: Obsidian Armor Crafting)." },
+
     // ---- Legendary Relic ----
     "Legendary Relic": { id: 101582, src: "Mystic Forge", in: [["Gift of Relics", 1], ["Gift of Craftsmanship", 1], ["Gift of Condensed Might", 1], ["Gift of Condensed Magic", 1]], wiki: "Legendary_Relic" },
     "Gift of Relics": { id: 101519, src: "Mystic Forge", in: [["Mystic Facet", 25], ["Mystic Clover", 25], ["Glob of Ectoplasm", 150], ["Gift of Research", 1]] },
@@ -474,7 +476,7 @@ const DATA = {
   // craftReq: craft istasyonunda yapılan parçalar → [meslek, en az seviye] seçenekleri (herhangi biri yeter). Kaynak: /v2/recipes (4 Ekim 2026);
   // Amalgamated Rift Essence API'de yok, wiki'den. TP'de satılan parçalar için meslek şart sayılmaz (alınabilir).
   // lyhr: true olan parçaları Lyhr (Wizard's Tower) ücretle yapar/satar; meslek yoksa da olur.
-  craftReq: {"Xunlai Electrum Ingot":[["Jeweler",400]],"Exotic Essence of Luck":[["Artificer",0]],"Orichalcum Ingot":[["Armorsmith",400],["Artificer",400],["Huntsman",400],["Jeweler",400],["Scribe",400],["Weaponsmith",400]],"Mithril Ingot":[["Armorsmith",300],["Artificer",300],["Huntsman",300],["Jeweler",300],["Leatherworker",300],["Scribe",300],["Tailor",300],["Weaponsmith",300]],"Darksteel Ingot":[["Armorsmith",225],["Artificer",225],["Huntsman",225],["Leatherworker",225],["Scribe",225],["Tailor",225],["Weaponsmith",225]],"Platinum Ingot":[["Jeweler",225],["Scribe",225]],"Seasoned Wood Plank":[["Artificer",150],["Huntsman",150],["Scribe",150],["Weaponsmith",150]],"Hard Wood Plank":[["Artificer",225],["Huntsman",225],["Scribe",225],["Weaponsmith",225]],"Elder Wood Plank":[["Artificer",300],["Huntsman",300],["Scribe",300],["Weaponsmith",300]],"Ancient Wood Plank":[["Artificer",400],["Huntsman",400],["Scribe",400],["Weaponsmith",400]],"Cured Hardened Leather Square":[["Armorsmith",400],["Huntsman",400],["Leatherworker",400],["Scribe",400],["Tailor",400]],"Bolt of Gossamer":[["Armorsmith",400],["Leatherworker",400],["Scribe",400],["Tailor",400]],"Opal Orb":[["Jeweler",350]],"Gift of Fangs":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Bones":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Claws":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Scales":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Dust":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Venom":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Blood":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Totems":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Cube of Stabilized Dark Energy":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Gift of Energy":[["Artificer",400]],"Gift of Metal":[["Weaponsmith",400]],"Gift of Wood":[["Huntsman",400]],"Vision Crystal":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Bloodstone Brick":[["Armorsmith",450],["Artificer",450],["Chef",425],["Huntsman",450],["Leatherworker",450],["Tailor",450],["Weaponsmith",450]],"Dragonite Ingot":[["Armorsmith",450],["Artificer",450],["Chef",425],["Huntsman",450],["Leatherworker",450],["Tailor",450],["Weaponsmith",450]],"Empyreal Star":[["Armorsmith",450],["Artificer",450],["Chef",425],["Huntsman",450],["Leatherworker",450],["Tailor",450],["Weaponsmith",450]],"Purified Rift Essence":[["Armorsmith",400],["Artificer",400],["Chef",400],["Huntsman",400],["Jeweler",400],["Leatherworker",400],["Scribe",400],["Tailor",400],["Weaponsmith",400]],"Obsidian Heavy Helmet":[["Armorsmith",500]],"Obsidian Heavy Pauldrons":[["Armorsmith",500]],"Obsidian Heavy Breastplate":[["Armorsmith",500]],"Obsidian Heavy Gauntlets":[["Armorsmith",500]],"Obsidian Heavy Cuisses":[["Armorsmith",500]],"Obsidian Heavy Greaves":[["Armorsmith",500]],"Lesser Vision Crystal":[["Armorsmith",500],["Leatherworker",500],["Tailor",500]],"Crystalline Ingot":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Gift of Light":[["Armorsmith",400]],"Chrysocola Orb":[["Jeweler",350]],"Unbound":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Pristine Mist Essence":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Unbound Wings":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Third Order Mist Frame":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Spark":[["Weaponsmith",500]],"Vial of Liquid Flame":[["Chef",400]],"Superior Sigil of Fire":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Zap":[["Weaponsmith",500]],"Gift of Lightning":[["Artificer",400]],"Superior Sigil of Air":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"The Energizer":[["Weaponsmith",500]],"Gift of Entertainment":[["Armorsmith",400]],"Superior Sigil of Energy":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Tooth of Frostfang":[["Weaponsmith",500]],"Gift of Ice":[["Jeweler",400]],"Superior Sigil of Ice":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Carcharias":[["Weaponsmith",500]],"Shark Statue":[["Jeweler",400]],"Superior Sigil of Agony":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Dawn":[["Weaponsmith",500]],"Superior Sigil of Strength":[["Weaponsmith",400]],"The Legend":[["Artificer",500]],"Gift of Color":[["Chef",400]],"Superior Sigil of Nullification":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Howl":[["Huntsman",500]],"Wolf Statue":[["Leatherworker",400]],"Superior Sigil of Accuracy":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Mystic Aspect":[["Armorsmith",75],["Leatherworker",75],["Tailor",75]],"Mystic Mote":[["Artificer",75],["Huntsman",75],["Weaponsmith",75]],"Amalgamated Rift Essence":[["Armorsmith",400],["Artificer",400],["Chef",400],["Huntsman",400],["Jeweler",400],["Leatherworker",400],["Scribe",400],["Tailor",400],["Weaponsmith",400]]},
+  craftReq: {"Obsidian parça craft'ı":[["Armorsmith",500]],"Xunlai Electrum Ingot":[["Jeweler",400]],"Exotic Essence of Luck":[["Artificer",0]],"Orichalcum Ingot":[["Armorsmith",400],["Artificer",400],["Huntsman",400],["Jeweler",400],["Scribe",400],["Weaponsmith",400]],"Mithril Ingot":[["Armorsmith",300],["Artificer",300],["Huntsman",300],["Jeweler",300],["Leatherworker",300],["Scribe",300],["Tailor",300],["Weaponsmith",300]],"Darksteel Ingot":[["Armorsmith",225],["Artificer",225],["Huntsman",225],["Leatherworker",225],["Scribe",225],["Tailor",225],["Weaponsmith",225]],"Platinum Ingot":[["Jeweler",225],["Scribe",225]],"Seasoned Wood Plank":[["Artificer",150],["Huntsman",150],["Scribe",150],["Weaponsmith",150]],"Hard Wood Plank":[["Artificer",225],["Huntsman",225],["Scribe",225],["Weaponsmith",225]],"Elder Wood Plank":[["Artificer",300],["Huntsman",300],["Scribe",300],["Weaponsmith",300]],"Ancient Wood Plank":[["Artificer",400],["Huntsman",400],["Scribe",400],["Weaponsmith",400]],"Cured Hardened Leather Square":[["Armorsmith",400],["Huntsman",400],["Leatherworker",400],["Scribe",400],["Tailor",400]],"Bolt of Gossamer":[["Armorsmith",400],["Leatherworker",400],["Scribe",400],["Tailor",400]],"Opal Orb":[["Jeweler",350]],"Gift of Fangs":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Bones":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Claws":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Scales":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Dust":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Venom":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Blood":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Gift of Totems":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Cube of Stabilized Dark Energy":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Gift of Energy":[["Artificer",400]],"Gift of Metal":[["Weaponsmith",400]],"Gift of Wood":[["Huntsman",400]],"Vision Crystal":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Bloodstone Brick":[["Armorsmith",450],["Artificer",450],["Chef",425],["Huntsman",450],["Leatherworker",450],["Tailor",450],["Weaponsmith",450]],"Dragonite Ingot":[["Armorsmith",450],["Artificer",450],["Chef",425],["Huntsman",450],["Leatherworker",450],["Tailor",450],["Weaponsmith",450]],"Empyreal Star":[["Armorsmith",450],["Artificer",450],["Chef",425],["Huntsman",450],["Leatherworker",450],["Tailor",450],["Weaponsmith",450]],"Purified Rift Essence":[["Armorsmith",400],["Artificer",400],["Chef",400],["Huntsman",400],["Jeweler",400],["Leatherworker",400],["Scribe",400],["Tailor",400],["Weaponsmith",400]],"Obsidian Heavy Helmet":[["Armorsmith",500]],"Obsidian Heavy Pauldrons":[["Armorsmith",500]],"Obsidian Heavy Breastplate":[["Armorsmith",500]],"Obsidian Heavy Gauntlets":[["Armorsmith",500]],"Obsidian Heavy Cuisses":[["Armorsmith",500]],"Obsidian Heavy Greaves":[["Armorsmith",500]],"Lesser Vision Crystal":[["Armorsmith",500],["Leatherworker",500],["Tailor",500]],"Crystalline Ingot":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Gift of Light":[["Armorsmith",400]],"Chrysocola Orb":[["Jeweler",350]],"Unbound":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Pristine Mist Essence":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Unbound Wings":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Third Order Mist Frame":[["Armorsmith",500],["Artificer",500],["Huntsman",500],["Leatherworker",500],["Tailor",500],["Weaponsmith",500]],"Spark":[["Weaponsmith",500]],"Vial of Liquid Flame":[["Chef",400]],"Superior Sigil of Fire":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Zap":[["Weaponsmith",500]],"Gift of Lightning":[["Artificer",400]],"Superior Sigil of Air":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"The Energizer":[["Weaponsmith",500]],"Gift of Entertainment":[["Armorsmith",400]],"Superior Sigil of Energy":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Tooth of Frostfang":[["Weaponsmith",500]],"Gift of Ice":[["Jeweler",400]],"Superior Sigil of Ice":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Carcharias":[["Weaponsmith",500]],"Shark Statue":[["Jeweler",400]],"Superior Sigil of Agony":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Dawn":[["Weaponsmith",500]],"Superior Sigil of Strength":[["Weaponsmith",400]],"The Legend":[["Artificer",500]],"Gift of Color":[["Chef",400]],"Superior Sigil of Nullification":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Howl":[["Huntsman",500]],"Wolf Statue":[["Leatherworker",400]],"Superior Sigil of Accuracy":[["Artificer",400],["Huntsman",400],["Weaponsmith",400]],"Mystic Aspect":[["Armorsmith",75],["Leatherworker",75],["Tailor",75]],"Mystic Mote":[["Artificer",75],["Huntsman",75],["Weaponsmith",75]],"Amalgamated Rift Essence":[["Armorsmith",400],["Artificer",400],["Chef",400],["Huntsman",400],["Jeweler",400],["Leatherworker",400],["Scribe",400],["Tailor",400],["Weaponsmith",400]]},
 
   // ---------------- Mastery'ler ----------------
   // track = /v2/masteries id, level = o track'teki seviye (0'dan). Mastery'ler sırayla açılır: önceki seviyeler de gerekir.
@@ -502,13 +504,25 @@ const DATA = {
   // /v2/masteries bölge adı → /v2/account/mastery/points bölge adı
   masteryRegions: { Tyria: "Central Tyria", Maguuma: "Heart of Thorns", Desert: "Path of Fire", Tundra: "Icebrood Saga", Jade: "End of Dragons", Sky: "Secrets of the Obscure", Wild: "Janthir Wilds", Magic: "Visions of Eternity" },
 
+  // ---------------- Obsidian parçaları ----------------
+  // Bütün parçalar aynı 3 gift'i ister (Expertise, Stormy Skies, Prosperity); farklı olan Arcanum ve Prosperity türü.
+  // Ayarlar'da hangi parçaları istediğin seçilir; sende olan parçalar düşülür.
+  obsidianSlots: [
+    { key: "helm", name: "Kask", piece: "Obsidian Heavy Helmet", arcanum: "Arcanum of Astral Thought", prosperity: "Gift of Magical Prosperity" },
+    { key: "shoulders", name: "Omuz", piece: "Obsidian Heavy Pauldrons", arcanum: "Arcanum of Astral Bearing", prosperity: "Gift of Magical Prosperity" },
+    { key: "coat", name: "Göğüs", piece: "Obsidian Heavy Breastplate", arcanum: "Arcanum of Astral Heartbeat", prosperity: "Gift of Magical Prosperity" },
+    { key: "gloves", name: "Eldiven", piece: "Obsidian Heavy Gauntlets", arcanum: "Arcanum of Astral Grasp", prosperity: "Gift of Mighty Prosperity" },
+    { key: "legs", name: "Bacak", piece: "Obsidian Heavy Cuisses", arcanum: "Arcanum of Astral Stride", prosperity: "Gift of Mighty Prosperity" },
+    { key: "boots", name: "Bot", piece: "Obsidian Heavy Greaves", arcanum: "Arcanum of Astral Footprints", prosperity: "Gift of Mighty Prosperity" }
+  ],
+
   // ---------------- Hedefler (sıra = varsayılan öncelik) ----------------
   // sg: slot grubu (aynı gruptaki hedefler birbirinin alternatifi). need: şart koşulan oyun modları ve ne kadar.
   // count: kaç kopya. gates: kalan gün tahmini. perDay değerleri tahmindir (est: true).
   targets: [
-    { key: "obsidian", sg: "armor", need: [{ m: "open", kind: "grind", why: "Rift Essence ve harita paraları, haftalarca" }], name: "Obsidian Armor (heavy, 6 parça)", root: "Obsidian Heavy Set", count: 1, slot: "Armor", mode: "Açık dünya (SotO), solo + meta",
-      gold: "Condensed Might/Magic ×3+3, Research ×6 ve 66 clover için ciddi altın",
-      why: "En uzun kapı Rift Essence (21.000 Fine). Ön koşul: SotO mastery 'Obsidian Armor Crafting' ve Convergence Mastery (essence'ı ikiye katlar). Ağaçta Astral Ward + Oneiros-Spun skinlerinin maliyeti (12 Purified Rift Essence, 6.000 Research Note) yok; onlar Arcanum koleksiyonlarında (Achievement avcısı) görünür.",
+    { key: "obsidian", sg: "armor", need: [{ m: "open", kind: "grind", why: "Seçtiğin parça sayısına göre hesaplanır (Ayarlar → Hedefler → parçalar). En uzun kapı Rift Essence: parça başı 12 Amalgamated Rift Essence (3.000 Fine + 1.200 Masterwork + 600 Rare). Ön koşul: SotO mastery Obsidian Armor Crafting; Convergence Mastery essence'ı ikiye katlar. Arcanum koleksiyonlarının skinleri ağaçta \"Koleksiyon: eksik parça\" altında." }], name: "Obsidian Armor (heavy)", root: "Obsidian Heavy Set", count: 1, slot: "Armor", mode: "Açık dünya (SotO), solo + meta",
+      gold: "Parça başı: Gift of Condensed Might ya da Magic + Gift of Research + 9 Mystic Clover + Gift of Craftsmanship; ayrıca Astral Ward ve Oneiros-Spun skinleri",
+      why: "Seçtiğin parça sayısına göre hesaplanır (Ayarlar → Hedefler → parçalar). En uzun kapı Rift Essence: parça başı 12 Amalgamated Rift Essence (3.000 Fine + 1.200 Masterwork + 600 Rare). Ön koşul: SotO mastery Obsidian Armor Crafting; Convergence Mastery essence'ı ikiye katlar. Arcanum koleksiyonlarının skinleri ağaçta \"Koleksiyon: eksik parça\" altında.",
       gates: [
         { label: "Fine Rift Essence", cur: 78, need: 21000, perDay: 525, est: true, note: "2 Convergence günlük sandık + haftalık Extraction + birkaç run; araştırma tahmini" },
         { label: "Masterwork Rift Essence", cur: 80, need: 8400, perDay: 210, est: true },
@@ -1533,6 +1547,22 @@ function achFrac(id) {
   if (a.done) return 1;
   return a.max ? Math.min(1, a.cur / a.max) : 0;
 }
+// Obsidian: seçilen ve henüz sende olmayan parçalar → ortak gift'ler × adet + her parçanın Arcanum'u
+function obsidianSlotsLeft() {
+  const sel = state.obsSlots || {};
+  return DATA.obsidianSlots.filter(x => sel[x.key] !== false && !(snap && ownedOf(x.piece) >= 1));
+}
+function applyObsidian() {
+  const root = P["Obsidian Heavy Set"]; if (!root) return;
+  const left = obsidianSlotsLeft(), n = left.length;
+  const by = name => left.filter(x => x.prosperity === name).length;
+  root.in = n ? [["Gift of Expertise", n], ["Gift of Stormy Skies", n],
+    ...(by("Gift of Magical Prosperity") ? [["Gift of Magical Prosperity", by("Gift of Magical Prosperity")]] : []),
+    ...(by("Gift of Mighty Prosperity") ? [["Gift of Mighty Prosperity", by("Gift of Mighty Prosperity")]] : []),
+    ...left.map(x => [x.arcanum, 1]), ["Obsidian parça craft'ı", n]] : [];
+  const chosen = DATA.obsidianSlots.filter(x => (state.obsSlots || {})[x.key] !== false).length;
+  root.src = `${chosen} parça seçili, ${n} tanesi yapılacak (${left.map(x => x.name).join(", ") || "hepsi sende"}). Her parça: Gift of Expertise + Gift of Stormy Skies + Prosperity (kask/omuz/göğüs Magical, eldiven/bacak/bot Mighty) + kendi Arcanum'u. Seçim: Ayarlar → Hedefler.`;
+}
 // koleksiyonun henüz toplanmamış parçaları (achievement bitmişse hiçbiri)
 function bitKids(p) {
   if (!p.bits) return [];
@@ -1554,6 +1584,7 @@ function prog(name, qty, pool, depth = 0) {
   pool[name] -= have;
   const rem = qty - have; if (rem <= 0) return 1;
   if (!p.in) return have / qty;
+  if (!p.in.length) return 1;
   const kids = p.in.map(([c, q]) => prog(c, q * rem, pool, depth + 1));
   return (have + rem * kids.reduce((a, b) => a + b, 0) / kids.length) / qty;
 }
@@ -1929,7 +1960,7 @@ function renderTargets() {
     const pct = c.done ? 100 : Math.round(c.pct * 100);
     const hrs = c.buy && c.cost ? Math.max(0, Math.ceil((c.cost - (c.coin || 0)) / 10000 / gph())) : 0;
     const days = c.done ? "bitti" : c.buy ? (c.tpPrice ? `hazır alınacak · ~${hrs} saat farm` : "TP fiyatı yok") : c.worst ? `~${c.worst.days} gün (${esc(c.worst.label)})` : "timegate yok — altına/çabaya bağlı";
-    return `<details class="tgt"><summary><div class="tgthead"><div><div class="name">${esc(t.name)}${tp.count > 1 ? " ×" + tp.count : ""}</div>
+    return `<details class="tgt"><summary><div class="tgthead"><div><div class="name">${esc(t.name)}${t.key === "obsidian" ? " — " + obsidianSlotsLeft().length + " parça" : tp.count > 1 ? " ×" + tp.count : ""}</div>
       <div class="small muted">${esc(t.slot)} · ${esc(t.mode)}</div><div>${modeBadges(tp)}</div></div>
       <div style="min-width:220px;flex:1;max-width:360px"><div class="bar"><i style="width:${pct}%"></i></div>
       <div class="small"><b>%${snap ? pct : "?"}</b> · ${snap ? days : "API verisi yok"}${c.armory ? ` · <span class="okc">Armory'de ${c.armory}</span>` : ""}</div></div></div></summary>
@@ -2093,7 +2124,8 @@ function renderSettings() {
     <input type="checkbox" data-tk="${tp.t.key}" ${tp.enabled ? "checked" : ""}>
     <div class="nm">${esc(tp.t.name)} <span class="pill">${esc(tp.t.slot)}</span> ${modeBadges(tp)}</div>
     ${P[tp.t.root] && P[tp.t.root].id && tp.t.buyDefault != null ? `<label class="small"><input type="checkbox" data-tb="${tp.t.key}" ${tp.buy ? "checked" : ""}> hazır al</label>` : ""}
-    <label class="small">kopya <input type="number" min="1" max="8" value="${tp.count}" data-tc="${tp.t.key}" style="width:56px"></label>
+    ${tp.t.key === "obsidian" ? `<span class="small">parçalar: ${DATA.obsidianSlots.map(x => `<label style="margin-right:6px"><input type="checkbox" data-obs="${x.key}" ${(state.obsSlots || {})[x.key] !== false ? "checked" : ""}> ${esc(x.name)}${snap && ownedOf(x.piece) >= 1 ? " ✓" : ""}</label>`).join("")}</span>`
+      : `<label class="small">kopya <input type="number" min="1" max="8" value="${tp.count}" data-tc="${tp.t.key}" style="width:56px"></label>`}
     <button class="btn" data-up="${i}" ${i === 0 ? "disabled" : ""}>↑</button><button class="btn" data-down="${i}" ${i === tps.length - 1 ? "disabled" : ""}>↓</button></div>`).join("");
 }
 document.addEventListener("change", e => {
@@ -2118,6 +2150,7 @@ $("#tgtSettings").addEventListener("change", e => {
   if (el.dataset.tk) setTgt(el.dataset.tk, { enabled: el.checked });
   if (el.dataset.tc) setTgt(el.dataset.tc, { count: Math.max(1, Math.min(8, +el.value || 1)) });
   if (el.dataset.tb) setTgt(el.dataset.tb, { buy: el.checked });
+  if (el.dataset.obs) { state.obsSlots = Object.assign({}, state.obsSlots, { [el.dataset.obs]: el.checked }); saveState(); }
   renderAll();
 });
 $("#tgtSettings").addEventListener("click", e => {
@@ -2154,7 +2187,7 @@ function renderStatus() {
   const t = new Date(snap.ts);
   setStatus(`Son güncelleme: ${t.toLocaleString("tr-TR", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" })}${snap.errors.length ? ' · <span class="err">' + snap.errors.length + " hata (Ayarlar)</span>" : ""}`);
 }
-function renderAll() { renderStatus(); renderToday(); renderRecs(); renderTargets(); renderSettings(); if (Object.keys(stat.ach).length) renderHunter(); }
+function renderAll() { applyObsidian(); renderStatus(); renderToday(); renderRecs(); renderTargets(); renderSettings(); if (Object.keys(stat.ach).length) renderHunter(); }
 
 $("#nav").addEventListener("click", e => {
   const b = e.target.closest("button[data-tab]"); if (!b) return;
