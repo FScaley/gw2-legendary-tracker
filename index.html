@@ -191,7 +191,7 @@ const DATA = {
     "Augur's Stone": { id: 46752, src: "Miyani/Lyhr: 20 Spirit Shard" },
     "Amalgamated Rift Essence": { id: 100930, lyhr: true, src: "Craft 400 (tarif Lyhr 50s)", in: [["Fine Rift Essence", 250], ["Masterwork Rift Essence", 100], ["Rare Rift Essence", 50], ["Glob of Ectoplasm", 50]], wiki: "Amalgamated_Rift_Essence", tg: true },
     "Purified Rift Essence": { id: 100569, src: "Craft 400", in: [["Amalgamated Rift Essence", 1], ["Mystic Clover", 1]], wiki: "Purified_Rift_Essence" },
-    "Funerary Incense": { id: 86093, src: "PoF heart vendor 1/gün, Primeval Steward sınırsız (Trade Contract/Elegy Mosaic)", wiki: "Funerary_Incense" },
+    "Funerary Incense": { id: 86093, src: "Domain of Vabbi'deki 8 heart vendor (her biri hesap başına günde 1). Primeval Steward sınırsız ama Trade Contract yerine 100 Trade Contract ya da 3 Elegy Mosaic ister.", in: [["Trade Contract", 5], ["Amalgamated Gemstone", 1], ["Obsidian Shard", 1], ["Glob of Ectoplasm", 1]], wiki: "Funerary_Incense", tg: true },
 
     // ---- SotO Obsidian (heavy) ----
     "Obsidian Heavy Set": { src: "6 parça (Armorsmith 500, Wizard's Tower; ya da Lyhr parça başı +10 Ecto). Tarif: Recipe: Legendary Obsidian Armor (Lyhr 50s, mastery: Obsidian Armor Crafting)", in: [["Obsidian Heavy Helmet", 1], ["Obsidian Heavy Pauldrons", 1], ["Obsidian Heavy Breastplate", 1], ["Obsidian Heavy Gauntlets", 1], ["Obsidian Heavy Cuisses", 1], ["Obsidian Heavy Greaves", 1]], wiki: "Obsidian_armor" },
@@ -296,8 +296,24 @@ const DATA = {
     "Gift of Complex Emotions": { id: 88909, src: "Coalescence II ödülü", in: [["Coalescence II: The Gift", 1]] },
     "Coalescence II: The Gift": { ach: 4412, src: "9 şişe bul ve doldur (biri Qadim sonrası Mythwright Gambit sandığında)" },
     "Gift of Desert Mastery": { id: 86036, src: "Mystic Forge", in: [["Gift of the Desert", 1], ["Gift of the Rider", 1], ["Bloodstone Shard", 1], ["Funerary Incense", 250]] },
-    "Gift of the Desert": { id: 85631, src: "4 PoF bölge gift'i (harita tamamlama + o günün heart'ı + karma)" },
-    "Gift of the Rider": { id: 86330, src: "4 mount Spirit (75 Elegy Mosaic her biri)" },
+    "Gift of the Desert": { id: 85631, src: "Mystic Forge", in: [["Gift of the Oasis", 1], ["Gift of the Highlands", 1], ["Gift of the Riverlands", 1], ["Gift of the Desolation", 1]] },
+    "Gift of the Oasis": { id: 85961, src: "Priestess Karima (Amnoon Farms, Crystal Oasis), karakter başına 1; Crystal Oasis harita tamamlama gerekir", in: [["Karma", 23331], ["Crystal Oasis Explorer", 1]] },
+    "Gift of the Highlands": { id: 86018, src: "Melilla (Stampede Uplands, Desert Highlands), karakter başına 1; Desert Highlands harita tamamlama gerekir", in: [["Karma", 23331], ["Desert Highlands Explorer", 1]] },
+    "Gift of the Riverlands": { id: 86241, src: "Follower Xunn (Skyward Reach, Elon Riverlands), karakter başına 1; Elon Riverlands harita tamamlama gerekir", in: [["Karma", 23331], ["Elon Riverlands Explorer", 1]] },
+    "Gift of the Desolation": { id: 86010, src: "Kisha Odili (The Bonestrand, The Desolation), karakter başına 1; The Desolation harita tamamlama gerekir", in: [["Karma", 23331], ["Desolation Explorer", 1]] },
+    "Crystal Oasis Explorer": { ach: 3864, src: "Crystal Oasis harita tamamlama" },
+    "Desert Highlands Explorer": { ach: 3616, src: "Desert Highlands harita tamamlama" },
+    "Elon Riverlands Explorer": { ach: 3623, src: "Elon Riverlands harita tamamlama" },
+    "Desolation Explorer": { ach: 3612, src: "The Desolation harita tamamlama" },
+    "Gift of the Rider": { id: 86330, src: "Mystic Forge", in: [["Spirit of the Raptor", 1], ["Spirit of the Springer", 1], ["Spirit of the Skimmer", 1], ["Spirit of the Jackal", 1]] },
+    "Spirit of the Raptor": { id: 85707, src: "Aksim (The Sinking Ruins, Crystal Oasis); Raptor mastery'si tam olmalı", in: [["Elegy Mosaic", 75]] },
+    "Spirit of the Springer": { id: 85681, src: "PoF vendor; Springer mastery'si tam olmalı", in: [["Elegy Mosaic", 75]] },
+    "Spirit of the Skimmer": { id: 86115, src: "PoF vendor; Skimmer mastery Nimble Benevolence gerekir", in: [["Elegy Mosaic", 75]] },
+    "Spirit of the Jackal": { id: 86177, src: "PoF vendor; Jackal mastery'si tam olmalı", in: [["Elegy Mosaic", 75]] },
+    "Karma": { cur: 2, src: "Wallet" },
+    "Elegy Mosaic": { cur: 35, src: "PoF legendary bounty'leri (4-50 her biri); Last Rites achievement'ı gerekir" },
+    "Trade Contract": { cur: 34, src: "PoF: Sanctum of Nabkha / Tomb of the Primeval Kings sandıkları, Vabbi" },
+    "Amalgamated Gemstone": { id: 68063, src: "TP / Hero's Choice Chest seçimi / Gift of Battle track" },
 
     // ---- Conflux (WvW) ----
     "Conflux": { id: 93105, src: "Mystic Forge", in: [["Gift of the World", 1], ["Mist Band (Infused)", 1], ["Mystic Tribute", 1], ["Gift of Conquering", 1]], wiki: "Conflux" },
@@ -459,6 +475,10 @@ const DATA = {
     { track: 37, level: 1, prio: 0, role: "required", targets: ["obsidian"], why: "Astral Craft: Arcanum koleksiyonlarındaki Astral Ward skinleri sadece bununla satın alınır." },
     { track: 37, level: 4, prio: 5, role: "required", targets: ["obsidian"], why: "Obsidian zırh tarifini (Recipe: Legendary Obsidian Armor) almak için şart. Ama sadece parçaları craftlarken gerekiyor; Rift Essence birikene kadar zamanın var." },
     { track: 21, level: 1, prio: 6, role: "required", targets: ["vision"], why: "Vision I: Awakening koleksiyonları Rift Repair istiyor (wiki). Bu PoF'un Skyscale track'i; SotO'daki Flight Training ayrı. Vision'ın koleksiyonlarına başlamadan önce açık olsun." },
+    { track: 14, level: 3, prio: 4, role: "required", targets: ["coalescence"], why: "Spirit of the Raptor (Gift of the Rider) Raptor mastery'si tam olmadan satın alınamaz (wiki)." },
+    { track: 17, level: 3, prio: 0, role: "required", targets: ["coalescence"], why: "Spirit of the Springer için Springer mastery'si tam olmalı (wiki)." },
+    { track: 15, level: 3, prio: 0, role: "required", targets: ["coalescence"], why: "Spirit of the Skimmer için Nimble Benevolence gerekir (wiki)." },
+    { track: 18, level: 3, prio: 0, role: "required", targets: ["coalescence"], why: "Spirit of the Jackal için Jackal mastery'si tam olmalı (wiki)." },
     { track: 5, level: 1, prio: 0, role: "required", targets: ["adinf"], why: "Agony Channeler: BUY-4373'ün 'Legendary Components' sekmesindeki Ad Infinitum parçaları için şart (wiki)." },
     { track: 39, level: 4, prio: 4, role: "helpful", targets: ["obsidian", "endless"], why: "Convergence'lardan bonus Kryptis essence: Rift Essence ~2 kat. Obsidian'ın en uzun kapısını kısaltır." },
     { track: 37, level: 3, prio: 3, role: "helpful", targets: ["obsidian", "endless"], why: "Rift'lerden daha fazla Kryptis essence (Rift Mastery). Obsidian Armor Crafting'e giderken zaten açılır." },
@@ -495,7 +515,7 @@ const DATA = {
     { key: "coalescence", sg: "ring", need: [{ m: "raid", kind: "once", h: 3, why: "Wing 6 Qadim (Coalescence II) + Wing 7 üç boss (Coalescence III), bir kez" }, { m: "strike", kind: "grind", why: "150 Legendary Insight, haftalarca" }], name: "Coalescence", root: "Coalescence", count: 1, slot: "Ring 2", mode: "Raid (W6 Qadim + W7 bir kez) + strike'larla Legendary Insight",
       gold: "~1.300-1.500 altın",
       why: "LI strike'lardan da geliyor (strike-only ~31/hafta; günlük bounty'lerin çoğu raid bossu). Dikkat: Coalescence I için bir raid boss sandığı, III için Wing 7 (Adina, Sabir, Qadim the Peerless) gerekir.",
-      gates: [ { label: "Legendary Insight", cur: 70, need: 150, perDay: 4.5, est: true, note: "Strike-only ~31/hafta: 15 encounter + ~10 bounty + 6 quickplay" } ] },
+      gates: [ { label: "Funerary Incense", item: 86093, need: 250, perDay: 8, est: true, note: "Vabbi'de 8 heart vendor × günde 1; Primeval Steward'dan daha hızlı ama Elegy Mosaic/Trade Contract pahalı" }, { label: "Legendary Insight", cur: 70, need: 150, perDay: 4.5, est: true, note: "Strike-only ~31/hafta: 15 encounter + ~10 bounty + 6 quickplay" } ] },
     { key: "vision", sg: "accessory", need: [{ m: "open", kind: "grind", why: "koleksiyonlar, metalar, harita işleri" }, { m: "wvw", kind: "once", h: 8, why: "1 Gift of Battle (WvW reward track; başka kaynağı yok)" }], name: "Vision", root: "Vision", count: 1, slot: "Accessory 2", mode: "Açık dünya (LS4)",
       gold: "~1.900-2.400 altın",
       why: "Stella Radians ve Strife Unending'den kısa; LS4 haritalarında oynarken koleksiyonlar kendiliğinden ilerler.", gates: [] },
@@ -543,6 +563,7 @@ const DATA = {
   groups: [
     { id: "soto", title: "SotO turu — Wizard's Tower", note: "Lion's Arch'tan Wizard's Tower portalı. Obsidian zırhın neredeyse bütün günlük kapıları burada. ~1-1,5 saat, saatli metalara göre planla." },
     { id: "ls3", title: "LS3 turu — Aurora", note: "Draconis Mons, Bitterfrost Frontier, Siren's Landing. ~30-45 dk, solo, saat yok." },
+    { id: "pof", title: "PoF turu — Coalescence", note: "Domain of Vabbi kalp vendor'ları ve bounty'ler. ~20-30 dk, solo." },
     { id: "raid", title: "Raid / strike — Lion's Arch Aerodrome", note: "Coalescence için Legendary Insight. Grup (LFG)." },
     { id: "frac", title: "Fractal — Lion's Arch, Fort Marriner", note: "Ad Infinitum sayfaları + clover için Fractal Relic. Grup (LFG)." },
     { id: "any", title: "Her yerden", note: "" }
@@ -624,6 +645,12 @@ const DATA = {
             "Queen Doran the Cheerful: 1 sandık bedava, 2.'si 1,5 altın. Cipher şansla düşer.",
             "Karakter başına günde 2 sandık; Cipher sadece Siren's Landing Master koleksiyonu açıkken düşer."],
       wiki: "Ancient_Cipher" },
+    { id: "incense", mode: "open", group: "pof", needsPart: "Funerary Incense", title: "Funerary Incense: Vabbi heart vendor'ları", kind: "tg", count: 8,
+      serves: "Coalescence → Gift of Desert Mastery (250 Funerary Incense)", time: "~15 dk, solo",
+      how: ["Domain of Vabbi'de 8 heart vendor'ın her biri hesap başına günde 1 Funerary Incense satar: Amusement Adjunct Cagri, Director Abioye Bayu (Garden of Seborhin), Awakened Servant Tooraj (Vehjin Mines), Distinguished Professor Nazimi (Vehtendi Academy), Embalmer Boran, Supreme Training Specialist Tozan (The Necropolis), Fallen Awakened Soldier (The Foundry), Prince Bakkal (Vehjin Palace).",
+            "Her biri: 5 Trade Contract + 1 Amalgamated Gemstone + 1 Obsidian Shard + 1 Glob of Ectoplasm. Heart'ı bitmiş vendor satar.",
+            "Daha hızlı ama pahalı yol: Desert Highlands, Tomb of the Primeval Kings'teki Primeval Steward sınırsız satar (Trade Contract yerine 100 Trade Contract ya da 3 Elegy Mosaic)."],
+      wiki: "Funerary_Incense" },
     { id: "bounty", mode: "strike", group: "raid", tgt: ["coalescence"], title: "Daily Raid Bounties (strike olanlar)", kind: "tg", count: 2,
       serves: "Coalescence → Legendary Insight", time: "5-15 dk/encounter, 10 kişi",
       how: ["Günde 4 bounty çıkar ama karışık: raid wing bossları + strike'lar (eski strike'ların yeni adı 'raid encounter').",
@@ -1163,7 +1190,7 @@ function targetCalc(tp) {
     const id = P[n] && P[n].id, pr = id && prices.p[id];
     if (pr && pr.s) cost += pr.s * q; else unpriced++;
   }
-  const gates = (t.gates || []).map(g => gateDays(g, miss));
+  const gates = (t.gates || []).map(g => gateDays(g, snap ? neededParts(t.root, tp.count, {}, {}) : null));   // ara parçalar da (ör. Funerary Incense)
   const worst = gates.reduce((a, g) => g.days != null && (!a || g.days > a.days) ? g : a, null);
   const tpPrice = root && root.id && prices.p[root.id] ? prices.p[root.id].s : 0;
   return { pct: Math.min(1, pct), armory, done: armory >= tp.count || (!!snap && pct >= 1), miss, cost, unpriced, gates, worst, tpPrice };
@@ -1317,7 +1344,7 @@ function renderRecs() {
   $("#modeWarnCard").style.display = bad.length ? "" : "none";
   $("#modeWarn").innerHTML = bad.map(x => `<div class="small" style="margin:4px 0"><b>${esc(x.t.name)}</b> — ${missingText(x)}.${altsFor(x)}</div>`).join("");
   const gates = [];
-  for (const tp of craftOnly(tps)) { const miss = snap ? missingLeaves(tp.t.root, tp.count, {}, {}) : null; for (const g of (tp.t.gates || [])) gates.push(Object.assign(gateDays(g, miss), { tname: tp.t.name })); }
+  for (const tp of craftOnly(tps)) { const miss = snap ? neededParts(tp.t.root, tp.count, {}, {}) : null; for (const g of (tp.t.gates || [])) gates.push(Object.assign(gateDays(g, miss), { tname: tp.t.name })); }
   gates.sort((a, b) => (b.days || 0) - (a.days || 0));
   $("#gateBox").innerHTML = !snap ? '<div class="muted">API verisi yok — key gir ve Yenile.</div>' :
     `<table><tr><th>Kapı</th><th>Hedef</th><th>Durum</th><th>~Gün</th></tr>${gates.map(g => `<tr>
