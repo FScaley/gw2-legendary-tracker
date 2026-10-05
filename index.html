@@ -548,7 +548,8 @@ const DATA = {
     { id: "any", title: "Her yerden", note: "" }
   ],
   // kind: tg = timegate (kaçarsa geri gelmez), bn = darboğaz, n = normal. count: kutu sayısı ("chars" = karakter sayısı).
-  // auto: API ile otomatik tik. untilAch: o achievement bitince madde gizlenir. tgt: sadece bu hedefler açıkken göster.
+  // auto: API ile otomatik tik. untilAch: o achievement bitince madde gizlenir. untilBit: [ach, bit sırası, item] o parça toplanınca (ya da item sendeyse) gizlenir.
+  // count "chars": karakter başına bir kutu (ör. sandıklar karakter başına günde açılıyor). tgt: sadece bu hedefler açıkken göster.
   // repeat: günlük sandıktan sonra tekrar turlarının ödülü (wiki "Repeatable" ödülleri).
   // needsPart: sadece açık (craft edilen) bir hedef bu parçayı istiyorsa göster. mode/required: mod kapalıysa gizle, required ise yine göster. how: adım adım.
   daily: [
@@ -610,14 +611,14 @@ const DATA = {
             "Home instance/homestead'e Fire Orchid Node koyarsan (Supplymaster Hanjo satar) her gün garanti 1 tane.",
             "Hesap başına günde 1."],
       wiki: "Primordial_Orchid" },
-    { id: "suet", mode: "open", group: "ls3", tgt: ["aurora"], title: "Bitterfrost: 5 Icebound Chest (Crystallized Suet)", kind: "bn", count: "chars", untilAch: 3499,
+    { id: "suet", mode: "open", group: "ls3", tgt: ["aurora"], title: "Bitterfrost: 5 Icebound Chest (Crystallized Suet)", kind: "bn", count: "chars", untilAch: 3499, untilBit: [3499, 13, 82050],
       serves: "Aurora → Bitterfrost Frontier Master", time: "15-25 dk/karakter, solo, RNG",
       how: ["Bir kerelik: karakterde 'A Crack in the Ice' hikayesinin 'Elixir Cookin'' adımı bitmiş olmalı (Thaw Elixir açılır).",
             "Her gün: Dragon's Teeth Hot Springs, Blister Cauldron'da Thaw Elixir pişir (12 Fresh Winterberry + 8 Clump of Frostbitten Suet + 3 Cold Resistant Eggshell + 1 Grawl Firestone).",
             "The Bitter Cold'a gir (sarkıttaki cihaz buz duvarını eritir), 5 Icebound Chest'i aç.",
             "Suet şansla düşer; günler/haftalar sürebilir. Karakter başına günde 1 tur."],
       wiki: "Crystallized_Suet" },
-    { id: "cipher", mode: "open", group: "ls3", tgt: ["aurora"], title: "Siren's Landing: Hidden Reliquary Chest (Ancient Cipher)", kind: "bn", count: "chars", untilAch: 3495,
+    { id: "cipher", mode: "open", group: "ls3", tgt: ["aurora"], title: "Siren's Landing: Hidden Reliquary Chest (Ancient Cipher)", kind: "bn", count: "chars", untilAch: 3495, untilBit: [3495, 7, 81722],
       serves: "Aurora → Siren's Landing Master", time: "5-10 dk, solo, RNG",
       how: ["Abaddon's Reliquary: 5 reliquary'nin (Balthazar, Dwayna, Grenth, Lyssa, Melandru) event/heart'ı bitince Hidden Reliquary kapağı açılır, havuza atla.",
             "Queen Doran the Cheerful: 1 sandık bedava, 2.'si 1,5 altın. Cipher şansla düşer.",
@@ -1244,7 +1245,9 @@ function renderTaskList(el, tasks, bucket) {
   const on = new Set(tgtPrefs().filter(x => x.enabled).map(x => x.t.key));
   const needed = {};   // craft edilen açık hedeflerin ağacındaki bütün parçalar
   for (const tp of craftOnly(tgtPrefs().filter(x => x.enabled))) grossNeed(tp.t.root, tp.count, needed);
-  const rows = tasks.filter(t => !(t.needsPart && !needed[t.needsPart]) && !(t.untilAch && achFrac(t.untilAch) >= 1) && !(t.tgt && !t.tgt.some(k => on.has(k))) && (modeOn(t.mode) || t.required)).map(t => {
+  const bitDone = t => { if (!t.untilBit || !snap) return false; const [a, i, item] = t.untilBit; const x = snap.ach[a];
+    return !!((x && (x.done || (x.bits || []).includes(i))) || (item && snap.owned[item] > 0)); };
+  const rows = tasks.filter(t => !bitDone(t) && !(t.needsPart && !needed[t.needsPart]) && !(t.untilAch && achFrac(t.untilAch) >= 1) && !(t.tgt && !t.tgt.some(k => on.has(k))) && (modeOn(t.mode) || t.required)).map(t => {
     const au = autoState(t), cnt = t.count === "chars" ? (snap && snap.chars || 3) : (t.count || 1), val = store[t.id] || 0;
     const done = (au && au.done) || val >= cnt;   // API gördüyse ya da sen tiklediysen
     const si = t.sched ? schedInfo(t.sched) : null;
@@ -1254,12 +1257,13 @@ function renderTaskList(el, tasks, bucket) {
     let boxes = "";
     // API onayladıysa kilitli tik; onaylamadıysa elle tiklenebilir (API birkaç dakika gecikebilir)
     if (au && au.done) boxes = `<input type="checkbox" disabled checked title="API'den onaylandı">`;
-    else for (let i = 0; i < cnt; i++) boxes += `<input type="checkbox" data-b="${bucket}" data-id="${esc(t.id)}" data-i="${i}" ${i < val ? "checked" : ""}>`;
+    else for (let i = 0; i < cnt; i++) boxes += `<input type="checkbox" data-b="${bucket}" data-id="${esc(t.id)}" data-i="${i}" ${i < val ? "checked" : ""} title="${t.count === "chars" ? (i + 1) + ". karakter" : (i + 1) + ". kutu"}">`;
     const hid = bucket + ":" + t.id;
     const api = t.auto ? ` · <span class="okc" title="API birkaç dakika geç güncellenebilir; o arada elle tikleyebilirsin">API${au && au.text ? " " + esc(au.text) : ""}${au && au.stale ? " (Yenile)" : au && au.done ? " ✓" : " bekliyor"}</span>` : "";
     return `<li class="k-${t.kind}${done ? " done" : ""}"><div class="chk">${boxes}</div><div style="flex:1">
       <div class="tt">${esc(t.title)}${t.sched ? `<span class="sched" data-sched="${t.sched}"></span>` : ""}</div>
       ${t.repeat ? `<div class="small ${done ? "okc" : "muted"}">${done ? "Günlük sandık alındı — tekrar turu yine değerli: " : "Tekrarlanabilir — günlük sandıktan sonraki her tur: "}${esc(t.repeat)}</div>` : ""}
+      ${t.count === "chars" ? `<div class="small muted">Kutular karakter başına: her karakterin günlük turu için bir tane. Eşya düşünce madde kendiliğinden kalkar (Yenile).</div>` : ""}
       <div class="small muted">${esc(t.serves)}${t.time ? " · " + esc(t.time) : ""}${api}${t.uv ? ' · <span style="color:var(--uv)">kısmen doğrulanmadı</span>' : ""}</div>
       ${t.how ? `<details class="how" data-how="${esc(hid)}" ${openHow.has(hid) ? "open" : ""}><summary>Nasıl?</summary><ol>${t.how.map(h => `<li>${esc(h)}</li>`).join("")}</ol>${t.wiki ? `<a class="small" href="${DATA.meta.wiki + t.wiki}" target="_blank" rel="noopener">wiki</a>` : ""}</details>` : ""}
     </div></li>`;
