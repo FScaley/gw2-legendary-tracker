@@ -551,7 +551,7 @@ const DATA = {
   // auto: API ile otomatik tik. untilAch: o achievement bitince madde gizlenir. untilBit: [ach, bit sırası, item] o parça toplanınca (ya da item sendeyse) gizlenir.
   // count "chars": karakter başına bir kutu (ör. sandıklar karakter başına günde açılıyor). tgt: sadece bu hedefler açıkken göster.
   // repeat: günlük sandıktan sonra tekrar turlarının ödülü (wiki "Repeatable" ödülleri).
-  // needsPart: sadece açık (craft edilen) bir hedef bu parçayı istiyorsa göster. mode/required: mod kapalıysa gizle, required ise yine göster. how: adım adım.
+  // needsPart: açık (craft edilen) bir hedefte bu parça hâlâ eksikse göster. whileAch: o achievement bitmeden de göster. mode/required: mod kapalıysa gizle, required ise yine göster. how: adım adım.
   daily: [
     { id: "conv_nayos", mode: "open", repeat: "Rift Essence (12-25 Fine, 5-10 Masterwork, 2-5 Rare; Convergence Mastery ile 2 katı)", group: "soto", title: "Convergence: Outer Nayos", sched: "conv_nayos", kind: "tg",
       serves: "Obsidian → Rift Essence", time: "20-30 dk, 50 kişilik public instance", auto: { t: "mapchest", id: "convergence_heros_choice_chest" },
@@ -605,7 +605,7 @@ const DATA = {
             "Supplymaster Hanjo (Mariner Landing, harita girişi) — 1.000 Unbound Magic.",
             "5 parçaya çift tıkla → 1 Druid Runestone. Henge bitince satıcılar satmayı bırakır."],
       wiki: "Druid_Runestone_Fragment" },
-    { id: "orchid", mode: "open", group: "ls3", tgt: ["aurora"], title: "Primordial Orchid kes (Fire Orchid Blossom)", kind: "tg", untilAch: 3436,
+    { id: "orchid", mode: "open", group: "ls3", tgt: ["aurora"], title: "Primordial Orchid kes (Fire Orchid Blossom)", kind: "tg", needsPart: "Fire Orchid Blossom", whileAch: 3436,
       serves: "Aurora → Druid Stone + Gift of Dragon Magic", time: "1 dk",
       how: ["Draconis Mons'taki Primordial Orchid düğümlerini balta ile kes; Blossom şansla düşer.",
             "Home instance/homestead'e Fire Orchid Node koyarsan (Supplymaster Hanjo satar) her gün garanti 1 tane.",
@@ -1243,11 +1243,11 @@ function updateScheds() {
 function renderTaskList(el, tasks, bucket) {
   const store = state.checks[bucket].d;
   const on = new Set(tgtPrefs().filter(x => x.enabled).map(x => x.t.key));
-  const needed = {};   // craft edilen açık hedeflerin ağacındaki bütün parçalar
-  for (const tp of craftOnly(tgtPrefs().filter(x => x.enabled))) grossNeed(tp.t.root, tp.count, needed);
+  const needed = {}, pool = {};   // craft edilen açık hedeflerde hâlâ EKSİK olan parçalar (sendekiler düşülür)
+  for (const tp of craftOnly(tgtPrefs().filter(x => x.enabled))) neededParts(tp.t.root, tp.count, pool, needed);
   const bitDone = t => { if (!t.untilBit || !snap) return false; const [a, i, item] = t.untilBit; const x = snap.ach[a];
     return !!((x && (x.done || (x.bits || []).includes(i))) || (item && snap.owned[item] > 0)); };
-  const rows = tasks.filter(t => !bitDone(t) && !(t.needsPart && !needed[t.needsPart]) && !(t.untilAch && achFrac(t.untilAch) >= 1) && !(t.tgt && !t.tgt.some(k => on.has(k))) && (modeOn(t.mode) || t.required)).map(t => {
+  const rows = tasks.filter(t => !bitDone(t) && !(t.needsPart && !needed[t.needsPart] && !(t.whileAch && achFrac(t.whileAch) < 1)) && !(t.untilAch && achFrac(t.untilAch) >= 1) && !(t.tgt && !t.tgt.some(k => on.has(k))) && (modeOn(t.mode) || t.required)).map(t => {
     const au = autoState(t), cnt = t.count === "chars" ? (snap && snap.chars || 3) : (t.count || 1), val = store[t.id] || 0;
     const done = (au && au.done) || val >= cnt;   // API gördüyse ya da sen tiklediysen
     const si = t.sched ? schedInfo(t.sched) : null;
