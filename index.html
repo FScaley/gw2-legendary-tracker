@@ -358,6 +358,30 @@ const DATA = {
     "Pile of Bloodstone Dust": { id: 46731 }, "Empyreal Fragment": { id: 46735 }, "Dragonite Ore": { id: 46733 },
     "Glob of Dark Matter": { id: 46681 }, "Integrated Fractal Matrix": { id: 79230 },
 
+    // ---- Warbringer (WvW sırt) ----
+    "Warbringer": { id: 81462, src: "Mystic Forge", in: [["Warcry", 1], ["Gift of Warfare", 1], ["Gift of Fortune", 1], ["Gift of Conquering", 1]], wiki: "Warbringer" },
+    "Warcry": { id: 81467, src: "Mystic Forge", in: [["Recruit's Wings of War", 1], ["Soldier's Wings of War", 1], ["General's Wings of War", 1], ["Commander's Wings of War", 1]] },
+    "Recruit's Wings of War": { id: 81455, src: "Legendary Commander War Razor (WvW); WvW rütbe 50", in: [["WvW Skirmish Claim Ticket", 350]] },
+    "Soldier's Wings of War": { id: 81356, src: "Legendary Commander War Razor; WvW rütbe 100, önce Recruit's", in: [["WvW Skirmish Claim Ticket", 525]] },
+    "General's Wings of War": { id: 81288, src: "Legendary Commander War Razor; WvW rütbe 200, önce Soldier's", in: [["WvW Skirmish Claim Ticket", 700]] },
+    "Commander's Wings of War": { id: 81294, src: "Legendary Commander War Razor; WvW rütbe 350, önce General's, commander simgesi (Commander's Compendium) gerekir", in: [["WvW Skirmish Claim Ticket", 875], ["Commander's Compendium", 1]] },
+    "Commander's Compendium": { id: 67335, src: "Commander vendor'ları: 300 altın + 250 Badge of Honor (commander simgen zaten varsa gerekmez)", in: [["Coin", 3000000], ["Badge of Honor", 250]] },
+
+    // ---- Strife Unending (WvW accessory) ----
+    "Strife Unending": { id: 109012, src: "Dugan (WvW); Mists Research: Strife Unending bitmiş olmalı", in: [["Gift of the Warclaw", 1], ["Gift of the Mist Warrior", 1], ["Gift of the Mistwalker", 1]], wiki: "Strife_Unending" },
+    "Gift of the Warclaw": { id: 109363, src: "Mists Research: Strife Unending ödülü", in: [["Mists Research: Strife Unending", 1]] },
+    "Mists Research: Strife Unending": { ach: 9244, src: "11 adım: Edge of the Mists ve Borderlands'te yer ele geçir, Mistwalker Infusion takılıyken 100 oyuncu öldür", in: [["Mists Research", 1]] },
+    "Mists Research": { ach: 6933, src: "WvW haritalarındaki 7 güç noktasını incele (Dugan)" },
+    "Gift of the Mist Warrior": { id: 109686, src: "Dugan", in: [["Testimony of Castoran Heroics", 500], ["Grandmaster Mark Shard", 50], ["Pile of Recycled Siege Equipment", 25], ["Gift of War Prosperity", 3]] },
+    "Grandmaster Mark Shard": { id: 87557, src: "WvW Skirmish reward track", tg: true },
+    "Pile of Recycled Siege Equipment": { id: 103913, src: "Siege Master (WvW) vb.: 250 aynı tür siege blueprint (en ucuzları Arrow Cart / Trebuchet, ~8 silver)", in: [["Arrow Cart Blueprint", 250]] },
+    "Arrow Cart Blueprint": { id: 39715 },
+    "Gift of War Prosperity": { id: 82746, src: "Mystic Forge", in: [["Gift of Battle", 1], ["Mystic Clover", 15], ["Gift of Condensed Might", 1], ["Gift of Condensed Magic", 1]] },
+    "Gift of the Mistwalker": { id: 109618, src: "Dugan", in: [["Emblem of the Conqueror", 2], ["Mistwalker Infusion", 1], ["Emblem of the Avenger", 40], ["Gift of the Mists", 2]] },
+    "Mistwalker Infusion": { src: "Dugan, Mists Research'ten sonra (hesaba bağlı). WvW'de nadir drop olarak da düşer.", in: [["Emblem of the Avenger", 20], ["Emblem of the Conqueror", 2], ["WvW Skirmish Claim Ticket", 3000], ["Badge of Honor", 5000]] },
+    "Emblem of the Avenger": { id: 93075, src: "WvW: 100 oyuncu öldür (tekrarlanabilir achievement) ya da Skirmish merchant'ta 1 Emblem of the Conqueror ile", in: [["Emblem of the Avenger (achievement)", 1]], tg: true },
+    "Emblem of the Avenger (achievement)": { ach: 5198, src: "WvW'de 100 oyuncu öldür (tekrarlanabilir)" },
+
     // ---- Endless Summer (VoE) ----
     "Endless Summer": { id: 107022, src: "Mystic Forge", in: [["Gift of Rays", 1], ["Gift of the Survivors", 1], ["Gift of the People", 1], ["Gift of the Hylek", 1]], wiki: "Endless_Summer" },
     "Gift of Rays": { id: 107040, src: "Mystic Forge", in: [["Gift of the Sun", 1], ["Gift of the Beach", 1], ["Gift of Infused Gems", 1], ["Purified Rift Essence", 10]] },
@@ -553,6 +577,20 @@ const DATA = {
       gates: [
         { label: "WvW Skirmish Claim Ticket", cur: 26, need: 1850, perDay: 40, est: true, note: "Tam WvW haftası ~455; 40/gün orta tempo tahmini" },
         { label: "Testimony of Castoran Heroics", cur: 82, need: 750, perDay: 15, est: true, note: "Skirmish Chest başına 6; günlük oran WvW süresine bağlı" }
+      ] },
+    { key: "warbringer", off: true, sg: "back", need: [{ m: "wvw", kind: "grind", why: "WvW rütbe 350 + ~2.800 Skirmish Ticket + Legendary Spike, aylarca" }], name: "Warbringer", root: "Warbringer", count: 1, slot: "Sırt", mode: "WvW",
+      gold: "~1.100-1.300 altın (Gift of Fortune + Commander's Compendium 300 altın)",
+      why: "WvW sırtı (Ad Infinitum'un alternatifi). En uzun kapı WvW rütbesi: Commander's Wings of War rütbe 350 istiyor.",
+      gates: [
+        { label: "WvW rütbesi", wvwRank: 350, perDay: 3, est: true, note: "Rütbe hızı oynama süresine çok bağlı; tahmin" },
+        { label: "WvW Skirmish Claim Ticket", cur: 26, perDay: 40, est: true, note: "Tam WvW haftası ~455" }
+      ] },
+    { key: "strife", off: true, sg: "accessory", need: [{ m: "wvw", kind: "grind", why: "~3.000+ Skirmish Ticket, 5.000 Badge of Honor, 60 Emblem of the Avenger, 5 Gift of Battle" }], name: "Strife Unending", root: "Strife Unending", count: 1, slot: "Accessory", mode: "WvW (Castoran Heroics: VoE)",
+      gold: "~1.500-2.000 altın (Condensed gift'ler + ~500 altın blueprint)",
+      why: "WvW accessory'si (Vision'ın alternatifi, 2 kopya alabilir). En uzun kısım: 60 Emblem of the Avenger (her biri 100 oyuncu öldürme ya da 1 Emblem of the Conqueror takası).",
+      gates: [
+        { label: "WvW Skirmish Claim Ticket", cur: 26, perDay: 40, est: true, note: "Tam WvW haftası ~455" },
+        { label: "Testimony of Castoran Heroics", cur: 82, perDay: 15, est: true, note: "Skirmish Chest başına 6" }
       ] },
     { key: "adinf", sg: "back", need: [{ m: "fractal", kind: "grind", why: "4 Fractal Journal + challenge mote'lar, haftalarca" }], name: "Ad Infinitum", root: "Ad Infinitum", count: 1, slot: "Sırt", mode: "Fractal",
       gold: "~800-1.000 altın",
@@ -1489,7 +1527,7 @@ async function refresh() {
   await job("tokeninfo", async () => { const t = await api("/v2/tokeninfo", true); s.scopes = t.permissions || []; });
   const has = sc => s.scopes.includes(sc);
   await Promise.all([
-    job("account", async () => { const a = await api("/v2/account", true); s.name = a.name; }),
+    job("account", async () => { const a = await api("/v2/account", true); s.name = a.name; s.wvwRank = a.wvw && a.wvw.rank || (a.wvw_rank || 0); }),
     has("progression") && job("achievements", async () => { for (const a of await api("/v2/account/achievements", true)) s.ach[a.id] = { done: !!a.done, cur: a.current || 0, max: a.max || 0, bits: a.bits || [] }; }),
     has("wallet") && job("wallet", async () => { for (const w of await api("/v2/account/wallet", true)) s.wallet[w.id] = w.value; }),
     has("inventories") && job("materials", async () => { for (const m of await api("/v2/account/materials", true)) add(m.id, m.count); }),
@@ -1659,6 +1697,7 @@ function targetCalc(tp) {
 function gateDays(g, miss) {
   let need = g.need || 0, have = 0, rem;
   if (g.steps) { need = g.steps.reduce((a, [id, u]) => a + (achFrac(id) >= 1 ? 0 : u), 0); rem = need; }
+  else if (g.wvwRank) { need = g.wvwRank; have = snap ? (snap.wvwRank || 0) : 0; rem = Math.max(0, need - have); }
   else {
     const name = Object.keys(P).find(n => (g.cur && P[n].cur === g.cur) || (g.item && P[n].id === g.item));
     have = snap ? (g.cur ? (snap.wallet[g.cur] || 0) : (snap.owned[g.item] || 0)) : 0;
