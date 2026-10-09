@@ -1393,8 +1393,8 @@ for (const [a, l] of Object.entries(COLLECTIONS.bits)) if (DATA.parts[a]) DATA.p
   </section>
 
   <section class="tab" id="tab-hunter">
-    <div class="card small muted">Kartlar en az maddesi kalandan başlar; bitenler en altta. Mastery kartları (ör. "All or Nothing" Mastery) koleksiyonlardaki zırh skinlerini veriyor — her birinin yanında reward track alternatifi yazıyor. Eksik maddeler kolaydan zora sıralı. Zorluk: veri dosyasındaki etiket → senin seçimin → açıklamadan otomatik tahmin (sırasıyla öncelikli). Otomatik etiketler "oto" işaretli ve doğrulanmamıştır.</div>
-    <div class="row" style="margin-bottom:10px"><label class="small">Hedef: <select id="hunterFilter"></select></label><button class="btn" id="hunterLoad">Listeyi yükle</button><span id="hunterStatus" class="small muted"></span></div>
+    <div class="card small muted">Kartlar en az maddesi kalandan başlar; bitenler en altta. Mastery kartları (ör. "All or Nothing" Mastery) koleksiyonlardaki zırh skinlerini veriyor — her birinin yanında reward track alternatifi yazıyor. Eksik maddeler kolaydan zora sıralı. Zorluk: veri dosyasındaki etiket → senin seçimin → koleksiyon verisi (sende var / TP / satıcı / craft / drop) → açıklamadan otomatik tahmin (sırasıyla öncelikli). Otomatik etiketler "oto" işaretli ve doğrulanmamıştır; "?" kalanlara soldaki kutudan kendin zorluk ver.</div>
+    <div class="row" style="margin-bottom:10px"><label class="small">Hedef: <select id="hunterFilter"></select></label><label class="small"><input type="checkbox" id="hunterEasy"> Sadece kolaylar (zorluk 1-2)</label><button class="btn" id="hunterLoad">Listeyi yükle</button><span id="hunterStatus" class="small muted"></span></div>
     <div id="hunterBox"></div>
   </section>
 
@@ -2066,12 +2066,25 @@ function renderTargets() {
 const AUTO_TAGS = [
   [/jumping puzzle|\bjp\b|climb|ledge|atop/i, "zıplama", 3],
   [/chance|random|drop(s|ped)? (from|by)|chest/i, "RNG", 4],
-  [/champion|legendary |world boss|meta|squad|defeat .* (boss|wurm|dragon)/i, "grup/meta", 4],
-  [/(skyscale|griffon|springer|skimmer|jackal|raptor|roller beetle|warclaw|skiff)|mount(?! (maelstrom|balrior))/i, "mount", 3],
-  [/event|defend|escort/i, "event", 3],
-  [/(purchase|buy|vendor|karma)/i, "satın al", 1],
-  [/bring|give|talk|speak|deliver/i, "teslim", 2],
-  [/collect|gather|harvest|forage/i, "toplama", 2]
+  [/champion|legendary |world boss|\bmeta\b|squad|defeat .* (boss|wurm|dragon)/i, "grup/meta", 4],
+  [/in a row|without (taking|being|getting|using|dying|losing)|within \d+ seconds|flawless/i, "zor koşul", 4],
+  [/\brace|time trial|rings? as quickly|as fast as/i, "yarış", 3],
+  [/\b(skyscale|griffon|springer|skimmer|jackal|raptor|roller beetle|warclaw|skiff)\b|\bmount\b(?! (maelstrom|balrior))/i, "mount", 3],
+  [/\bevents?\b|defend|escort/i, "event", 3],
+  [/survive|stacks of/i, "dayanma", 3],
+  [/(defeat|slay|kill) \d+/i, "kesme", 2],
+  [/\b(purchase|buy|vendor|karma|donate)\b/i, "satın al", 1],
+  [/bring|give|talk|speak|deliver|return to/i, "teslim", 2],
+  [/collect|gather|harvest|forage|find (all|every)/i, "toplama", 2],
+  [/^(find|discover|visit|inspect|examine|read|interact|attune|look|locate|investigate) /i, "keşif", 1],
+  [/serve |roll \d+ times|transformed/i, "eğlence", 2],
+  [/\bwithout\b|under \d+ (minutes|seconds)/i, "zor koşul", 4],
+  [/fractal|timed mote|challenge mote/i, "fractal", 3],
+  [/bount(y|ies)/i, "bounty", 3],
+  [/^(defeat|slay|kill) (a|an|the) /i, "kesme", 2],
+  [/(loot|inflict|afflict) .*\d+|while wielding/i, "tekrar", 2],
+  [/acquire a .* and perform tasks/i, "silah + görev", 3],
+  [/^(infuse|meditate|found in)/i, "teslim/keşif", 2]
 ];
 function autoTags(text) {
   const tags = [], ds = [];
@@ -2129,6 +2142,26 @@ async function loadHunter() {
   } catch (e) { st.innerHTML = '<span class="err">Hata: ' + esc(e.message) + "</span>"; }
   renderHunter();
 }
+// koleksiyon parçasının zorluğu, verideki kaynağından (API tarifleri + wiki vendor verisi; tahmin değil)
+const BIT_PART = {};   // achievement id -> bit sırası -> parça adı
+for (const [n, p] of Object.entries(DATA.parts)) if (p.ach && p.bits) BIT_PART[p.ach] = Object.fromEntries(p.bits.map(b => [b[2], b[0]]));
+const coinTxt = c => c >= 10000 ? gold(c) : Math.max(1, Math.round(c / 100)) + " gümüş";
+function partDiff(name, itemId) {
+  const p = P[name];
+  if (snap && ((p && ownedOf(name) > 0) || (itemId && snap.owned[itemId] > 0)))
+    return { d: 1, tag: "sende var", why: "Sende var: koleksiyona eklenmesi için çift tıkla (ya da NPC'ye ver)." };
+  if (!p) return null;
+  const src = p.src || "", cost = (p.in || []).map(([c, q]) => P[c] && P[c].cur === 1 ? coinTxt(q) : fmt(q) + " " + c).join(" + ");
+  if (src === "TP") { const pr = prices.p[p.id]; return { d: 1, tag: "TP", why: "TP'den al" + (pr && pr.s ? ": ~" + coinTxt(pr.s) : "") + "." }; }
+  // sadece para birimiyle ya da malzemesi sende olan alım kolay; gift/malzeme istiyorsa önce onları yapmak gerekir
+  const easyCost = (p.in || []).every(([c, q]) => (P[c] && P[c].cur) || (snap && ownedOf(c) >= q));
+  if (/^Vendor:/.test(src)) return { d: easyCost ? 1 : 2, tag: easyCost ? "satın al" : "satın al + malzeme", why: src.replace(/^Vendor: /, "Satıcı: ") + (cost ? " — " + cost : "") };
+  if (/^(Craft:|Mystic Forge)/.test(src)) return { d: 2, tag: "craft", why: src + (cost ? " — " + cost : "") };
+  if (/ödülü$/.test(src)) return { d: 3, tag: "koleksiyon ödülü", why: src };
+  if (/^(Boss event|Drop)/.test(src)) return { d: 4, tag: /^Boss/.test(src) ? "boss" : "drop", why: src };
+  if (p.in && p.in.length) return { d: 2, tag: "malzemeyle", why: src + (cost ? " — " + cost : "") };
+  return null;
+}
 function bitInfo(b) {
   const kind = { Item: "items", Skin: "skins", Minipet: "minis" }[b.type];
   const nm = kind && stat[kind][b.id] ? stat[kind][b.id].name : (b.text || (b.type + " " + (b.id || "")));
@@ -2140,7 +2173,12 @@ function renderHunter() {
   const leftOf = h => { const d = stat.ach[h.ach], a = snap && snap.ach[h.ach]; if (!d) return 1e6; if (a && a.done) return 1e7; const n = d.tiers.length ? d.tiers[d.tiers.length - 1].count : (d.bits.length || 1); return n - (a ? a.cur : 0); };
   const list = hunterList().filter(h => !sel || h.target === sel).sort((x, y) => leftOf(x) - leftOf(y));
   buildHunterFilter();
-  $("#hunterBox").innerHTML = list.map(h => {
+  const easyOnly = !!state.hunterEasy, easy = [];
+  const rowLi = r => `<li><select data-dk="${esc(r.key)}" title="Zorluk">${["", 1, 2, 3, 4, 5].map(v => `<option value="${v}" ${(r.man || "") == v ? "selected" : ""}>${v === "" ? "–" : v}</option>`).join("")}</select>
+        <div><div><a href="${wikiUrl(r.name)}" target="_blank" rel="noopener">${esc(r.name)}</a> <span class="pill">zorluk ${r.d || "?"}</span>${r.card ? ` <span class="small muted">${esc(r.card)}</span>` : ""}</div>
+        <div>${(r.dataTag ? r.dataTag.tags.map(t => `<span class="tag">${esc(t)}</span>`) : r.pd && !r.man ? [`<span class="tag">${esc(r.pd.tag)}</span>`] : r.au.tags.map(t => `<span class="tag uv">oto: ${esc(t)}</span>`)).join("")}</div>
+        <div class="small muted">${esc(r.dataTag && r.dataTag.tip || r.pd && r.pd.why || r.hint || "")}</div></div></li>`;
+  const cards = list.map(h => {
     const def = stat.ach[h.ach];
     if (!def) return `<div class="card"><h2>${esc(h.title)}</h2><div class="muted small">Yüklenmedi — "Listeyi yükle".</div></div>`;
     if (h.kind === "category" && !stat.cats[h.cat]) return `<div class="card"><h2>${esc(h.title)}</h2><div class="muted small">Kategori yüklenmedi — "Listeyi yükle".</div></div>`;
@@ -2150,27 +2188,34 @@ function renderHunter() {
     if (h.kind === "bits") {
       const got = new Set(a ? a.bits : []);
       haveN = a ? (a.done ? needN : a.cur) : 0;
-      def.bits.forEach((b, i) => { if (a && a.done) return; if (got.has(i)) return; const bi = bitInfo(b); rows.push(Object.assign(bi, { hint: b.text && b.text !== bi.name ? b.text : "" })); });
+      def.bits.forEach((b, i) => { if (a && a.done) return; if (got.has(i)) return; const bi = bitInfo(b); rows.push(Object.assign(bi, { hint: b.text && b.text !== bi.name ? b.text : "", part: (BIT_PART[h.ach] || {})[i], itemId: b.type === "Item" ? b.id : null })); });
     } else {
       const ids = (stat.cats[h.cat] || []).filter(id => id !== h.ach);
       for (const id of ids) { const d = stat.ach[id]; if (!d || d.flags.includes("Daily") || d.flags.includes("Weekly") || d.flags.includes("Repeatable") || d.flags.includes("CategoryDisplay")) continue; const x = snap && snap.ach[id]; if (x && x.done) { haveN++; continue; } rows.push({ key: "ach:" + id, name: d.name, hint: d.req || d.desc, achId: id }); }
       if (a && a.max) haveN = a.done ? needN : a.cur;   // meta'nın kendi sayacı (kategoride sayılmayan achievement'lar olabilir)
     }
-    const left = Math.max(0, needN - haveN), done = a && a.done;
+    // zorluk sırası: veri dosyasındaki etiket → senin seçimin → koleksiyon verisi → açıklamadan tahmin
     rows = rows.map(r => {
-      const dataTag = DATA.hunterTags[r.key], man = state.diff[r.key], au = autoTags(r.name + " " + r.hint);
-      const d = dataTag && dataTag.d || man || au.d;
-      return Object.assign(r, { d, dataTag, man, au });
+      const dataTag = DATA.hunterTags[r.key], man = state.diff[r.key], pd = partDiff(r.part, r.itemId), au = autoTags(r.name + " " + r.hint + " " + (P[r.part] && P[r.part].src || ""));
+      const d = dataTag && dataTag.d || man || pd && pd.d || au.d;
+      return Object.assign(r, { d, dataTag, man, pd, au });
     }).sort((x, y) => (x.d || 9) - (y.d || 9));
+    const left = Math.max(0, needN - haveN), done = a && a.done;
+    if (!done) for (const r of rows) if (r.d && r.d <= 2) easy.push(Object.assign({}, r, { card: h.title, left }));
+    const shown = easyOnly ? rows.filter(r => r.d && r.d <= 2) : rows;
+    if (easyOnly && !shown.length) return "";
     return `<div class="card"><h2>${esc(h.title)} <span class="pill">${esc(tname[h.target] || "")}</span></h2>
       <div class="small">${done ? '<span class="okc">Tamamlandı</span>' : `<b>${fmt(haveN)}/${fmt(needN)}</b> · <b class="warnc">${fmt(left)} tane daha lazım</b>`} · <a href="${wikiUrl(def.name)}" target="_blank" rel="noopener">wiki</a></div>
       ${h.why ? `<div class="small" style="margin:2px 0">${esc(h.why)}${!modeOn("wvw") && /reward track/.test(h.why) ? ' <b class="warnc">WvW kapalı: mastery yolunu seç.</b>' : ""}</div>` : ""}
       ${def.req ? `<div class="small muted">${esc(def.req)}</div>` : ""}
-      ${done ? "" : `<ul class="hunt">${rows.map(r => `<li><select data-dk="${esc(r.key)}" title="Zorluk">${["", 1, 2, 3, 4, 5].map(v => `<option value="${v}" ${(r.man || "") == v ? "selected" : ""}>${v === "" ? "–" : v}</option>`).join("")}</select>
-        <div><div><a href="${wikiUrl(r.name)}" target="_blank" rel="noopener">${esc(r.name)}</a> <span class="pill">zorluk ${r.d || "?"}</span></div>
-        <div>${(r.dataTag ? r.dataTag.tags.map(t => `<span class="tag">${esc(t)}</span>`) : r.au.tags.map(t => `<span class="tag uv">oto: ${esc(t)}</span>`)).join("")}</div>
-        <div class="small muted">${esc(r.dataTag && r.dataTag.tip || r.hint || "")}</div></div></li>`).join("")}</ul>`}</div>`;
-  }).join("");
+      ${done ? "" : `<ul class="hunt">${shown.map(rowLi).join("")}</ul>`}</div>`;
+  });
+  // en kolaylar: önce zorluk, sonra "sende var", sonra az maddesi kalan koleksiyon
+  easy.sort((x, y) => x.d - y.d || ((y.pd && y.pd.tag === "sende var") - (x.pd && x.pd.tag === "sende var")) || x.left - y.left);
+  const top = easy.slice(0, 25);
+  $("#hunterBox").innerHTML = (list.some(h => stat.ach[h.ach]) ? `<div class="card"><h2>En kolay işler <span class="pill">${easy.length} madde zorluk 1-2</span></h2>
+      <div class="small muted">Bütün koleksiyonlardan. "sende var", "TP", "satın al", "craft" etiketleri koleksiyon verisinden gelir (API tarifleri + wiki satıcı verisi); "oto" etiketleri açıklamadan tahmindir.${easy.length > top.length ? ` İlk ${top.length} tanesi; hepsi için "Sadece kolaylar"ı işaretle.` : ""}</div>
+      ${top.length ? `<ul class="hunt">${top.map(rowLi).join("")}</ul>` : '<div class="small muted">Kolay madde yok.</div>'}</div>` : "") + cards.join("");
 }
 document.addEventListener("change", e => {
   const s = e.target; if (!s.matches || !s.matches("select[data-dk]")) return;
@@ -2280,6 +2325,8 @@ function buildHunterFilter() {
 buildHunterFilter();
 $("#hunterFilter").value = state.hunterFilter || "";
 $("#hunterFilter").onchange = e => { state.hunterFilter = e.target.value; saveState(); renderHunter(); };
+$("#hunterEasy").checked = !!state.hunterEasy;
+$("#hunterEasy").onchange = e => { state.hunterEasy = e.target.checked; saveState(); renderHunter(); };
 $("#dataAsOf").textContent = DATA.meta.asOf;
 
 renderAll();
