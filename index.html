@@ -1539,7 +1539,7 @@ const MASTERY_OBJECTIVES = {
   </section>
 
   <section class="tab" id="tab-hunter">
-    <div class="card small muted">Kartlar en az maddesi kalandan başlar; bitenler en altta. Mastery kartları (ör. "All or Nothing" Mastery) koleksiyonlardaki zırh skinlerini veriyor — her birinin yanında hikaye istemeyen tekrarlanabilir LS3/LS4 reward track yolu yazıyor. Eksik maddeler kolaydan zora sıralı. Zorluk: veri dosyasındaki etiket → senin seçimin → koleksiyon verisi (sende var / TP / satıcı / craft / drop) → açıklamadan otomatik tahmin (sırasıyla öncelikli). Hikaye achievement'ları (API'de "Story Instance" ya da "Journal") ayrıca işaretli; mastery kartları hikayesiz bitip bitmeyeceğini yazar. Otomatik etiketler "oto" işaretli ve doğrulanmamıştır; "?" kalanlara soldaki kutudan kendin zorluk ver.</div>
+    <div class="card small muted">Sadece hâlâ gereken achievement'lar: bitenler ve parçası sende olanlar gösterilmez. Kartlar en az maddesi kalandan başlar. Mastery kartları (ör. "All or Nothing" Mastery) koleksiyonlardaki zırh skinlerini veriyor — her birinin yanında hikaye istemeyen tekrarlanabilir LS3/LS4 reward track yolu yazıyor. Eksik maddeler kolaydan zora sıralı. Zorluk: veri dosyasındaki etiket → senin seçimin → koleksiyon verisi (sende var / TP / satıcı / craft / drop) → açıklamadan otomatik tahmin (sırasıyla öncelikli). Hikaye achievement'ları (API'de "Story Instance" ya da "Journal") ayrıca işaretli; mastery kartları hikayesiz bitip bitmeyeceğini yazar. Otomatik etiketler "oto" işaretli ve doğrulanmamıştır; "?" kalanlara soldaki kutudan kendin zorluk ver.</div>
     <div class="row" style="margin-bottom:10px"><label class="small">Hedef: <select id="hunterFilter"></select></label><label class="small"><input type="checkbox" id="hunterEasy"> Sadece kolaylar (zorluk 1-2)</label><label class="small"><input type="checkbox" id="hunterNoStory"> Hikaye achievement'larını gizle</label><button class="btn" id="hunterLoad">Listeyi yükle</button><span id="hunterStatus" class="small muted"></span></div>
     <div id="hunterBox"></div>
   </section>
@@ -2258,13 +2258,21 @@ async function ensureStatic(kind, ids) {
 // açık ve craft edilen hedeflerin ağacındaki bütün achievement'lar; DATA.hunter sadece başlık/açıklama/tür verir
 function hunterList() {
   const over = Object.fromEntries(DATA.hunter.map(h => [h.ach, h])), seen = new Map();
-  const walk = (name, key, depth) => {
+  // sadece hâlâ gereken achievement'lar: biten achievement'ta, sende olan parçada ve toplanmış koleksiyon parçasında durulur
+  // (API verisi yokken hepsi)
+  const walk = (name, qty, key, depth) => {
     const p = P[name]; if (!p || depth > 14) return;
-    if (p.ach && !seen.has(p.ach)) seen.set(p.ach, { ach: p.ach, target: key, name });
-    for (const [c] of (p.in || [])) walk(c, key, depth + 1);
-    for (const b of (p.bits || [])) walk(b[0], key, depth + 1);
+    if (p.ach) {
+      if (snap && achFrac(p.ach) >= 1) return;
+      if (!seen.has(p.ach)) seen.set(p.ach, { ach: p.ach, target: key, name });
+      for (const [c] of (p.in || [])) walk(c, 1, key, depth + 1);
+      for (const [c, q] of (snap ? bitKids(p) : (p.bits || []).map(b => [b[0], b[1]]))) walk(c, q, key, depth + 1);
+      return;
+    }
+    if (snap && ownedOf(name) >= qty) return;
+    for (const [c, q] of (p.in || [])) walk(c, q * qty, key, depth + 1);
   };
-  for (const tp of tgtPrefs().filter(x => x.enabled && !x.buy)) walk(tp.t.root, tp.t.key, 0);
+  for (const tp of tgtPrefs().filter(x => x.enabled && !x.buy)) walk(tp.t.root, tp.count || 1, tp.t.key, 0);
   return [...seen.values()].map(x => {
     const o = over[x.ach] || {}, def = stat.ach[x.ach];
     let kind = o.kind, cat = o.cat;
