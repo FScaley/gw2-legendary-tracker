@@ -2,7 +2,7 @@
 // Each generator owns one block in index.html between "// <gen:NAME>" and "// </gen:NAME>" and rewrites only that block.
 // "--check" compares instead of writing and exits 1 when the block would change.
 // The GW2 Wiki refuses requests from GitHub's servers, so only the API-only generator (skins) runs in the weekly Action;
-// the wiki-based ones (collections, vendorreqs, mastery) are run locally.
+// the wiki-based ones (collections, vendorreqs, mastery, achinfo) are run locally.
 const fs = require('fs');
 const path = require('path');
 const INDEX = path.join(__dirname, '..', '..', 'index.html');
@@ -16,16 +16,17 @@ const EMPTY = {
   vendorreqs: 'const VENDOR_REQS = {};',
   mastery: 'const MASTERY_OBJECTIVES = {};',
   skins: 'const PART_SKINS = {};',
+  achinfo: 'const ACH_INFO = {};',
 };
 // DATA as the page sees it (with the generated blocks applied); without: block names to load empty
-function loadData({ without = [] } = {}) {
+function loadData({ without = [], ret = 'DATA' } = {}) {
   let script = [...readIndex().matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)][0][1];
   for (const name of without) {
     const open = `// <gen:${name}>`, close = `// </gen:${name}>`;
     const i = script.indexOf(open), j = script.indexOf(close);
     script = script.slice(0, i) + EMPTY[name] + '\n' + script.slice(j + close.length);
   }
-  return new Function(script + '; return DATA;')();
+  return new Function(script + '; return ' + ret + ';')();
 }
 // optional disk cache for repeated local runs: GEN_CACHE=path/to/cache.json (never used by the GitHub Action)
 const cacheFile = process.env.GEN_CACHE;
@@ -68,6 +69,24 @@ async function wikiRaw(title) {
   throw new Error(`wiki failed (${last}): ${title}`);
 }
 
+// the wiki page whose achievement table lists achievement id (a category's "<name> (achievements)" page, or "<name>")
+async function achTable(catName, id) {
+  for (const t of [catName + ' (achievements)', catName]) {
+    let raw = await wikiRaw(t);
+    if (raw && /^#REDIRECT/i.test(raw)) { const to = raw.match(/\[\[([^\]#|]+)/); raw = to ? await wikiRaw(to[1]) : null; }
+    if (raw && idField(id).test(raw)) return raw;
+  }
+  return null;
+}
+const idField = id => new RegExp('\\|\\s*id\\s*=\\s*' + id + '\\b');
+// one row of a wiki achievement table: { field: value }
+function achRow(raw, id) {
+  const row = raw.split('{{Achievement table row').find(r => idField(id).test(r));
+  if (!row) return null;
+  const out = {};
+  for (const m of row.matchAll(/\n\|\s*([a-z ]+?)\s*=([\s\S]*?)(?=\n\||\n\}\})/g)) out[m[1]] = m[2].trim();
+  return out;
+}
 // replace (or check) the generated block NAME; body is JavaScript
 function writeBlock(name, body) {
   const html = readIndex();
@@ -88,4 +107,4 @@ function writeBlock(name, body) {
 }
 const js = v => JSON.stringify(v, null, 0).replace(/,"/g, ', "').replace(/":/g, '": ');
 
-module.exports = { readIndex, loadData, api, apiIds, ask, wikiRaw, writeBlock, js, sleep, saveCache };
+module.exports = { readIndex, loadData, api, apiIds, ask, wikiRaw, achTable, achRow, writeBlock, js, sleep, saveCache };

@@ -2,7 +2,7 @@
 // The API gives a meta only its category; the category also holds achievements the meta does not count
 // (Insights, Requiem experiments ...). The wiki's achievement table lists the meta's real objectives.
 // Writes the MASTERY_OBJECTIVES block of index.html: { metaAchId: [achId, ...] }.
-const { loadData, api, apiIds, wikiRaw, writeBlock } = require('./lib');
+const { loadData, api, apiIds, achTable, writeBlock } = require('./lib');
 
 (async () => {
   const DATA = loadData({ without: ['mastery'] });
@@ -15,14 +15,7 @@ const { loadData, api, apiIds, wikiRaw, writeBlock } = require('./lib');
   for (const m of metas.sort((a, b) => a.id - b.id)) {
     const cat = catOf[m.id];
     if (!cat) { console.log('no category for', m.id, m.name); continue; }
-    let raw = null;
-    for (const t of [cat.name + ' (achievements)', cat.name]) {
-      const r = await wikiRaw(t);
-      if (r && /^#REDIRECT/i.test(r)) { const to = r.match(/\[\[([^\]#|]+)/); if (to) { raw = await wikiRaw(to[1]); } }
-      else raw = r;
-      if (raw && raw.includes('| id = ' + m.id)) break;
-      raw = null;
-    }
+    const raw = await achTable(cat.name, m.id);
     if (!raw) { console.log('MISSING wiki table for', m.id, m.name, '(category', cat.name + ')'); process.exitCode = 1; continue; }
     const row = raw.split('{{Achievement table row').find(r => new RegExp('\\|\\s*id\\s*=\\s*' + m.id + '\\b').test(r));
     const obj = (row.match(/\|\s*objectives\s*=([\s\S]*?)(\n\||\n\}\})/) || [])[1] || '';

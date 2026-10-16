@@ -32,7 +32,7 @@ Node 18+ (no dependencies, no API key):
 
 ## Regenerating the data
 
-Four blocks in `index.html` are written by scripts in `tools/gen` (Node 18+, no API key) from the API and the wiki. Each owns the lines between `// <gen:NAME>` and `// </gen:NAME>`; do not edit those lines by hand.
+Five blocks in `index.html` are written by scripts in `tools/gen` (Node 18+, no API key) from the API and the wiki. Each owns the lines between `// <gen:NAME>` and `// </gen:NAME>`; do not edit those lines by hand.
 
 | Script | Block | What it holds |
 |---|---|---|
@@ -40,7 +40,8 @@ Four blocks in `index.html` are written by scripts in `tools/gen` (Node 18+, no 
 | `tools/gen/vendorreqs.js` | `VENDOR_REQS` | what a vendor wants before it sells (an achievement, a mastery level, a heart) |
 | `tools/gen/skins.js` | `PART_SKINS` | the skin each collection piece unlocks, so an unlocked skin counts as the piece |
 | `tools/gen/mastery.js` | `MASTERY_OBJECTIVES` | the achievements each mastery meta counts (the wiki's list, not the whole category) |
+| `tools/gen/achinfo.js` | `ACH_INFO` | for those achievements, the kind of page the wiki links them to (event, group event, adventure, NPC, jumping puzzle, place, story) and the wiki's notes; the hunter's difficulty guesses use it |
 
-Run them in this order after a game patch: `collections`, `vendorreqs`, `skins`, `mastery`. `--check` only compares and exits 1 when a block would change. Fixes by hand go into `DATA.parts`, which wins over the generated parts; a collection piece the API does not list goes into `DATA.parts[achievement].bitsExtra`. For faster repeated local runs set `GEN_CACHE=some-file.json` to cache the responses.
+Run them in this order after a game patch: `collections`, `vendorreqs`, `skins`, `mastery`, `achinfo`. `--check` only compares and exits 1 when a block would change. Fixes by hand go into `DATA.parts`, which wins over the generated parts; a collection piece the API does not list goes into `DATA.parts[achievement].bitsExtra`. For faster repeated local runs set `GEN_CACHE=some-file.json` to cache the responses.
 
-The GW2 Wiki refuses requests from GitHub's servers, so the weekly GitHub Action runs only `skins.js --check` (API only); run `collections`, `vendorreqs` and `mastery` with `--check` locally after a game patch.
+The GW2 Wiki refuses requests from GitHub's servers, so the weekly GitHub Action runs only `skins.js --check` (API only); run `collections`, `vendorreqs`, `mastery` and `achinfo` with `--check` locally after a game patch.
