@@ -244,7 +244,42 @@ const DATA = {
     "Aurora: Awakening": { ach: 3522, src: "6 Hero item + Sentient Seed", in: [["A Henge Away from Home", 1], ["Bloodstone Fen Master", 1], ["Ember Bay Master", 1], ["Bitterfrost Frontier Master", 1], ["Lake Doric Master", 1], ["Draconis Mons Master", 1], ["Siren's Landing Master", 1]] },
     "Awakening the Druid Stone": { ach: 3445, src: "Druid Stone 2. adım (3 Druid Runestone + 12 Fire Orchid)" },
     "Sprouting the Druid Stone": { ach: 3447, src: "Druid Stone 3. adım: 5 Druid Runestone (günde 1)", tg: true },
-    "A Henge Away from Home": { ach: 3436, src: "Druid Stone 4. adım: 7 Druid Runestone (günde 1) → The Wayfarer's Henge", tg: true, in: [["Awakening the Druid Stone", 1], ["Sprouting the Druid Stone", 1]] },
+    // ---- A Henge Away from Home: API'de 32 parça, eşya olmayan 15'i (teslim, buket, ekim) ve runestone/element kaynakları elle (wiki, 9 Eki 2026) ----
+    "Destroyer's Rest": {"src": "Aestus, Ignis ve Desecrator Runestone'u Kodama'ya ver (Draconis Mons)"},
+    "Elemental Rest": {"src": "Volcanic, Glacial, Charged ve Earthen Runestone'u Kodama'ya ver (Draconis Mons)"},
+    "Druid's Vision": {"src": "1 Vision Crystal'ı Kodama'ya ver (Druid's Grotto, Draconis Mons)", "in": [["Vision Crystal", 1]]},
+    "A Storm Bouquet for Kodama": {"src": "10 Fire Orchid + 5 Charged Lodestone → Kodama (Savage Rise)", "in": [["Fire Orchid Blossom", 10], ["Charged Lodestone", 5]]},
+    "A Frozen Bouquet for Liriodendron": {"src": "10 Fire Orchid + 5 Glacial Lodestone → Liriodendron (Savage Rise su başı)", "in": [["Fire Orchid Blossom", 10], ["Glacial Lodestone", 5]]},
+    "An Earthen Bouquet for Broadleaf": {"src": "10 Fire Orchid + 5 Onyx Lodestone → Broadleaf (Savage Rise üstündeki çıkıntı)", "in": [["Fire Orchid Blossom", 10], ["Onyx Lodestone", 5]]},
+    "An Infernal Bouquet for Rosewood": {"src": "10 Fire Orchid + 5 Molten Lodestone → Rosewood (Ancient Hollow üstündeki çıkıntı)", "in": [["Fire Orchid Blossom", 10], ["Molten Lodestone", 5]]},
+    "Dierdre's Orchard": {"src": "3 Fire Orchid Seed ek: Dierdre's Steps bahçesi (Mount Maelstrom)", "in": [["Fire Orchid Seed", 3]]},
+    "Maguuma's Orchard": {"src": "3 Fire Orchid Seed ek: Uplands Oasis (Dry Top)", "in": [["Fire Orchid Seed", 3]]},
+    "Melandru's Orchard": {"src": "3 Fire Orchid Seed ek: Cathedral of Verdance (Cursed Shore)", "in": [["Fire Orchid Seed", 3]]},
+    "Seaside Propagation": {"src": "1 Fire Orchid Seed ek: Eastern Boiling Sea adası (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
+    "Wind Rider Ledge Propagation": {"src": "1 Fire Orchid Seed ek: Wind Rider Ledge'e bakan toprak (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
+    "Rata Arcanum Propagation": {"src": "1 Fire Orchid Seed ek: Rata Arcanum üstündeki ışıklı mağara (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
+    "Seaside Ledges Propagation": {"src": "1 Fire Orchid Seed ek: Frothing Pedestal'a bakan çıkıntı (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
+    "Nu II Propagation": {"src": "1 Fire Orchid Seed ek: Nu II Vault (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
+    "Ancient Hollow Propagation": {"src": "1 Fire Orchid Seed ek: Ancient Hollow üstü (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
+    "Druid Runestone": {"id": 81140, "src": "5 Druid Runestone Fragment birleştir (5 satıcı, hesap başına günde 1'er)", "in": [["Druid Runestone Fragment", 5]]},
+    "Druid Runestone Fragment": {"id": 81111, "src": "Draconis Mons: 4 heart satıcısı 1.050 karma, Supplymaster Hanjo 1.000 Unbound Magic; her biri günde 1"},
+    "Fire Orchid Seed": {"id": 81190, "src": "Primordial Orchid kesince düşer (Draconis Mons)"},
+    "Onyx Lodestone": {"id": 24310},
+    "Element of Aestus": {"id": 81058, "src": "Drop: Destroyer Aestus (Draconis Mons). Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
+    "Aestus Runestone": {"id": 81047, "src": "1 Druid Runestone + 1 Element of Aestus birleştir", "in": [["Druid Runestone", 1]]},
+    "Element of Ignis": {"id": 81110, "src": "Drop: Destroyer Ignis (Draconis Mons). Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
+    "Ignis Runestone": {"id": 81165, "src": "1 Druid Runestone + 1 Element of Ignis birleştir", "in": [["Druid Runestone", 1]]},
+    "Element of the Desecrator": {"id": 81041, "src": "Drop: Molten Desecrator (Draconis Mons). Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
+    "Desecrator Runestone": {"id": 81066, "src": "1 Druid Runestone + 1 Element of the Desecrator birleştir", "in": [["Druid Runestone", 1]]},
+    "Element of Fire": {"id": 81118, "src": "Drop: Fire Elemental'lar. Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
+    "Volcanic Runestone": {"id": 81023, "src": "1 Druid Runestone + 1 Element of Fire birleştir", "in": [["Druid Runestone", 1]]},
+    "Element of Water": {"id": 81094, "src": "Drop: Ice Elemental'lar. Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
+    "Glacial Runestone": {"id": 81195, "src": "1 Druid Runestone + 1 Element of Water birleştir", "in": [["Druid Runestone", 1]]},
+    "Element of Air": {"id": 80999, "src": "Drop: Air Elemental ve Spark'lar. Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
+    "Charged Runestone": {"id": 81086, "src": "1 Druid Runestone + 1 Element of Air birleştir", "in": [["Druid Runestone", 1]]},
+    "Element of Earth": {"id": 81105, "src": "Drop: Earth Elemental'lar. Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
+    "Earthen Runestone": {"id": 81160, "src": "1 Druid Runestone + 1 Element of Earth birleştir", "in": [["Druid Runestone", 1]]},
+    "A Henge Away from Home": { ach: 3436, src: "Druid Stone 4. adım: 7 Druid Runestone (günde 1) → The Wayfarer's Henge", tg: true, in: [["Awakening the Druid Stone", 1], ["Sprouting the Druid Stone", 1]] , bitsExtra: [["Destroyer's Rest",1,8],["Elemental Rest",1,17],["Druid's Vision",1,18],["A Storm Bouquet for Kodama",1,19],["A Frozen Bouquet for Liriodendron",1,20],["An Earthen Bouquet for Broadleaf",1,21],["An Infernal Bouquet for Rosewood",1,22],["Dierdre's Orchard",1,23],["Maguuma's Orchard",1,24],["Melandru's Orchard",1,25],["Seaside Propagation",1,26],["Wind Rider Ledge Propagation",1,27],["Rata Arcanum Propagation",1,28],["Seaside Ledges Propagation",1,29],["Nu II Propagation",1,30],["Ancient Hollow Propagation",1,31]] },
     "Bloodstone Fen Master": { ach: 3500, src: "Bloodstone Fen koleksiyonu", in: [['"Out of the Shadows" Mastery', 1]] },
     '"Out of the Shadows" Mastery': { ach: 3050, src: "LS3 bölüm mastery'si. Ödülü Bloodstone Crown Box → koleksiyonun skin maddesi. Hikaye ya da achievement istemeyen yol: tekrarlanabilir Living World Season 3 Reward Track (WvW ya da PvP; tam track tahminen ~6-8 saat). Sondaki Living World Season 3 Cache'ten Bloodstone Cache'i seç, içinden skin kutusunu al; her tur bir skin. Haritanın kendi track'i tek seferlik ve hikaye adımıyla açılır" },
     "Ember Bay Master": { ach: 3529, src: "Ember Bay koleksiyonu", in: [['"Rising Flames" Mastery', 1]] },
@@ -1025,9 +1060,10 @@ const DATA = {
   }
 };
 
-// ---- Koleksiyon içerikleri (otomatik üretildi: GW2 API tarifleri + wiki vendor verisi; 6 Ekim 2026) ----
+// <gen:collections>
+// ---- Koleksiyon içerikleri (otomatik: GW2 API tarifleri + wiki satıcı verisi; tools/gen/collections.js) ----
 // bits: achievement -> [[parça, adet, bit sırası]]. Sadece henüz toplanmamış parçalar hesaplara girer.
-// Elle düzeltmek için: aynı adı DATA.parts'ta tanımla (DATA.parts önce gelir), ya da buradaki satırı düzelt.
+// Elle düzeltme burada yapılmaz (betik üzerine yazar): aynı adı DATA.parts'ta tanımla (DATA.parts önce gelir), eksik koleksiyon parçası için DATA.parts[ach].bitsExtra.
 const COLLECTIONS = {
   parts: {
     "Astral Ward Heavy Helm": {"id": 100026, "src": "Vendor: Astral Ward Mage (Outfitter) (Outer Ring)", "in": [["Gift of Fangs", 1], ["Pouch of Stardust", 2], ["Research Note", 500], ["Purified Rift Essence", 1]]},
@@ -1087,40 +1123,6 @@ const COLLECTIONS = {
     "Arcanum Rest": {"id": 81137, "src": "Drop / event (wiki: Arcanum Rest)"},
     "Blooming Druid Stone": {"id": 81143, "src": "Sprouting the Druid Stone ödülü"},
     "Heavy Houndskin Mantle": {"id": 81049, "src": "Bölüm mastery'sinin ödül kutusu ya da tekrarlanabilir LS3/LS4 reward track'i, hikaye şartı yok (Mastery kartı)"},
-    "Destroyer's Rest": {"src": "Aestus, Ignis ve Desecrator Runestone'u Kodama'ya ver (Draconis Mons)"},
-    "Elemental Rest": {"src": "Volcanic, Glacial, Charged ve Earthen Runestone'u Kodama'ya ver (Draconis Mons)"},
-    "Druid's Vision": {"src": "1 Vision Crystal'ı Kodama'ya ver (Druid's Grotto, Draconis Mons)", "in": [["Vision Crystal", 1]]},
-    "A Storm Bouquet for Kodama": {"src": "10 Fire Orchid + 5 Charged Lodestone → Kodama (Savage Rise)", "in": [["Fire Orchid Blossom", 10], ["Charged Lodestone", 5]]},
-    "A Frozen Bouquet for Liriodendron": {"src": "10 Fire Orchid + 5 Glacial Lodestone → Liriodendron (Savage Rise su başı)", "in": [["Fire Orchid Blossom", 10], ["Glacial Lodestone", 5]]},
-    "An Earthen Bouquet for Broadleaf": {"src": "10 Fire Orchid + 5 Onyx Lodestone → Broadleaf (Savage Rise üstündeki çıkıntı)", "in": [["Fire Orchid Blossom", 10], ["Onyx Lodestone", 5]]},
-    "An Infernal Bouquet for Rosewood": {"src": "10 Fire Orchid + 5 Molten Lodestone → Rosewood (Ancient Hollow üstündeki çıkıntı)", "in": [["Fire Orchid Blossom", 10], ["Molten Lodestone", 5]]},
-    "Dierdre's Orchard": {"src": "3 Fire Orchid Seed ek: Dierdre's Steps bahçesi (Mount Maelstrom)", "in": [["Fire Orchid Seed", 3]]},
-    "Maguuma's Orchard": {"src": "3 Fire Orchid Seed ek: Uplands Oasis (Dry Top)", "in": [["Fire Orchid Seed", 3]]},
-    "Melandru's Orchard": {"src": "3 Fire Orchid Seed ek: Cathedral of Verdance (Cursed Shore)", "in": [["Fire Orchid Seed", 3]]},
-    "Seaside Propagation": {"src": "1 Fire Orchid Seed ek: Eastern Boiling Sea adası (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
-    "Wind Rider Ledge Propagation": {"src": "1 Fire Orchid Seed ek: Wind Rider Ledge'e bakan toprak (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
-    "Rata Arcanum Propagation": {"src": "1 Fire Orchid Seed ek: Rata Arcanum üstündeki ışıklı mağara (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
-    "Seaside Ledges Propagation": {"src": "1 Fire Orchid Seed ek: Frothing Pedestal'a bakan çıkıntı (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
-    "Nu II Propagation": {"src": "1 Fire Orchid Seed ek: Nu II Vault (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
-    "Ancient Hollow Propagation": {"src": "1 Fire Orchid Seed ek: Ancient Hollow üstü (Draconis Mons)", "in": [["Fire Orchid Seed", 1]]},
-    "Druid Runestone": {"id": 81140, "src": "5 Druid Runestone Fragment birleştir (5 satıcı, hesap başına günde 1'er)", "in": [["Druid Runestone Fragment", 5]]},
-    "Druid Runestone Fragment": {"id": 81111, "src": "Draconis Mons: 4 heart satıcısı 1.050 karma, Supplymaster Hanjo 1.000 Unbound Magic; her biri günde 1"},
-    "Fire Orchid Seed": {"id": 81190, "src": "Primordial Orchid kesince düşer (Draconis Mons)"},
-    "Onyx Lodestone": {"id": 24310},
-    "Element of Aestus": {"id": 81058, "src": "Drop: Destroyer Aestus (Draconis Mons). Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
-    "Aestus Runestone": {"id": 81047, "src": "1 Druid Runestone + 1 Element of Aestus birleştir", "in": [["Druid Runestone", 1]]},
-    "Element of Ignis": {"id": 81110, "src": "Drop: Destroyer Ignis (Draconis Mons). Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
-    "Ignis Runestone": {"id": 81165, "src": "1 Druid Runestone + 1 Element of Ignis birleştir", "in": [["Druid Runestone", 1]]},
-    "Element of the Desecrator": {"id": 81041, "src": "Drop: Molten Desecrator (Draconis Mons). Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
-    "Desecrator Runestone": {"id": 81066, "src": "1 Druid Runestone + 1 Element of the Desecrator birleştir", "in": [["Druid Runestone", 1]]},
-    "Element of Fire": {"id": 81118, "src": "Drop: Fire Elemental'lar. Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
-    "Volcanic Runestone": {"id": 81023, "src": "1 Druid Runestone + 1 Element of Fire birleştir", "in": [["Druid Runestone", 1]]},
-    "Element of Water": {"id": 81094, "src": "Drop: Ice Elemental'lar. Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
-    "Glacial Runestone": {"id": 81195, "src": "1 Druid Runestone + 1 Element of Water birleştir", "in": [["Druid Runestone", 1]]},
-    "Element of Air": {"id": 80999, "src": "Drop: Air Elemental ve Spark'lar. Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
-    "Charged Runestone": {"id": 81086, "src": "1 Druid Runestone + 1 Element of Air birleştir", "in": [["Druid Runestone", 1]]},
-    "Element of Earth": {"id": 81105, "src": "Drop: Earth Elemental'lar. Dört elementin hepsi Malchor's Leap'te Cathedral of Eternal Radiance çevresindeki elementallerden düşer. Bir kez aldıktan sonra Supplymaster Hanjo 250 Unbound Magic'e satar."},
-    "Earthen Runestone": {"id": 81160, "src": "1 Druid Runestone + 1 Element of Earth birleştir", "in": [["Druid Runestone", 1]]},
     "Bloodstone Chip": {"id": 81804, "src": "Salvage for unbound magic."},
     "Hablion's Dignity": {"id": 82025, "src": "Salvage for unbound magic."},
     "White Mantle Crest": {"id": 81755, "src": "Salvage for unbound magic."},
@@ -1408,7 +1410,7 @@ const COLLECTIONS = {
     "Aurora: Awakening": [["Sentient Seed",1,0],["Bloodstone Fen Hero",1,1],["Ember Bay Hero",1,2],["Bitterfrost Frontier Hero",1,3],["Lake Doric Hero",1,4],["Draconis Mons Hero",1,5],["Siren's Landing Hero",1,6]],
     "Awakening the Druid Stone": [["Druid Stone",1,0],["Element of the Wardbough",1,1],["Wardbough's Runestone",1,2],["Element of the Arbor",1,4],["Arboreal Runestone",1,5],["Element of the Oakhearts",1,7],["Oakheart's Runestone",1,8]],
     "Sprouting the Druid Stone": [["Living Druid Stone",1,0],["Element of the Saurians",1,1],["Saurian Runestone",1,2],["Saurian Rest",1,3],["Element of the Empire",1,4],["Imperial Runestone",1,5],["Imperial Rest",1,6],["Element of Webby",1,7],["Webby Runestone",1,8],["Webby Rest",1,9],["Element of the Wurm",1,10],["Wurm Runestone",1,11],["Wurm Rest",1,12],["Element of Arcanum",1,13],["Arcanum Runestone",1,14],["Arcanum Rest",1,15]],
-    "A Henge Away from Home": [["Blooming Druid Stone",1,0],["Heavy Houndskin Mantle",1,1],["Element of Aestus",1,2],["Aestus Runestone",1,3],["Element of Ignis",1,4],["Ignis Runestone",1,5],["Element of the Desecrator",1,6],["Desecrator Runestone",1,7],["Destroyer's Rest",1,8],["Element of Fire",1,9],["Volcanic Runestone",1,10],["Element of Water",1,11],["Glacial Runestone",1,12],["Element of Air",1,13],["Charged Runestone",1,14],["Element of Earth",1,15],["Earthen Runestone",1,16],["Elemental Rest",1,17],["Druid's Vision",1,18],["A Storm Bouquet for Kodama",1,19],["A Frozen Bouquet for Liriodendron",1,20],["An Earthen Bouquet for Broadleaf",1,21],["An Infernal Bouquet for Rosewood",1,22],["Dierdre's Orchard",1,23],["Maguuma's Orchard",1,24],["Melandru's Orchard",1,25],["Seaside Propagation",1,26],["Wind Rider Ledge Propagation",1,27],["Rata Arcanum Propagation",1,28],["Seaside Ledges Propagation",1,29],["Nu II Propagation",1,30],["Ancient Hollow Propagation",1,31]],
+    "A Henge Away from Home": [["Blooming Druid Stone",1,0],["Heavy Houndskin Mantle",1,1],["Element of Aestus",1,2],["Aestus Runestone",1,3],["Element of Ignis",1,4],["Ignis Runestone",1,5],["Element of the Desecrator",1,6],["Desecrator Runestone",1,7],["Element of Fire",1,9],["Volcanic Runestone",1,10],["Element of Water",1,11],["Glacial Runestone",1,12],["Element of Air",1,13],["Charged Runestone",1,14],["Element of Earth",1,15],["Earthen Runestone",1,16]],
     "Bloodstone Fen Master": [["Bloodstone Chip",1,1],["Hablion's Dignity",1,2],["White Mantle Crest",1,3],["Jade Core",1,4],["Aged Ectoplasm",1,5],["Living Bloodstone",1,6],["Pristine Blood Ruby",1,7],["Strange Residue",1,8],["Aerial Assault",1,9],["Rift Residue",1,10],["Shattered Guardian Binding",1,11]],
     "Ember Bay Master": [["Heavy Dragonscale Epaulets",1,0],["Petrified Burl",1,1],["Pyroclastic Core",1,2],["Flask of Tears",1,3],["Friend of the Circus",1,4],["Friend of the Researchers",1,5],["Friend of the Skritt",1,6],["Friend of Science",1,7],["Mursaat Investigator",1,8],["Shiny Rock",1,9],["Tarnished Coin",1,10],["Volcanic Scale",1,11],["Bottle of Skritt Spirits",1,12],["Slubling Tail",1,13],["Molten Domination",1,14]],
     "Bitterfrost Frontier Master": [["Heavy Glacial Gauntlets",1,0],["Plump Winterberry",1,1],["Frozen Winterberry",1,2],["Friend of the Grawl",1,3],["Protector of Griffons",1,4],["Friend of Quaggans",1,5],["Enemy of the Svanir",1,6],["Corrupted Griffon Talon",1,8],["Corrupted Wolfmaster Whistle",1,9],["Icebrood Goliath Sinew",1,10],["Icebrood Norn Pauldrons",1,11],["Icebrood Troll Tooth",1,12],["Crystallized Suet",1,13]],
@@ -1428,15 +1430,20 @@ const COLLECTIONS = {
     "Coalescence I: Unbridled": [["Transcendental Binding",1,0],["Transcendental Ink",1,1],["Transcendental Parchment",1,2],["Meditation Logbook",1,3],["Meditation Log: Crystal Oasis",1,4],["Meditation Log: Desert Highlands",1,5],["Meditation Log: Elon Riverlands",1,6],["Meditation Log: The Desolation",1,7],["Meditation Log: Domain of Vabbi",1,8],["Meditation Log: Completed Log",1,9]],
     "Coalescence III: Culmination": [["Twisted Essence of Generosity",1,0],["Twisted Essence of Resolve",1,1],["Twisted Essence of Trust",1,2],["Worn Meditation Logbook",1,3],["Purified Essence of Generosity",1,4],["Purified Essence of Resolve",1,5],["Purified Essence of Trust",1,6],["Infused Meditation Log Book",1,7]],
     "Coalescence II: The Gift": [["Alembic Apparatus",1,0],["Bottle of Rage (Empty)",1,1],["Bottle of Rage (Filled)",1,2],["Bottle of Contempt (Empty)",1,3],["Bottle of Contempt (Filled)",1,4],["Bottle of Surprise (Empty)",1,5],["Bottle of Surprise (Filled)",1,6],["Bottle of Fear (Empty)",1,7],["Bottle of Fear (Filled)",1,8],["Bottle of Anguish (Empty)",1,9],["Bottle of Anguish (Filled)",1,10],["Bottle of Excitement (Empty)",1,11],["Bottle of Excitement (Filled)",1,12],["Bottle of Joy (Empty)",1,13],["Bottle of Joy (Filled)",1,14],["Bottle of Shame (Empty)",1,15],["Bottle of Shame (Filled)",1,16],["Alchemical Alembic Complete",1,17]],
+    "Glimmering Resin Weapon Collector": [["Berserker's Glimmering Resin Axe",1,0],["Berserker's Glimmering Resin Dagger",1,1],["Berserker's Glimmering Resin Focus",1,2],["Berserker's Glimmering Resin Greatsword",1,3],["Berserker's Glimmering Resin Hammer",1,4],["Berserker's Glimmering Resin Longbow",1,5],["Berserker's Glimmering Resin Mace",1,6],["Berserker's Glimmering Resin Pistol",1,7],["Berserker's Glimmering Resin Rifle",1,8],["Berserker's Glimmering Resin Scepter",1,9],["Berserker's Glimmering Resin Shield",1,10],["Berserker's Glimmering Resin Short Bow",1,11],["Berserker's Glimmering Resin Spear",1,12],["Berserker's Glimmering Resin Staff",1,13],["Berserker's Glimmering Resin Sword",1,14],["Berserker's Glimmering Resin Torch",1,15],["Berserker's Glimmering Resin Warhorn",1,16]],
     "Ad Infinitum I: Finite Result": [["Defender of Ascalon",1,0],["Charr-Nip",1,1],["Swampland Challenge Mote",1,2],["Aquatic Ruin Challenge Mote",1,3],["Jade Kraken Timed Mote",1,4],["Ascalonian Fractal Field Research Paper",1,5],["Burning Frozen Core",1,6],["Charged Clump of Swamp Moss",1,7],["Prototype Fractal Capacitor",1,8],["Unstable Magically Charged Infusion Sample",1,9],["Aetherblade Recruitment Form",1,10]],
     "Ad Infinitum II: Upper Bound": [["Dredge Spiral Drill",1,0],["Glob of Molten Fire",1,1],["Uncategorized Challenge Mote",1,2],["Snowblind Challenge Mote",1,3],["Thaumanova Reactor Timed Mote",1,4],["Molten Alliance Fractal Field Research Paper",1,5],["Jade Maw Fang",1,6],["Pollenated Ice Elemental Core",1,7],["Beta Fractal Capacitor (Infused)",1,8],["Weak Magically Charged Infusion Sample",1,9],["Aetherblade Handbook",1,10]],
     "Ad Infinitum III: Unbound": [["Inquest Dragon Energy Research Cube",1,0],["Essence of Subject 2",1,1],["Volcanic Challenge Mote",1,2],["Cliffside Challenge Mote",1,3],["Molten Boss Timed Mote",1,4],["Thaumanova Fractal Field Research Paper",1,5],["Old Tom's Vital Reading (He's Dead)",1,6],["Rabsovich's Lost Treasure",1,7],["Fractal Capacitor (Infused)",1,8],["Magically Charged Infusion Sample",1,9],["Aetherblade Secret Handshake Tutorial Book",1,10]],
     "Legendary Backpack: Ad Infinitum": [["Aetherblade Pirate Eye Patch",1,0],["Aetherblade Airship Steering Wheel",1,1],["Underground Facility Challenge Mote",1,2],["Aetherblade Challenge Mote",1,3],["Mai Trin Timed Mote",1,4],["Aetherblade Fractal Field Research Paper",1,5],["Jungle Wurm Omelet (Mossman Style)",1,6],["Charged Archdiviner's Mallet",1,7],["Explosive Magically Charged Infusion Sample",1,8],["Aetherblade Diploma",1,9],["Lessons in Arbology",1,10],["Lessons in Metallurgy",1,11],["Theory of Ad Infinitum",1,12]]
   }
 };
+// </gen:collections>
 for (const [n, p] of Object.entries(COLLECTIONS.parts)) if (!DATA.parts[n]) DATA.parts[n] = p;
+// elle eklenen koleksiyon parçaları (API'de olmayan teslim/ekim adımları gibi): DATA.parts[ach].bitsExtra
 for (const [a, l] of Object.entries(COLLECTIONS.bits)) if (DATA.parts[a]) DATA.parts[a].bits = l;
-// Satıcı şartları (wiki "Has requirement", 16 Ekim 2026; reqscan). Şart yerine gelmeden satıcı satmaz.
+for (const p of Object.values(DATA.parts)) if (p.bitsExtra) p.bits = (p.bits || []).filter(b => !p.bitsExtra.some(x => x[2] === b[2])).concat(p.bitsExtra).sort((x, y) => x[2] - y[2]);
+// <gen:vendorreqs>
+// Satıcı şartları (wiki "Has requirement"; tools/gen/vendorreqs.js). Şart yerine gelmeden satıcı satmaz.
 // ach: achievement bitmeli (ağaca alt madde olarak girer) · mast: [mastery track, seviye] · first: önce drop olarak bir kez bulunmalı · yalnız name: sadece not.
 const VENDOR_REQS = {
   "Shadowstone Orb": [{"name": "heart bitmiş olmalı: Help out with research and expedition tasks around Pilgrim's Rest"}],
@@ -1458,6 +1465,7 @@ const VENDOR_REQS = {
   "Essence of Subject 2": [{"mast": [5, 1], "name": "Fractal Attunement: Agony Channeler"}],
   "Shard of Crystallized Mists Essence": [{"ach": 2248, "name": "Follows Advice"}]
 };
+// </gen:vendorreqs>
 for (const [n, rs] of Object.entries(VENDOR_REQS)) {
   const p = DATA.parts[n]; if (!p) continue;
   p.req = rs;

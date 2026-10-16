@@ -5,7 +5,7 @@
 const { loadData, api, apiIds, wikiRaw, writeBlock } = require('./lib');
 
 (async () => {
-  const DATA = loadData();
+  const DATA = loadData({ without: ['mastery'] });
   const achIds = [...new Set(Object.values(DATA.parts).filter(p => p.ach).map(p => p.ach).concat(DATA.hunter.map(h => h.ach)))];
   const defs = await apiIds('/v2/achievements', achIds);
   const metas = defs.filter(d => d.flags.includes('CategoryDisplay'));

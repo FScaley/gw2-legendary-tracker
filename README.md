@@ -29,3 +29,18 @@ Node 18+ (no dependencies, no API key):
 - `node tools/verify.js` checks every item, achievement, currency, map chest, daily craft and Wizard's Vault ID in `DATA` against the official API.
 - A GitHub Action runs `tools/verify.js` on every push and every Monday after the weekly reset; when an ID breaks it opens (or updates) a "Data check failed" issue.
 - `node tools/recipecheck.js` compares every recipe in `DATA` with the API recipe or the wiki's `{{Recipe}}` template and lists the differences (vendor and achievement-reward items show up there by design).
+
+## Regenerating the data
+
+Four blocks in `index.html` are written by scripts in `tools/gen` (Node 18+, no API key) from the API and the wiki. Each owns the lines between `// <gen:NAME>` and `// </gen:NAME>`; do not edit those lines by hand.
+
+| Script | Block | What it holds |
+|---|---|---|
+| `tools/gen/collections.js` | `COLLECTIONS` | every collection's pieces and what each one costs (trading post, API recipe, wiki vendor, Mystic Forge, drop) |
+| `tools/gen/vendorreqs.js` | `VENDOR_REQS` | what a vendor wants before it sells (an achievement, a mastery level, a heart) |
+| `tools/gen/skins.js` | `PART_SKINS` | the skin each collection piece unlocks, so an unlocked skin counts as the piece |
+| `tools/gen/mastery.js` | `MASTERY_OBJECTIVES` | the achievements each mastery meta counts (the wiki's list, not the whole category) |
+
+Run them in this order after a game patch: `collections`, `vendorreqs`, `skins`, `mastery`. `--check` only compares and exits 1 when a block would change. Fixes by hand go into `DATA.parts`, which wins over the generated parts; a collection piece the API does not list goes into `DATA.parts[achievement].bitsExtra`. For faster repeated local runs set `GEN_CACHE=some-file.json` to cache the responses.
+
+The weekly GitHub Action also runs every script with `--check`; a block that no longer matches the wiki or the API opens the same "Data check failed" issue.
