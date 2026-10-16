@@ -500,7 +500,7 @@ const DATA = {
     "Survivor's Enchanted Compass": { id: 106370, src: "Shipwreck Strand Mastery ödülü", in: [["Shipwreck Strand Mastery", 1]] },
     "Shipwreck Strand Mastery": { ach: 8880, src: "36 harita achievement'ı" },
     "Gift of the People": { id: 105804, src: "Canach", in: [["Patron of the Magical Arts Plaque", 1], ["Gift of Starlit Weald Exploration", 1], ["Seer Wreath of Service", 1], ["Antiquated Ducat", 500]] },
-    "Patron of the Magical Arts Plaque": { id: 105933, src: "Huntmaster Arnorr (Untamed Crags, Starlit Weald): 250 + 500 + 300.000 (Starlit Weald Mastery gerekir)" },
+    "Patron of the Magical Arts Plaque": { id: 105933, src: "Huntmaster Arnorr (Untamed Crags, Starlit Weald): 250 altın + 500 Raw Enchanting Stone + 300.000 karma (Starlit Weald Mastery gerekir)" },
     "Gift of Starlit Weald Exploration": { id: 106672, src: "Harita tamamlama" },
     "Seer Wreath of Service": { id: 106627, src: "Starlit Weald Mastery ödülü", in: [["Starlit Weald Mastery", 1]] },
     "Starlit Weald Mastery": { ach: 9057, src: "36 harita achievement'ı" },
@@ -1056,7 +1056,9 @@ const DATA = {
     "item:81201": { d: 1, tags: ["toplama"], tip: "3 Fire Orchid Blossom → Kodama (Savage Rise)." },
     "item:81006": { d: 1, tags: ["toplama"], tip: "3 Fire Orchid Blossom → Liriodendron (Savage Rise su başı)." },
     "item:81200": { d: 2, tags: ["toplama", "zıplama"], tip: "3 Fire Orchid Blossom → Broadleaf (Savage Rise üstündeki çıkıntı)." },
-    "item:81035": { d: 2, tags: ["toplama", "zıplama"], tip: "3 Fire Orchid Blossom → Rosewood (Ancient Hollow üstündeki çıkıntı)." }
+    "item:81035": { d: 2, tags: ["toplama", "zıplama"], tip: "3 Fire Orchid Blossom → Rosewood (Ancient Hollow üstündeki çıkıntı)." },
+    "ach:3127": { d: 5, tags: ["1000 altın"], tip: "Ember Bay Circus ringmaster'ından 1000 altınlık Contract of Patronage. Mastery'ye sayılır ama atla: diğer achievement'lar yeter." },
+    "ach:4374": { d: 1, tags: ["5 altın"], tip: "Sun's Refuge'de Pact Donations Agent Ira'ya bağış; toplam 5 altın." }
   }
 };
 
@@ -2660,7 +2662,8 @@ const AUTO_TAGS = [
   [/\bevents?\b|defend|escort/i, "event", 3],
   [/survive|stacks of/i, "dayanma", 3],
   [/(defeat|slay|kill) \d+/i, "kesme", 2],
-  [/\b(purchase|buy|vendor|karma|donate)\b/i, "satın al", 1],
+  // fiyatı bilinmeyen alım kolay sayılmaz (Patron 1000 altın); ucuzları hunterTags'te elle
+  [/\b(purchase|buy|vendor|karma|donate)\b/i, "satın al: fiyatı?", 3],
   [/bring|give|talk|speak|deliver|return to/i, "teslim", 2],
   [/collect|gather|harvest|forage|find (all|every)/i, "toplama", 2],
   [/^(find|discover|visit|inspect|examine|read|interact|attune|look|locate|investigate) /i, "keşif", 1],
