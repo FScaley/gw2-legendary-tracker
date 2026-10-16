@@ -595,6 +595,23 @@ const DATA = {
   // /v2/masteries bölge adı → /v2/account/mastery/points bölge adı
   masteryRegions: { Tyria: "Central Tyria", Maguuma: "Heart of Thorns", Desert: "Path of Fire", Tundra: "Icebrood Saga", Jade: "End of Dragons", Sky: "Secrets of the Obscure", Wild: "Janthir Wilds", Magic: "Visions of Eternity" },
 
+  // ---------------- Living World reward track skinleri ----------------
+  // Aurora'nın LS3 ve Vision'ın LS4 koleksiyonlarının ilk parçası bölüm mastery'sinin zırh skini. Tekrarlanabilir Living World Season 3/4
+  // Reward Track (WvW ya da PvP, hikaye şartı yok) her bitişte bir cache verir; içinden haritanın cache'i seçilir, o cache'te skin kutusu var.
+  trackSkins: [
+    { season: 3, cache: "Bloodstone Cache", coll: 3500, mastery: 3050, skin: 6856, name: "Bloodstone Crown", target: "aurora" },
+    { season: 3, cache: "Ember Bay Cache", coll: 3529, mastery: 3123, skin: 6951, name: "Heavy Dragonscale Epaulets", target: "aurora" },
+    { season: 3, cache: "Bitterfrost Frontier Cache", coll: 3499, mastery: 3171, skin: 7006, name: "Heavy Glacial Gauntlets", target: "aurora" },
+    { season: 3, cache: "Lake Doric Cache", coll: 3491, mastery: 3348, skin: 7102, name: "White Mantle Elite Guard Mask", target: "aurora" },
+    { season: 3, cache: "Draconis Mons Cache", coll: 3547, mastery: 3442, skin: 7210, name: "Heavy Houndskin Mantle", target: "aurora" },
+    { season: 3, cache: "Siren's Landing Cache", coll: 3495, mastery: 3516, skin: 7299, name: "Heavy Mursaat Brogans", target: "aurora" },
+    { season: 4, cache: "Istan Cache", coll: 4765, mastery: 3988, skin: 7844, name: "Heavy Corsair Turban", target: "vision" },
+    { season: 4, cache: "Sandswept Isles Cache", coll: 4774, mastery: 4093, skin: 8032, name: "Olmakhan Mantle", target: "vision" },
+    { season: 4, cache: "Kournan Cache", coll: 4760, mastery: 4195, skin: 8181, name: "Heavy Corsair Jerkin", target: "vision" },
+    { season: 4, cache: "Thunderhead Peaks Cache", coll: 4764, mastery: 4544, skin: 8349, name: "Heavy Corsair Leggings", target: "vision" },
+    { season: 4, cache: "Dragonfall Cache", coll: 4757, mastery: 4689, skin: 8752, name: "Heavy Corsair Boots", target: "vision" }
+  ],
+
   // ---------------- Obsidian parçaları ----------------
   // Bütün parçalar aynı 3 gift'i ister (Expertise, Stormy Skies, Prosperity); farklı olan Arcanum ve Prosperity türü.
   // Ayarlar'da hangi parçaları istediğin seçilir; sende olan parçalar düşülür.
@@ -811,6 +828,13 @@ const DATA = {
 
   // ---------------- Haftalık (reset Pazartesi 07:30 UTC) ----------------
   weekly: [
+    { id: "ls_track", modes: ["wvw", "pvp"], group: "any", tgt: ["aurora", "vision"], track: true, kind: "bn", title: "Living World reward track: mastery skinleri (hikayesiz yol)",
+      serves: "Aurora / Vision → koleksiyonların zırh skinleri, bölüm mastery'si yerine", time: "track başına tahminen ~6-8 saat (booster'la daha az)",
+      how: ["WvW: paneli aç (B) → Reward Tracks → 'Living World Season 3' ya da 'Living World Season 4' → Activate. PvP'de: Hero paneli (H) → PvP → Reward Tracks.",
+            "Track bitince Living World Season 3/4 Cache gelir. Aç, aşağıda yazan haritanın cache'ini seç; o cache'i açınca skin kutusunu seç (map token seçeneğini değil).",
+            "Track tekrarlanabilir, her tur bir skin. Hikaye adımı ya da achievement şartı yok (Season 4 track'i için LS4 hesapta olmalı).",
+            "Bölüm mastery'si bitmişse skin kutusu zaten verilmiştir: çantana ya da bankana bak."],
+      wiki: "Living_World_Season_4_Reward_Track" },
     { id: "w_conv", needsPart: ["Fine Rift Essence", "Masterwork Rift Essence", "Rare Rift Essence"], mode: "open", group: "soto", title: "Convergence haftalık achievement'ları (her biri 3 tur)", kind: "tg", count: 3,
       serves: "Obsidian → Convergence Extraction (= 1 Amalgamated Rift Essence)", time: "3 instance × 3 tur",
       how: ["Her Convergence'ın '(Weekly) Convergences' achievement'ı: haftada 3 tamamla → Unstable Rift Motivation + 3 Convergence Extraction.",
@@ -1885,12 +1909,20 @@ function taskCtx() {
   }
   return { on, needed, neededBy };
 }
+function trackLeft(ctx) {
+  if (!snap) return [];
+  const craft = new Set(craftOnly(tgtPrefs().filter(p => p.enabled)).map(p => p.t.key));   // açık ve TP'den alınmayan hedefler
+  return DATA.trackSkins.filter(x => craft.has(x.target) && achFrac(x.coll) < 1 && !((snap.ach[x.coll] || {}).bits || []).includes(0) && achFrac(x.mastery) < 1)
+    .sort((a, b) => masteryLeft(b) - masteryLeft(a));   // önce mastery'si en uzak olan: track en çok orada zaman kazandırır
+}
+function masteryLeft(x) { const a = snap.ach[x.mastery]; return a && a.max ? a.max - a.cur : 99; }
 function taskVisible(t, ctx) {
   const bitDone = () => { if (!t.untilBit || !snap) return false; const [a, i, item] = t.untilBit; const x = snap.ach[a];
     return !!((x && (x.done || (x.bits || []).includes(i))) || (item && snap.owned[item] > 0)); };
   // needsPart: tek parça ya da liste; biri bile hâlâ eksikse görünür. API verisi yokken hep görünür.
   const partsNeeded = !t.needsPart || !snap || [].concat(t.needsPart).some(n => ctx.needed[n]) || (t.whileAch && achFrac(t.whileAch) < 1);
-  return !bitDone() && partsNeeded && !(t.untilAch && achFrac(t.untilAch) >= 1) && !(t.tgt && !t.tgt.some(k => ctx.on.has(k))) && (modeOn(t.mode) || t.required);
+  if (t.track && !trackLeft(ctx).length) return false;
+  return !bitDone() && partsNeeded && !(t.untilAch && achFrac(t.untilAch) >= 1) && !(t.tgt && !t.tgt.some(k => ctx.on.has(k))) && ((t.modes ? t.modes.some(m => modeOn(m)) : modeOn(t.mode)) || t.required);
 }
 function renderUpcoming(now = new Date()) {
   const el = $("#upcoming"); if (!el) return;
@@ -1953,6 +1985,7 @@ function renderTaskList(el, tasks, bucket) {
       <div class="tt">${esc(t.title)}${t.sched ? `<span class="sched" data-sched="${t.sched}"></span>` : ""}</div>
       ${t.repeat ? `<div class="small ${done ? "okc" : "muted"}">${done ? "Günlük sandık alındı — tekrar turu yine değerli: " : "Tekrarlanabilir — günlük sandıktan sonraki her tur: "}${esc(t.repeat)}</div>` : ""}
       ${t.count === "chars" ? `<div class="small muted">Kutular karakter başına: her karakterin günlük turu için bir tane. Eşya düşünce madde kendiliğinden kalkar (Yenile).</div>` : ""}
+      ${t.track ? (() => { const l = trackLeft(ctx); return `<div class="small">Sıradaki tur: <b>Living World Season ${l[0].season} Cache → ${esc(l[0].cache)}</b> (${esc(l[0].name)}). Kalan ${l.length} skin: ${l.map(x => esc(x.cache.replace(/ Cache$/, ""))).join(", ")}.</div>`; })() : ""}
       ${t.needsPart && snap ? `<div class="small warnc">Eksik: ${[].concat(t.needsPart).filter(n => ctx.needed[n]).map(n => esc(n) + " " + fmt(ctx.needed[n])).join(", ")}</div>` : ""}
       <div class="small muted">${esc(servesOf(t))}${t.time ? " · " + esc(t.time) : ""}${api}${t.uv ? ' · <span style="color:var(--uv)">kısmen doğrulanmadı</span>' : ""}</div>
       ${t.how ? `<details class="how" data-how="${esc(hid)}" ${openHow.has(hid) ? "open" : ""}><summary>Nasıl?</summary><ol>${t.how.map(h => `<li>${esc(h)}</li>`).join("")}</ol>${t.wiki ? `<a class="small" href="${DATA.meta.wiki + t.wiki}" target="_blank" rel="noopener">wiki</a>` : ""}</details>` : ""}
