@@ -22,15 +22,11 @@ jobs:
       - name: Check IDs against the GW2 API
         run: node tools/verify.js | tee verify.log
         shell: bash -o pipefail {0}
-      - name: Check the generated blocks against the wiki and the API
+      # the GW2 Wiki refuses GitHub's servers: only the API-only generator can run here (the wiki-based ones run locally)
+      - name: Check the generated skins block against the API
         if: github.event_name != 'push'
-        run: |
-          status=0
-          for g in collections vendorreqs skins mastery; do
-            node tools/gen/$g.js --check >> verify.log 2>&1 || status=1
-          done
-          grep -E '^(CHANGED|UNMAPPED|MISSING|SHORT|UNRESOLVED)|up to date' verify.log || true
-          exit $status
+        run: node tools/gen/skins.js --check 2>&1 | tee -a verify.log
+        shell: bash -o pipefail {0}
       - name: Report failure as an issue
         if: failure()
         env:

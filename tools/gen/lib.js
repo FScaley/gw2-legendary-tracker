@@ -1,6 +1,8 @@
 // Shared helpers for the data generators in tools/gen (Node 18+, no packages).
 // Each generator owns one block in index.html between "// <gen:NAME>" and "// </gen:NAME>" and rewrites only that block.
-// "--check" compares instead of writing and exits 1 when the block would change (the weekly GitHub Action uses it).
+// "--check" compares instead of writing and exits 1 when the block would change.
+// The GW2 Wiki refuses requests from GitHub's servers, so only the API-only generator (skins) runs in the weekly Action;
+// the wiki-based ones (collections, vendorreqs, mastery) are run locally.
 const fs = require('fs');
 const path = require('path');
 const INDEX = path.join(__dirname, '..', '..', 'index.html');
@@ -31,15 +33,17 @@ const cache = cacheFile && fs.existsSync(cacheFile) ? JSON.parse(fs.readFileSync
 function saveCache() { if (cacheFile) fs.writeFileSync(cacheFile, JSON.stringify(cache)); }
 async function getJson(url, opts) {
   if (cacheFile && cache[url] !== undefined) return cache[url];
+  let last = '';
   for (let i = 0; i < 4; i++) {
     try {
       const r = await fetch(url, opts);
       if (r.status === 404) { cache[url] = null; return null; }
       if (r.ok) { const j = await r.json(); cache[url] = j; return j; }
-    } catch (e) { }
+      last = 'HTTP ' + r.status;
+    } catch (e) { last = e.message; }
     await sleep(800 * (i + 1));
   }
-  throw new Error('fetch failed: ' + url);
+  throw new Error(`fetch failed (${last}): ${url}`);
 }
 const api = u => getJson('https://api.guildwars2.com' + u);
 async function apiIds(base, ids) {
@@ -51,15 +55,17 @@ const ask = q => getJson('https://wiki.guildwars2.com/api.php?action=ask&format=
 async function wikiRaw(title) {
   const url = 'https://wiki.guildwars2.com/index.php?title=' + encodeURIComponent(title.replace(/ /g, '_')) + '&action=raw';
   if (cacheFile && cache[url] !== undefined) return cache[url];
+  let last = '';
   for (let i = 0; i < 4; i++) {
     try {
       const r = await fetch(url, UA);
       if (r.status === 404) { cache[url] = null; return null; }
       if (r.ok) { const t = await r.text(); cache[url] = t; return t; }
-    } catch (e) { }
+      last = 'HTTP ' + r.status;
+    } catch (e) { last = e.message; }
     await sleep(800 * (i + 1));
   }
-  throw new Error('wiki failed: ' + title);
+  throw new Error(`wiki failed (${last}): ${title}`);
 }
 
 // replace (or check) the generated block NAME; body is JavaScript

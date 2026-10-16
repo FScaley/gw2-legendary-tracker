@@ -43,4 +43,4 @@ Four blocks in `index.html` are written by scripts in `tools/gen` (Node 18+, no 
 
 Run them in this order after a game patch: `collections`, `vendorreqs`, `skins`, `mastery`. `--check` only compares and exits 1 when a block would change. Fixes by hand go into `DATA.parts`, which wins over the generated parts; a collection piece the API does not list goes into `DATA.parts[achievement].bitsExtra`. For faster repeated local runs set `GEN_CACHE=some-file.json` to cache the responses.
 
-The weekly GitHub Action also runs every script with `--check`; a block that no longer matches the wiki or the API opens the same "Data check failed" issue.
+The GW2 Wiki refuses requests from GitHub's servers, so the weekly GitHub Action runs only `skins.js --check` (API only); run `collections`, `vendorreqs` and `mastery` with `--check` locally after a game patch.
