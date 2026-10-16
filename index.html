@@ -1487,6 +1487,78 @@ const MASTERY_OBJECTIVES = {
   9265: [9242, 9243, 9245, 9247, 9248, 9249, 9250, 9251, 9252, 9254, 9255, 9257, 9258, 9259, 9264, 9270, 9273, 9277, 9280, 9281, 9285, 9287, 9289, 9294, 9295, 9296, 9297, 9298, 9302, 9304, 9306, 9307, 9309, 9311, 9314, 9315, 9321, 9322, 9324, 9325, 9328, 9329, 9337, 9338, 9341, 9343]
 };
 // </gen:mastery>
+// <gen:skins>
+// Part -> the skin it unlocks (API default_skin; tools/gen/skins.js). An unlocked skin counts as the part.
+const PART_SKINS = {
+  "Astral Ward Heavy Boots": 11692,
+  "Astral Ward Heavy Coat": 11742,
+  "Astral Ward Heavy Gloves": 11722,
+  "Astral Ward Heavy Helm": 11755,
+  "Astral Ward Heavy Leggings": 11694,
+  "Astral Ward Heavy Shoulders": 11637,
+  "Banner of the Commander": 8149,
+  "Berserker's Glimmering Resin Axe": 13959,
+  "Berserker's Glimmering Resin Dagger": 13861,
+  "Berserker's Glimmering Resin Focus": 13971,
+  "Berserker's Glimmering Resin Greatsword": 13986,
+  "Berserker's Glimmering Resin Hammer": 13985,
+  "Berserker's Glimmering Resin Longbow": 13945,
+  "Berserker's Glimmering Resin Mace": 13856,
+  "Berserker's Glimmering Resin Pistol": 13978,
+  "Berserker's Glimmering Resin Rifle": 13866,
+  "Berserker's Glimmering Resin Scepter": 13934,
+  "Berserker's Glimmering Resin Shield": 13850,
+  "Berserker's Glimmering Resin Short Bow": 13990,
+  "Berserker's Glimmering Resin Spear": 13982,
+  "Berserker's Glimmering Resin Staff": 13964,
+  "Berserker's Glimmering Resin Sword": 13933,
+  "Berserker's Glimmering Resin Torch": 13865,
+  "Berserker's Glimmering Resin Warhorn": 13917,
+  "Beta Fractal Capacitor (Infused)": 2378,
+  "Blooming Druid Stone": 7214,
+  "Druid Stone": 7209,
+  "Forge Guard's Medium Boots": 13896,
+  "Forge Guard's Medium Cuirass": 13937,
+  "Forge Guard's Medium Gloves": 13996,
+  "Forge Guard's Medium Helmet": 13859,
+  "Forge Guard's Medium Leggings": 13928,
+  "Forge Guard's Medium Pauldron": 13876,
+  "Fractal Capacitor (Infused)": 2379,
+  "Heavy Corsair Boots": 8752,
+  "Heavy Corsair Jerkin": 8181,
+  "Heavy Corsair Leggings": 8349,
+  "Heavy Corsair Turban": 7844,
+  "Heavy Dragonscale Epaulets": 6951,
+  "Heavy Glacial Gauntlets": 7006,
+  "Heavy Houndskin Mantle": 7210,
+  "Heavy Mursaat Brogans": 7299,
+  "Living Druid Stone": 7216,
+  "Obsidian Heavy Breastplate": 12060,
+  "Obsidian Heavy Cuisses": 12049,
+  "Obsidian Heavy Gauntlets": 12090,
+  "Obsidian Heavy Greaves": 12048,
+  "Obsidian Heavy Helmet": 12030,
+  "Obsidian Heavy Pauldrons": 12064,
+  "Olmakhan Bow of Force": 4643,
+  "Oneiros-Spun Heavy Boots": 11888,
+  "Oneiros-Spun Heavy Coat": 11914,
+  "Oneiros-Spun Heavy Gloves": 11885,
+  "Oneiros-Spun Heavy Helm": 11905,
+  "Oneiros-Spun Heavy Leggings": 11906,
+  "Oneiros-Spun Heavy Shoulders": 11877,
+  "Prototype Fractal Capacitor": 2377,
+  "Rift Hunter Heavy Boots": 11789,
+  "Rift Hunter Heavy Coat": 11586,
+  "Rift Hunter Heavy Gloves": 11759,
+  "Rift Hunter Heavy Helm": 11653,
+  "Rift Hunter Heavy Leggings": 11806,
+  "Rift Hunter Heavy Shoulders": 11812,
+  "Seraph Bloodstone Savant's Staff": 7118,
+  "Seraph Seraph Protector": 7135,
+  "The Wayfarer's Henge": 7218
+};
+// </gen:skins>
+for (const [n, sk] of Object.entries(PART_SKINS)) if (DATA.parts[n]) DATA.parts[n].skin = sk;
 </script>
 
 <header>
@@ -1707,6 +1779,7 @@ async function refresh() {
     }),
     has("unlocks") && job("legendaryarmory", async () => { for (const a of await api("/v2/account/legendaryarmory", true)) s.armory[a.id] = a.count; }),
     has("progression") && job("mapchests", async () => { s.mapchests = await api("/v2/account/mapchests", true); }),
+    has("unlocks") && job("skins", async () => { s.skins = await api("/v2/account/skins", true); }),
     has("progression") && job("masteries", async () => { s.masteries = {}; for (const m of await api("/v2/account/masteries", true)) s.masteries[m.id] = m.level != null ? m.level : -1; }),
     has("progression") && job("mastery points", async () => { s.mpoints = {}; for (const r of (await api("/v2/account/mastery/points", true)).totals || []) s.mpoints[r.region] = r.earned - r.spent; }),
     job("mastery defs", async () => { if (!stat.mast || !Object.keys(stat.mast).length) { stat.mast = {}; for (const m of await api("/v2/masteries?ids=all", false)) stat.mast[m.id] = { name: m.name, region: m.region, levels: m.levels.map(l => ({ name: l.name, p: l.point_cost, xp: l.exp_cost })) }; lsSet(LS.stat, stat); } }),
@@ -1743,8 +1816,15 @@ const P = DATA.parts;
 function ownedOf(name) {
   const p = P[name]; if (!p || !snap) return 0;
   if (p.cur) return snap.wallet[p.cur] || 0;
-  if (p.id) return (snap.owned[p.id] || 0) + (p.alt || []).reduce((a, id) => a + (snap.owned[id] || 0), 0);
+  if (p.id) { const n = (snap.owned[p.id] || 0) + (p.alt || []).reduce((a, id) => a + (snap.owned[id] || 0), 0); return p.skin && skinOn(p.skin) ? Math.max(n, 1) : n; }
   return 0;
+}
+// hesapta açık skinler (unlocks yetkisi); PART_SKINS'teki koleksiyon parçaları skin açıkken sende sayılır
+let skinSet = null, skinSrc = null;
+function skinOn(id) {
+  if (!snap || !snap.skins) return false;
+  if (skinSrc !== snap.skins) { skinSet = new Set(snap.skins); skinSrc = snap.skins; }
+  return skinSet.has(id);
 }
 function achFrac(id) {
   if (!snap) return 0;
@@ -1912,7 +1992,7 @@ function taskCtx() {
 function trackLeft(ctx) {
   if (!snap) return [];
   const craft = new Set(craftOnly(tgtPrefs().filter(p => p.enabled)).map(p => p.t.key));   // açık ve TP'den alınmayan hedefler
-  return DATA.trackSkins.filter(x => craft.has(x.target) && achFrac(x.coll) < 1 && !((snap.ach[x.coll] || {}).bits || []).includes(0) && achFrac(x.mastery) < 1)
+  return DATA.trackSkins.filter(x => craft.has(x.target) && achFrac(x.coll) < 1 && !((snap.ach[x.coll] || {}).bits || []).includes(0) && achFrac(x.mastery) < 1 && !skinOn(x.skin))
     .sort((a, b) => masteryLeft(b) - masteryLeft(a));   // önce mastery'si en uzak olan: track en çok orada zaman kazandırır
 }
 function masteryLeft(x) { const a = snap.ach[x.mastery]; return a && a.max ? a.max - a.cur : 99; }
@@ -2309,8 +2389,10 @@ async function loadHunter() {
 const BIT_PART = {};   // achievement id -> bit sırası -> parça adı
 for (const [n, p] of Object.entries(DATA.parts)) if (p.ach && p.bits) BIT_PART[p.ach] = Object.fromEntries(p.bits.map(b => [b[2], b[0]]));
 const coinTxt = c => c >= 10000 ? gold(c) : Math.max(1, Math.round(c / 100)) + " gümüş";
-function partDiff(name, itemId) {
+function partDiff(name, itemId, skinId) {
   const p = P[name];
+  if (skinOn(skinId || (p && p.skin)) && !(itemId && snap.owned[itemId] > 0))
+    return { d: 1, tag: "skin açık", why: "Skin hesabında açık: koleksiyon genelde bir sonraki girişte kendiliğinden işlenir." };
   if (snap && ((p && ownedOf(name) > 0) || (itemId && snap.owned[itemId] > 0)))
     return { d: 1, tag: "sende var", why: "Sende var: koleksiyona eklenmesi için çift tıkla (ya da NPC'ye ver)." };
   if (!p) return null;
@@ -2358,7 +2440,7 @@ function renderHunter() {
     if (h.kind === "bits") {
       const got = new Set(a ? a.bits : []);
       haveN = a ? (a.done ? needN : a.cur) : 0;
-      def.bits.forEach((b, i) => { if (a && a.done) return; if (got.has(i)) return; const bi = bitInfo(b); rows.push(Object.assign(bi, { hint: b.text && b.text !== bi.name ? b.text : "", part: (BIT_PART[h.ach] || {})[i], itemId: b.type === "Item" ? b.id : null })); });
+      def.bits.forEach((b, i) => { if (a && a.done) return; if (got.has(i)) return; const bi = bitInfo(b); rows.push(Object.assign(bi, { hint: b.text && b.text !== bi.name ? b.text : "", part: (BIT_PART[h.ach] || {})[i], itemId: b.type === "Item" ? b.id : null, skinId: b.type === "Skin" ? b.id : null })); });
     } else {
       // mastery'nin saydığı achievement'lar (wiki listesi); yoksa kategorinin tamamı
       const ids = (MASTERY_OBJECTIVES[h.ach] || stat.cats[h.cat] || []).filter(id => id !== h.ach);
@@ -2367,7 +2449,7 @@ function renderHunter() {
     }
     // zorluk sırası: veri dosyasındaki etiket → senin seçimin → koleksiyon verisi → açıklamadan tahmin
     rows = rows.map(r => {
-      const dataTag = DATA.hunterTags[r.key], man = state.diff[r.key], pd = partDiff(r.part, r.itemId), au = autoTags(r.name + " " + r.hint + " " + (P[r.part] && P[r.part].src || ""));
+      const dataTag = DATA.hunterTags[r.key], man = state.diff[r.key], pd = partDiff(r.part, r.itemId, r.skinId), au = autoTags(r.name + " " + r.hint + " " + (P[r.part] && P[r.part].src || ""));
       const d = dataTag && dataTag.d || man || pd && pd.d || (r.story === "instance" ? 4 : r.story ? 3 : null) || au.d;
       return Object.assign(r, { d, dataTag, man, pd, au });
     }).sort((x, y) => (x.d || 9) - (y.d || 9));
