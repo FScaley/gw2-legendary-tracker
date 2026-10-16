@@ -1443,6 +1443,26 @@ for (const [n, rs] of Object.entries(VENDOR_REQS)) {
     p.in = (p.in || []).concat([[r.name, 1]]);
   }
 }
+// <gen:mastery>
+// Mastery meta achievement -> the achievements it counts (wiki achievement tables; tools/gen/mastery.js)
+const MASTERY_OBJECTIVES = {
+  3050: [3040, 3042, 3049, 3053, 3054, 3056, 3059, 3062, 3064, 3065, 3070, 3072, 3073, 3074, 3076, 3077, 3081, 3082, 3088],
+  3123: [3104, 3105, 3107, 3109, 3110, 3112, 3113, 3115, 3119, 3120, 3121, 3122, 3124, 3126, 3127, 3128, 3129, 3130, 3131, 3133, 3134, 3136, 3137, 3138, 3139, 3142, 3145, 3147, 3148, 3150],
+  3171: [3173, 3174, 3179, 3182, 3186, 3188, 3191, 3193, 3195, 3206, 3207, 3210, 3212, 3214, 3216, 3217, 3221, 3224, 3227, 3231, 3240],
+  3348: [3282, 3284, 3285, 3286, 3288, 3294, 3301, 3306, 3308, 3309, 3311, 3314, 3315, 3317, 3320, 3322, 3323, 3326, 3329, 3330, 3333, 3338, 3340, 3343, 3344, 3350, 3351, 3354, 3358, 3361, 3365, 3367, 3372, 3374, 3377, 3379, 3380, 3381, 3383],
+  3442: [3395, 3396, 3398, 3400, 3401, 3402, 3403, 3405, 3406, 3407, 3408, 3410, 3412, 3420, 3421, 3422, 3423, 3424, 3427, 3428, 3429, 3430, 3433, 3435, 3436, 3437, 3439, 3440, 3441, 3445, 3446, 3447],
+  3516: [3454, 3456, 3460, 3462, 3467, 3470, 3472, 3473, 3475, 3477, 3480, 3481, 3482, 3484, 3485, 3486, 3487, 3490, 3493, 3496, 3497, 3498, 3502, 3503, 3506, 3507, 3508, 3510, 3511, 3517, 3518, 3519, 3520, 3521, 3524, 3527, 3533, 3536, 3537, 3542, 3546, 3548],
+  3988: [3955, 3958, 3959, 3960, 3962, 3965, 3968, 3969, 3975, 3976, 3978, 3981, 3982, 3983, 3984, 3985, 3986, 3989, 3991, 3992, 3994, 3995, 3996, 3997, 3999, 4002, 4007, 4008, 4009, 4013, 4014, 4019, 4022, 4023, 4026, 4027, 4029, 4031, 4032, 4034, 4039, 4040, 4041, 4042],
+  4093: [4090, 4091, 4092, 4095, 4096, 4098, 4100, 4101, 4102, 4103, 4105, 4106, 4108, 4110, 4112, 4114, 4115, 4117, 4119, 4120, 4121, 4122, 4124, 4125, 4126, 4127, 4129, 4130, 4131, 4132, 4133, 4134, 4135, 4136, 4137, 4139, 4140, 4141, 4142, 4143, 4144, 4145, 4146, 4147, 4148, 4149, 4150],
+  4195: [4182, 4186, 4188, 4192, 4194, 4198, 4199, 4201, 4203, 4204, 4205, 4206, 4207, 4208, 4209, 4213, 4214, 4216, 4217, 4220, 4223, 4227, 4228, 4230, 4231, 4233, 4234, 4235, 4236, 4238, 4243, 4246, 4247, 4250, 4251, 4253, 4255, 4256, 4258, 4259, 4261, 4262, 4264, 4265, 4269, 4270, 4271, 4272],
+  4359: [4342, 4343, 4346, 4347, 4348, 4349, 4350, 4351, 4352, 4353, 4358, 4360, 4362, 4363, 4365, 4366, 4369, 4370, 4371, 4372, 4373, 4374, 4375, 4376, 4377, 4378, 4381, 4384, 4385, 4387, 4389, 4390, 4392, 4393, 4394, 4398, 4400, 4401, 4403, 4406, 4413, 4414, 4417, 4418, 4419, 4421, 4424, 4425, 4426, 4427, 4428, 4430, 4433, 4434],
+  4544: [4493, 4497, 4498, 4499, 4503, 4506, 4507, 4510, 4513, 4515, 4516, 4522, 4532, 4538, 4539, 4545, 4550, 4553, 4559, 4564, 4567, 4569, 4576, 4577, 4579, 4586, 4588, 4590, 4591, 4594, 4596, 4600, 4601, 4604, 4605, 4616, 4617, 4618, 4621],
+  4689: [4663, 4669, 4673, 4687, 4697, 4700, 4705, 4708, 4715, 4721, 4722, 4723, 4731, 4737, 4740, 4744, 4747, 4753],
+  8880: [8854, 8860, 8861, 8873, 8875, 8882, 8893, 8894, 8898, 8903, 8914, 8921, 8923, 8926, 8932, 8934, 8935, 8950, 8951, 8953, 8957, 8961, 8963, 8964, 8968, 8969, 8971, 8976, 8981, 8983, 8989, 8991, 8992, 8995, 8998, 9001, 9010, 9011, 9016, 9020, 9021, 9026, 9032, 9037, 9046, 9051, 9052, 9054, 9058, 9059, 9071, 9081, 9082],
+  9057: [8856, 8857, 8862, 8866, 8867, 8881, 8884, 8886, 8902, 8904, 8909, 8915, 8917, 8918, 8919, 8920, 8922, 8933, 8937, 8938, 8941, 8942, 8952, 8967, 8982, 8986, 8996, 9000, 9003, 9007, 9008, 9018, 9022, 9025, 9027, 9028, 9033, 9035, 9039, 9040, 9042, 9044, 9045, 9047, 9048, 9049, 9061, 9062, 9065, 9069, 9072, 9074, 9077, 9078, 9083],
+  9265: [9242, 9243, 9245, 9247, 9248, 9249, 9250, 9251, 9252, 9254, 9255, 9257, 9258, 9259, 9264, 9270, 9273, 9277, 9280, 9281, 9285, 9287, 9289, 9294, 9295, 9296, 9297, 9298, 9302, 9304, 9306, 9307, 9309, 9311, 9314, 9315, 9321, 9322, 9324, 9325, 9328, 9329, 9337, 9338, 9341, 9343]
+};
+// </gen:mastery>
 </script>
 
 <header>
@@ -1495,8 +1515,8 @@ for (const [n, rs] of Object.entries(VENDOR_REQS)) {
   </section>
 
   <section class="tab" id="tab-hunter">
-    <div class="card small muted">Kartlar en az maddesi kalandan başlar; bitenler en altta. Mastery kartları (ör. "All or Nothing" Mastery) koleksiyonlardaki zırh skinlerini veriyor — her birinin yanında hikaye istemeyen tekrarlanabilir LS3/LS4 reward track yolu yazıyor. Eksik maddeler kolaydan zora sıralı. Zorluk: veri dosyasındaki etiket → senin seçimin → koleksiyon verisi (sende var / TP / satıcı / craft / drop) → açıklamadan otomatik tahmin (sırasıyla öncelikli). Otomatik etiketler "oto" işaretli ve doğrulanmamıştır; "?" kalanlara soldaki kutudan kendin zorluk ver.</div>
-    <div class="row" style="margin-bottom:10px"><label class="small">Hedef: <select id="hunterFilter"></select></label><label class="small"><input type="checkbox" id="hunterEasy"> Sadece kolaylar (zorluk 1-2)</label><button class="btn" id="hunterLoad">Listeyi yükle</button><span id="hunterStatus" class="small muted"></span></div>
+    <div class="card small muted">Kartlar en az maddesi kalandan başlar; bitenler en altta. Mastery kartları (ör. "All or Nothing" Mastery) koleksiyonlardaki zırh skinlerini veriyor — her birinin yanında hikaye istemeyen tekrarlanabilir LS3/LS4 reward track yolu yazıyor. Eksik maddeler kolaydan zora sıralı. Zorluk: veri dosyasındaki etiket → senin seçimin → koleksiyon verisi (sende var / TP / satıcı / craft / drop) → açıklamadan otomatik tahmin (sırasıyla öncelikli). Hikaye achievement'ları (API'de "Story Instance" ya da "Journal") ayrıca işaretli; mastery kartları hikayesiz bitip bitmeyeceğini yazar. Otomatik etiketler "oto" işaretli ve doğrulanmamıştır; "?" kalanlara soldaki kutudan kendin zorluk ver.</div>
+    <div class="row" style="margin-bottom:10px"><label class="small">Hedef: <select id="hunterFilter"></select></label><label class="small"><input type="checkbox" id="hunterEasy"> Sadece kolaylar (zorluk 1-2)</label><label class="small"><input type="checkbox" id="hunterNoStory"> Hikaye achievement'larını gizle</label><button class="btn" id="hunterLoad">Listeyi yükle</button><span id="hunterStatus" class="small muted"></span></div>
     <div id="hunterBox"></div>
   </section>
 
@@ -2235,7 +2255,7 @@ async function loadHunter() {
     }
     const list = hunterList().filter(h => !sel || h.target === sel);
     for (const h of list) if (h.kind === "category" && !stat.cats[h.cat]) { const c = await api("/v2/achievements/categories/" + h.cat, false); stat.cats[h.cat] = c.achievements || []; }
-    const achIds = list.map(h => h.ach).concat(...list.filter(h => h.kind === "category").map(h => stat.cats[h.cat] || []));
+    const achIds = list.map(h => h.ach).concat(...list.filter(h => h.kind === "category").map(h => MASTERY_OBJECTIVES[h.ach] || stat.cats[h.cat] || []));
     await ensureStatic("ach", achIds);
     const items = [], skins = [], minis = [];
     for (const h of list) if (h.kind === "bits") for (const b of (stat.ach[h.ach] || {}).bits || []) { if (b.type === "Item") items.push(b.id); if (b.type === "Skin") skins.push(b.id); if (b.type === "Minipet") minis.push(b.id); }
@@ -2274,21 +2294,23 @@ function bitInfo(b) {
   const nm = kind && stat[kind][b.id] ? stat[kind][b.id].name : (b.text || (b.type + " " + (b.id || "")));
   return { key: (b.type || "text").toLowerCase().replace("minipet", "mini") + ":" + (b.id != null ? b.id : nm), name: nm, text: b.text || "" };
 }
+// hikaye achievement'ı: API açıklaması "Story Instance: ..." (hikaye instance'ında yapılır) ya da "Journal: ... Completed" (bölümü bitir)
+const storyKind = d => /^Story Instance:/i.test(d.desc || "") ? "instance" : /^Journal:/i.test(d.desc || "") ? "journal" : null;
 function renderHunter() {
   const sel = state.hunterFilter, tname = Object.fromEntries(DATA.targets.map(t => [t.key, t.name]));
   // en az kalan üstte, bitenler en altta
   const leftOf = h => { const d = stat.ach[h.ach], a = snap && snap.ach[h.ach]; if (!d) return 1e6; if (a && a.done) return 1e7; const n = d.tiers.length ? d.tiers[d.tiers.length - 1].count : (d.bits.length || 1); return n - (a ? a.cur : 0); };
   const list = hunterList().filter(h => !sel || h.target === sel).sort((x, y) => leftOf(x) - leftOf(y));
   buildHunterFilter();
-  const easyOnly = !!state.hunterEasy, easy = [];
+  const easyOnly = !!state.hunterEasy, noStory = !!state.hunterNoStory, easy = [];
   const rowLi = r => `<li><select data-dk="${esc(r.key)}" title="Zorluk">${["", 1, 2, 3, 4, 5].map(v => `<option value="${v}" ${(r.man || "") == v ? "selected" : ""}>${v === "" ? "–" : v}</option>`).join("")}</select>
         <div><div><a href="${wikiUrl(r.name)}" target="_blank" rel="noopener">${esc(r.name)}</a> <span class="pill">zorluk ${r.d || "?"}</span>${r.card ? ` <span class="small muted">${esc(r.card)}</span>` : ""}</div>
-        <div>${(r.dataTag ? r.dataTag.tags.map(t => `<span class="tag">${esc(t)}</span>`) : r.pd && !r.man ? [`<span class="tag">${esc(r.pd.tag)}</span>`] : r.au.tags.map(t => `<span class="tag uv">oto: ${esc(t)}</span>`)).join("")}</div>
+        <div>${r.story ? `<span class="tag warnc">${r.story === "instance" ? "hikaye instance'ı" : "hikaye bölümü"}</span>` : ""}${(r.dataTag ? r.dataTag.tags.map(t => `<span class="tag">${esc(t)}</span>`) : r.pd && !r.man ? [`<span class="tag">${esc(r.pd.tag)}</span>`] : r.au.tags.map(t => `<span class="tag uv">oto: ${esc(t)}</span>`)).join("")}</div>
         <div class="small muted">${esc(r.dataTag && r.dataTag.tip || r.pd && r.pd.why || r.hint || "")}</div></div></li>`;
   const cards = list.map(h => {
     const def = stat.ach[h.ach];
     if (!def) return `<div class="card"><h2>${esc(h.title)}</h2><div class="muted small">Yüklenmedi — "Listeyi yükle".</div></div>`;
-    if (h.kind === "category" && !stat.cats[h.cat]) return `<div class="card"><h2>${esc(h.title)}</h2><div class="muted small">Kategori yüklenmedi — "Listeyi yükle".</div></div>`;
+    if (h.kind === "category" && !MASTERY_OBJECTIVES[h.ach] && !stat.cats[h.cat]) return `<div class="card"><h2>${esc(h.title)}</h2><div class="muted small">Kategori yüklenmedi — "Listeyi yükle".</div></div>`;
     const a = snap && snap.ach[h.ach];
     const needN = def.tiers.length ? def.tiers[def.tiers.length - 1].count : (def.bits.length || 1);
     let rows = [], haveN = 0;
@@ -2297,23 +2319,30 @@ function renderHunter() {
       haveN = a ? (a.done ? needN : a.cur) : 0;
       def.bits.forEach((b, i) => { if (a && a.done) return; if (got.has(i)) return; const bi = bitInfo(b); rows.push(Object.assign(bi, { hint: b.text && b.text !== bi.name ? b.text : "", part: (BIT_PART[h.ach] || {})[i], itemId: b.type === "Item" ? b.id : null })); });
     } else {
-      const ids = (stat.cats[h.cat] || []).filter(id => id !== h.ach);
-      for (const id of ids) { const d = stat.ach[id]; if (!d || d.flags.includes("Daily") || d.flags.includes("Weekly") || d.flags.includes("Repeatable") || d.flags.includes("CategoryDisplay")) continue; const x = snap && snap.ach[id]; if (x && x.done) { haveN++; continue; } rows.push({ key: "ach:" + id, name: d.name, hint: d.req || d.desc, achId: id }); }
+      // mastery'nin saydığı achievement'lar (wiki listesi); yoksa kategorinin tamamı
+      const ids = (MASTERY_OBJECTIVES[h.ach] || stat.cats[h.cat] || []).filter(id => id !== h.ach);
+      for (const id of ids) { const d = stat.ach[id]; if (!d || d.flags.includes("Daily") || d.flags.includes("Weekly") || d.flags.includes("Repeatable") || d.flags.includes("CategoryDisplay")) continue; const x = snap && snap.ach[id]; if (x && x.done) { haveN++; continue; } rows.push({ key: "ach:" + id, name: d.name, hint: d.req || d.desc, achId: id, story: storyKind(d) }); }
       if (a && a.max) haveN = a.done ? needN : a.cur;   // meta'nın kendi sayacı (kategoride sayılmayan achievement'lar olabilir)
     }
     // zorluk sırası: veri dosyasındaki etiket → senin seçimin → koleksiyon verisi → açıklamadan tahmin
     rows = rows.map(r => {
       const dataTag = DATA.hunterTags[r.key], man = state.diff[r.key], pd = partDiff(r.part, r.itemId), au = autoTags(r.name + " " + r.hint + " " + (P[r.part] && P[r.part].src || ""));
-      const d = dataTag && dataTag.d || man || pd && pd.d || au.d;
+      const d = dataTag && dataTag.d || man || pd && pd.d || (r.story === "instance" ? 4 : r.story ? 3 : null) || au.d;
       return Object.assign(r, { d, dataTag, man, pd, au });
     }).sort((x, y) => (x.d || 9) - (y.d || 9));
     const left = Math.max(0, needN - haveN), done = a && a.done;
-    if (!done) for (const r of rows) if (r.d && r.d <= 2) easy.push(Object.assign({}, r, { card: h.title, left }));
-    const shown = easyOnly ? rows.filter(r => r.d && r.d <= 2) : rows;
+    if (!done) for (const r of rows) if (r.d && r.d <= 2 && !(noStory && r.story)) easy.push(Object.assign({}, r, { card: h.title, left }));
+    const shown = rows.filter(r => !(easyOnly && !(r.d && r.d <= 2)) && !(noStory && r.story));
+    // mastery hikayesiz bitebilir mi: hikaye dışı kalan achievement sayısı, gereken sayıya yetiyor mu
+    const plain = rows.filter(r => !r.story).length, storyN = rows.length - plain;
+    const storyLine = h.kind === "category" && !done && storyN ? `<div class="small">${plain >= left
+      ? `<span class="okc">Hikayesiz bitebilir:</span> hikaye dışı ${plain} achievement kaldı, ${left} tane lazım (${storyN} hikaye achievement'ını atlayabilirsin).`
+      : `<span class="warnc">En az ${left - plain} hikaye achievement'ı gerekiyor:</span> hikaye dışı sadece ${plain} kaldı, ${left} tane lazım.`}</div>` : "";
     if (easyOnly && !shown.length) return "";
     return `<div class="card"><h2>${esc(h.title)} <span class="pill">${esc(tname[h.target] || "")}</span></h2>
       <div class="small">${done ? '<span class="okc">Tamamlandı</span>' : `<b>${fmt(haveN)}/${fmt(needN)}</b> · <b class="warnc">${fmt(left)} tane daha lazım</b>`} · <a href="${wikiUrl(def.name)}" target="_blank" rel="noopener">wiki</a></div>
       ${h.why ? `<div class="small" style="margin:2px 0">${esc(h.why)}${!modeOn("wvw") && !modeOn("pvp") && /reward track/i.test(h.why) ? ' <b class="warnc">WvW ve PvP kapalı: mastery yolunu seç.</b>' : ""}</div>` : ""}
+      ${storyLine}
       ${def.req ? `<div class="small muted">${esc(def.req)}</div>` : ""}
       ${done ? "" : `<ul class="hunt">${shown.map(rowLi).join("")}</ul>`}</div>`;
   });
@@ -2434,6 +2463,8 @@ $("#hunterFilter").value = state.hunterFilter || "";
 $("#hunterFilter").onchange = e => { state.hunterFilter = e.target.value; saveState(); renderHunter(); };
 $("#hunterEasy").checked = !!state.hunterEasy;
 $("#hunterEasy").onchange = e => { state.hunterEasy = e.target.checked; saveState(); renderHunter(); };
+$("#hunterNoStory").checked = !!state.hunterNoStory;
+$("#hunterNoStory").onchange = e => { state.hunterNoStory = e.target.checked; saveState(); renderHunter(); };
 $("#dataAsOf").textContent = DATA.meta.asOf;
 
 renderAll();
