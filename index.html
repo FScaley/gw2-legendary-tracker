@@ -185,10 +185,10 @@ const DATA = {
     "Gift of Craftsmanship": { id: 77451, src: "Faction Provisioner: 50 Provisioner Token", in: [["Provisioner Token", 50]], wiki: "Gift_of_Craftsmanship", tg: true },
     "Gift of Research": { id: 97655, src: "Mystic Forge", in: [["Thermocatalytic Reagent", 250], ["Hydrocatalytic Reagent", 500], ["Exotic Essence of Luck", 250]], wiki: "Gift_of_Research" },
     "Vision Crystal": { id: 46746, src: "Craft 400 (any) / Wizard's Vault 4/sezon", in: [["Bloodstone Brick", 5], ["Dragonite Ingot", 5], ["Empyreal Star", 5], ["Augur's Stone", 1]], wiki: "Vision_Crystal" },
-    "Bloodstone Brick": { id: 46730, src: "Craft: 100 Bloodstone Dust + 2 Obsidian Shard + 10 Thermocatalytic" },
-    "Dragonite Ingot": { id: 46732, src: "Craft: 100 Dragonite Ore + 2 Obsidian Shard + 10 Thermocatalytic" },
-    "Empyreal Star": { id: 46734, src: "Craft: 100 Empyreal Fragment + 2 Obsidian Shard + 10 Thermocatalytic" },
-    "Augur's Stone": { id: 46752, src: "Miyani/Lyhr: 20 Spirit Shard" },
+    "Bloodstone Brick": { id: 46730, src: "Craft 450 (Chef 425)", in: [["Pile of Bloodstone Dust", 100], ["Obsidian Shard", 2], ["Thermocatalytic Reagent", 10]] },
+    "Dragonite Ingot": { id: 46732, src: "Craft 450 (Chef 425)", in: [["Dragonite Ore", 100], ["Obsidian Shard", 2], ["Thermocatalytic Reagent", 10]] },
+    "Empyreal Star": { id: 46734, src: "Craft 450 (Chef 425)", in: [["Empyreal Fragment", 100], ["Obsidian Shard", 2], ["Thermocatalytic Reagent", 10]] },
+    "Augur's Stone": { id: 46752, src: "Miyani/Lyhr: 20 Spirit Shard", in: [["Spirit Shard", 20]] },
     "Amalgamated Rift Essence": { id: 100930, lyhr: true, src: "Craft 400 (tarif Lyhr 50s)", in: [["Fine Rift Essence", 250], ["Masterwork Rift Essence", 100], ["Rare Rift Essence", 50], ["Glob of Ectoplasm", 50]], wiki: "Amalgamated_Rift_Essence", tg: true },
     "Purified Rift Essence": { id: 100569, src: "Craft 400", in: [["Amalgamated Rift Essence", 1], ["Mystic Clover", 1]], wiki: "Purified_Rift_Essence" },
     "Funerary Incense": { id: 86093, src: "Domain of Vabbi'deki 8 heart vendor (her biri hesap başına günde 1). Primeval Steward sınırsız ama Trade Contract yerine 100 Trade Contract ya da 3 Elegy Mosaic ister.", in: [["Trade Contract", 5], ["Amalgamated Gemstone", 1], ["Obsidian Shard", 1], ["Glob of Ectoplasm", 1]], wiki: "Funerary_Incense", tg: true },
@@ -218,9 +218,10 @@ const DATA = {
     "Eldritch Scroll": { id: 20852, src: "Miyani: 50 Spirit Shard", in: [["Spirit Shard", 50]] },
     "Gift of Stormy Skies": { id: 100288, src: "Mystic Forge", in: [["Gift of the Astral Ward", 1], ["Case of Captured Lightning", 5], ["Pouch of Stardust", 5], ["Clot of Congealed Screams", 5]], wiki: "Gift_of_Stormy_Skies" },
     "Gift of the Astral Ward": { id: 100466, src: "Mystic Forge", in: [["Gift of Skywatch Archipelago", 1], ["Gift of Amnytas", 1], ["Gift of Inner Nayos", 1], ["Gift of Persistence", 1]] },
-    "Gift of Skywatch Archipelago": { id: 100544, src: "Harita tamamlama / Illuminating Skywatch (ach 7126) sandığı / Gharr: 13 Case" },
-    "Gift of Amnytas": { id: 100798, src: "Harita tamamlama / Illuminating Amnytas (ach 7053) / Gharr: 13 Pouch" },
-    "Gift of Inner Nayos": { id: 101595, src: "Illuminating Inner Nayos (ach 7809) / Inner Nayos Mastery II (7800) / Gharr: 13 Clot" },
+    // free: bu achievement'lar birer gift verir; kalanı Gharr'dan (Illuminating şartlı) 13 Case/Pouch/Clot = 3.250 harita parası
+    "Gift of Skywatch Archipelago": { id: 100544, free: [7126], src: "Bedava: Illuminating Skywatch (100% keşiften sonra fenerler) sandığı, harita tamamlama (alt karakterle de dene). Kalanı Gharr Leadclaw: 13 Case (Illuminating şart)", in: [["Case of Captured Lightning", 13]] },
+    "Gift of Amnytas": { id: 100798, free: [7053], src: "Bedava: Illuminating Amnytas (100% keşiften sonra fenerler) sandığı, harita tamamlama (alt karakterle de dene). Kalanı Gharr Leadclaw: 13 Pouch (Illuminating şart)", in: [["Pouch of Stardust", 13]] },
+    "Gift of Inner Nayos": { id: 101595, free: [7809, 7800, 7831], src: "Bedava: Illuminating Inner Nayos, Inner Nayos Mastery II, Realm of Dreams Mastery. Kalanı Gharr Leadclaw: 13 Clot (Illuminating şart)", in: [["Clot of Congealed Screams", 13]] },
     "Gift of Persistence": { id: 99962, src: "Lyhr", in: [["Ancient Coin", 250], ["Static Charge", 250], ["Pinch of Stardust", 250], ["Calcified Gasp", 250]] },
     "Case of Captured Lightning": { id: 100267, src: "250 Static Charge (provisioner) ya da günlük Hero's Choice Chest seçimi", in: [["Static Charge", 250]], tg: true },
     "Pouch of Stardust": { id: 99964, src: "250 Pinch of Stardust ya da günlük sandık seçimi", in: [["Pinch of Stardust", 250]], tg: true },
@@ -2210,6 +2211,13 @@ function bitKids(p) {
   const got = new Set(a ? a.bits || [] : []);
   return p.bits.filter(b => !got.has(b[2])).map(b => [b[0], b[1]]);
 }
+// p.free: eksiğin bu kadarını bitmemiş achievement'lar bedava verir, vendor tarifine (in) gitmez; pool'da bir kez sayılır
+function freeTake(name, p, rem, pool) {
+  if (!p.free) return 0;
+  const k = "free:" + name;
+  if (pool[k] == null) pool[k] = p.free.filter(id => achFrac(id) < 1).length;
+  const n = Math.min(pool[k], rem); pool[k] -= n; return n;
+}
 // pool: hedef içinde aynı malzeme iki kez sayılmasın
 function prog(name, qty, pool, depth = 0) {
   const p = P[name]; if (!p || depth > 20) return 0;
@@ -2224,8 +2232,9 @@ function prog(name, qty, pool, depth = 0) {
   const rem = qty - have; if (rem <= 0) return 1;
   if (!p.in) return have / qty;
   if (!p.in.length) return 1;
-  const kids = p.in.map(([c, q]) => prog(c, q * rem, pool, depth + 1));
-  return (have + rem * kids.reduce((a, b) => a + b, 0) / kids.length) / qty;
+  const viaIn = rem - freeTake(name, p, rem, pool); if (!viaIn) return have / qty;
+  const kids = p.in.map(([c, q]) => prog(c, q * viaIn, pool, depth + 1));
+  return (have + viaIn * kids.reduce((a, b) => a + b, 0) / kids.length) / qty;
 }
 // eksik taban malzemeler (TP maliyeti için)
 function missingLeaves(name, qty, pool, out, depth = 0) {
@@ -2239,8 +2248,10 @@ function missingLeaves(name, qty, pool, out, depth = 0) {
   const have = Math.min(pool[name] != null ? pool[name] : (pool[name] = ownedOf(name)), qty);
   pool[name] -= have;
   const rem = qty - have; if (rem <= 0) return out;
-  if (p.in) for (const [c, q] of p.in) missingLeaves(c, q * rem, pool, out, depth + 1);
-  else out[name] = (out[name] || 0) + rem;
+  const free = freeTake(name, p, rem, pool);
+  if (free) out[name] = (out[name] || 0) + free;   // achievement'la gelecek: satın alınamaz, fiyatsız kalem
+  if (p.in) for (const [c, q] of p.in) missingLeaves(c, q * (rem - free), pool, out, depth + 1);
+  else out[name] = (out[name] || 0) + rem - free;
   return out;
 }
 // eksik bütün parçalar (ara ürünler dahil): hangi parçayı kendin yapman gerekecek
@@ -2256,7 +2267,8 @@ function neededParts(name, qty, pool, out, depth = 0) {
   pool[name] -= have;
   const rem = qty - have; if (rem <= 0) return out;
   out[name] = (out[name] || 0) + rem;
-  if (p.in) for (const [c, q] of p.in) neededParts(c, q * rem, pool, out, depth + 1);
+  const viaIn = rem - freeTake(name, p, rem, pool);
+  if (p.in) for (const [c, q] of p.in) neededParts(c, q * viaIn, pool, out, depth + 1);
   return out;
 }
 // brüt ihtiyaç (çakışma tablosu için)
@@ -2269,7 +2281,8 @@ function grossNeed(name, qty, out, depth = 0) {
     return out;
   }
   out[name] = (out[name] || 0) + qty;
-  if (p.in) for (const [c, q] of p.in) grossNeed(c, q * qty, out, depth + 1);
+  const viaIn = Math.max(0, qty - (p.free || []).length);   // brüt: bedava kaynakların hepsi sayılır
+  if (p.in) for (const [c, q] of p.in) grossNeed(c, q * viaIn, out, depth + 1);
   return out;
 }
 function targetCalc(tp) {
@@ -2539,8 +2552,9 @@ function nodeHtml(name, qty, depth) {
   else if (p.cur === 1) { const h = ownedOf(name); cnt = `<span class="cnt ${h >= qty ? "ok" : "no"}">${snap ? gold(h) : "?"} / ${gold(qty)}</span>`; }
   else { const h = ownedOf(name); cnt = `<span class="cnt ${h >= qty ? "ok" : "no"}">${snap ? fmt(h) : "?"} / ${fmt(qty)}</span>`; }
   const pr = p.id && prices.p[p.id] && prices.p[p.id].s ? `<span class="pill">TP ${gold(prices.p[p.id].s)}</span>` : "";
-  const kids = p.in && depth < 8 && !(snap && !p.ach && ownedOf(name) >= qty)
-    ? `<ul>${p.in.map(([c, q]) => nodeHtml(c, p.ach ? 1 : q * qty, depth + 1)).join("")}</ul>` : "";
+  const viaIn = Math.max(0, qty - (p.free || []).length);
+  const kids = p.in && depth < 8 && viaIn && !(snap && !p.ach && ownedOf(name) >= qty)
+    ? `<ul>${p.in.map(([c, q]) => nodeHtml(c, p.ach ? 1 : q * viaIn, depth + 1)).join("")}</ul>` : "";
   const bk = p.ach && depth < 8 && achFrac(p.ach) < 1 ? bitKids(p) : [];
   const bitsHtml = bk.length ? `<details class="how"><summary>Koleksiyon: ${bk.length} eksik parça</summary><ul>${bk.map(([c, q]) => nodeHtml(c, q, depth + 1)).join("")}</ul></details>` : "";
   return `<li><div class="node"><a href="${partWiki(name, p)}" target="_blank" rel="noopener">${esc(name)}</a>${p.ach ? '<span class="tag">achievement</span>' : ""}${cnt}${pr}${p.tg ? '<span class="tag tg">timegate</span>' : ""}${p.uv ? '<span class="tag uv">doğrulanmadı</span>' : ""}<span class="small muted">${esc(p.src || "")}</span></div>${kids}${bitsHtml}</li>`;
@@ -2706,6 +2720,7 @@ function hunterList() {
       return;
     }
     if (snap && ownedOf(name) >= qty) return;
+    for (const id of (p.free || [])) if (!seen.has(id) && !(snap && achFrac(id) >= 1)) seen.set(id, { ach: id, target: key, name });
     for (const [c, q] of (p.in || [])) walk(c, q * qty, key, depth + 1);
   };
   for (const tp of tgtPrefs().filter(x => x.enabled && !x.buy)) walk(tp.t.root, tp.count || 1, tp.t.key, 0);
