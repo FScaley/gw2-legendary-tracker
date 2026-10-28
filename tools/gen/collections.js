@@ -117,14 +117,14 @@ async function resolveItem(id, depth = 0) {
 // requirements a trophy's vendor price hides (wiki notes), and what each extra child is
 const EXTRA = {
   "Vision of Equipment: Astral Weapons": [[85804, 6], ["Astral weapon recipes", 1]],
-  "Vision of Equipment: Dragonsblood Weapons": [[89774, 6]],
+  "Vision of Equipment: Dragonsblood Weapons": [[89774, 6], ["Dragonsblood Weapon Recipe Book", 1]],
   "Vision of Equipment: Dragon Champion Armor": [["Mist Shard armor (heavy, 6 parça)", 1]],
   "Vision of Equipment: Elegy Armor": [["The Convergence of Sorrow I: Elegy", 1]],
   "Vision of Equipment: Olmakhan Bandolier": [[87225, 1]],
 };
 const EXTRA_NOTE = {
   "Vision of Equipment: Astral Weapons": "6 farklı Astral ya da Stellar silah craft et (fiyat örnek olarak dagger ile); sonra Yasna'dan al",
-  "Vision of Equipment: Dragonsblood Weapons": "6 FARKLI türde Dragonsblood silah craft et (fiyat örnek olarak dagger ile); sonra Forge Master Hilina'dan al",
+  "Vision of Equipment: Dragonsblood Weapons": "6 FARKLI türde Dragonsblood silah craft et (fiyat örnek olarak dagger ile; tarifler Hilina'nın kitabından); sonra Forge Master Hilina'dan al",
   "Vision of Equipment: Dragon Champion Armor": "Bir ağırlıkta Tier 1 Mist Shard seti; sonra Traveling Elonian Trader'dan al",
   "Vision of Equipment: Elegy Armor": "The Convergence of Sorrow I: Elegy bitince Amira'dan al",
   "Vision of Equipment: Olmakhan Bandolier": "Reinforced Olmakhan Bandolier'ı edin (Trance Stone'dan sonra yapılırsa kendiliğinden gelir)",
