@@ -2020,7 +2020,12 @@ const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == n
 const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } };
 const wikiUrl = n => "https://wiki.guildwars2.com/wiki/Special:Search?search=" + encodeURIComponent(n);
 const partWiki = (name, p) => p && p.wiki ? DATA.meta.wiki + encodeURI(p.wiki) : wikiUrl(name);
-const gold = c => (c / 10000).toLocaleString("tr-TR", { maximumFractionDigits: 0 }) + " altın";
+// para: 1 altından azı gümüş/bakır (eskiden "0 altın" yazıyordu); 10 altından azı bir ondalıklı
+const gold = c => {
+  c = Math.round(c || 0); const a = Math.abs(c);
+  if (a >= 10000) { const g = c / 10000; return g.toLocaleString("tr-TR", { maximumFractionDigits: a < 100000 ? 1 : 0 }) + " altın"; }
+  return a >= 100 ? Math.round(c / 100) + " gümüş" : c + " bakır";
+};
 
 // =================== Durum ===================
 let state = Object.assign({ targets: {}, checks: { daily: { p: "", d: {} }, weekly: { p: "", d: {} } }, diff: {}, hunterFilter: "" }, lsGet(LS.state, {}));
@@ -2308,7 +2313,8 @@ function targetCalc(tp) {
     else if (pr && pr.s) cost += pr.s * q; else unpriced++;
   }
   const gates = (t.gates || []).map(g => gateDays(g, snap ? neededParts(t.root, tp.count, {}, {}) : null));   // ara parçalar da (ör. Funerary Incense)
-  const worst = gates.reduce((a, g) => g.days != null && (!a || g.days > a.days) ? g : a, null);
+  // biten kapı (0 gün) en uzun bekleme sayılmaz
+  const worst = gates.reduce((a, g) => g.days != null && g.days > 0 && (!a || g.days > a.days) ? g : a, null);
   const tpPrice = root && root.id && prices.p[root.id] ? prices.p[root.id].s : 0;
   return { pct: Math.min(1, pct), armory, done: armory >= tp.count || (!!snap && pct >= 1), miss, cost, unpriced, gates, worst, tpPrice };
 }
@@ -2354,10 +2360,12 @@ function schedInfo(key, now = new Date()) {
 // hangi görev görünür: hedefi açık mı, parçası hâlâ eksik mi, modu açık mı, eşya bulundu mu
 function taskCtx() {
   const on = new Set(tgtPrefs().filter(x => x.enabled).map(x => x.t.key));
-  const needed = {}, pool = {}, neededBy = {};   // craft edilen açık hedeflerde hâlâ EKSİK olan parçalar (sendekiler düşülür) ve hangi hedefte
+  // craft edilen açık hedeflerde hâlâ EKSİK olan parçalar: tek havuz, envanter hedeflere öncelik sırasıyla dağıtılır.
+  // neededBy aynı hesaptan gelir: eksiğe katkısı olan her hedef (toplam ile etiket çelişmesin)
+  const needed = {}, pool = {}, neededBy = {};
   for (const tp of craftOnly(tgtPrefs().filter(x => x.enabled))) {
-    neededParts(tp.t.root, tp.count, pool, needed);
-    for (const n of Object.keys(neededParts(tp.t.root, tp.count, {}, {}))) (neededBy[n] = neededBy[n] || []).push(tp.t.name);
+    const mine = neededParts(tp.t.root, tp.count, pool, {});
+    for (const [n, q] of Object.entries(mine)) { needed[n] = (needed[n] || 0) + q; (neededBy[n] = neededBy[n] || []).push(tp.t.name); }
   }
   return { on, needed, neededBy };
 }
@@ -2438,7 +2446,7 @@ function renderTaskList(el, tasks, bucket) {
       ${t.repeat ? `<div class="small ${done ? "okc" : "muted"}">${done ? "Günlük sandık alındı — tekrar turu yine değerli: " : "Tekrarlanabilir — günlük sandıktan sonraki her tur: "}${esc(t.repeat)}</div>` : ""}
       ${t.count === "chars" ? `<div class="small muted">Kutular karakter başına: her karakterin günlük turu için bir tane. Eşya düşünce madde kendiliğinden kalkar (Yenile).</div>` : ""}
       ${t.track ? (() => { const l = trackLeft(ctx); return `<div class="small">Sıradaki tur: <b>Living World Season ${l[0].season} Cache → ${esc(l[0].cache)}</b> (${esc(l[0].name)}). Kalan ${l.length} skin: ${l.map(x => esc(x.cache.replace(/ Cache$/, ""))).join(", ")}.</div>`; })() : ""}
-      ${t.needsPart && snap ? `<div class="small warnc">Eksik: ${[].concat(t.needsPart).filter(n => ctx.needed[n]).map(n => esc(n) + " " + fmt(ctx.needed[n])).join(", ")}</div>` : ""}
+      ${t.needsPart && snap ? `<div class="small warnc" title="Açık hedeflerin hepsi için, elindekiler düşülünce">Eksik (bütün hedefler): ${[].concat(t.needsPart).filter(n => ctx.needed[n]).map(n => esc(n) + " " + fmt(ctx.needed[n])).join(", ")}</div>` : ""}
       <div class="small muted">${esc(servesOf(t))}${t.time ? " · " + esc(t.time) : ""}${api}${t.uv ? ' · <span style="color:var(--uv)">kısmen doğrulanmadı</span>' : ""}</div>
       ${t.how ? `<details class="how" data-how="${esc(hid)}" ${openHow.has(hid) ? "open" : ""}><summary>Nasıl?</summary><ol>${t.how.map(h => `<li>${esc(h)}</li>`).join("")}</ol>${t.wiki ? `<a class="small" href="${DATA.meta.wiki + t.wiki}" target="_blank" rel="noopener">wiki</a>` : ""}</details>` : ""}
     </div></li>`;
@@ -2550,18 +2558,23 @@ function renderRecs() {
 }
 
 // =================== Render: Hedefler ===================
-function nodeHtml(name, qty, depth) {
+// pool: neededParts ile aynı dağıtım; bir malzeme ağaçta ikinci kez geçince ilkinin aldığı düşülmüş hali görünür
+function nodeHtml(name, qty, depth, pool = {}) {
   const p = P[name]; if (!p) return `<li><span class="err">${esc(name)} (veri yok)</span></li>`;
-  let cnt = "";
-  if (p.ach) { const f = achFrac(p.ach), a = snap && snap.ach[p.ach]; cnt = `<span class="cnt ${f >= 1 ? "ok" : "no"}">${f >= 1 ? "tamam" : a ? a.cur + "/" + a.max : "başlanmadı"}</span>`; }
-  else if (p.cur === 1) { const h = ownedOf(name); cnt = `<span class="cnt ${h >= qty ? "ok" : "no"}">${snap ? gold(h) : "?"} / ${gold(qty)}</span>`; }
-  else { const h = ownedOf(name); cnt = `<span class="cnt ${h >= qty ? "ok" : "no"}">${snap ? fmt(h) : "?"} / ${fmt(qty)}</span>`; }
+  let cnt = "", rem = qty;
+  if (p.ach) { const f = achFrac(p.ach), a = snap && snap.ach[p.ach]; rem = f >= 1 ? 0 : 1; cnt = `<span class="cnt ${f >= 1 ? "ok" : "no"}">${f >= 1 ? "tamam" : a ? a.cur + "/" + a.max : "başlanmadı"}</span>`; }
+  else {
+    const own = ownedOf(name), h = snap ? Math.min(pool[name] != null ? pool[name] : (pool[name] = own), qty) : 0;
+    if (snap) { pool[name] -= h; rem = qty - h; }
+    const tip = snap && h < own ? ` title="Sende toplam ${p.cur === 1 ? gold(own) : fmt(own)}; ${p.cur === 1 ? gold(own - h) : fmt(own - h)} tanesi ağaçta daha önce sayıldı"` : "";
+    cnt = `<span class="cnt ${snap && rem <= 0 ? "ok" : "no"}"${tip}>${snap ? (p.cur === 1 ? gold(h) : fmt(h)) : "?"} / ${p.cur === 1 ? gold(qty) : fmt(qty)}</span>`;
+  }
   const pr = p.id && prices.p[p.id] && prices.p[p.id].s ? `<span class="pill">TP ${gold(prices.p[p.id].s)}</span>` : "";
-  const viaIn = Math.max(0, qty - (p.free || []).length);
-  const kids = p.in && depth < 8 && viaIn && !(snap && !p.ach && ownedOf(name) >= qty)
-    ? `<ul>${p.in.map(([c, q]) => nodeHtml(c, p.ach ? 1 : q * viaIn, depth + 1)).join("")}</ul>` : "";
-  const bk = p.ach && depth < 8 && achFrac(p.ach) < 1 ? bitKids(p) : [];
-  const bitsHtml = bk.length ? `<details class="how"><summary>Koleksiyon: ${bk.length} eksik parça</summary><ul>${bk.map(([c, q]) => nodeHtml(c, q, depth + 1)).join("")}</ul></details>` : "";
+  const viaIn = p.ach ? 1 : snap ? rem - freeTake(name, p, rem, pool) : Math.max(0, qty - (p.free || []).length);
+  const kids = p.in && depth < 20 && viaIn > 0 && rem > 0
+    ? `<ul>${p.in.map(([c, q]) => nodeHtml(c, p.ach ? 1 : q * viaIn, depth + 1, pool)).join("")}</ul>` : "";
+  const bk = p.ach && depth < 20 && achFrac(p.ach) < 1 ? bitKids(p) : [];
+  const bitsHtml = bk.length ? `<details class="how"><summary>Koleksiyon: ${bk.length} eksik parça</summary><ul>${bk.map(([c, q]) => nodeHtml(c, q, depth + 1, pool)).join("")}</ul></details>` : "";
   return `<li><div class="node"><a href="${partWiki(name, p)}" target="_blank" rel="noopener">${esc(name)}</a>${p.ach ? '<span class="tag">achievement</span>' : ""}${cnt}${pr}${p.tg ? '<span class="tag tg">timegate</span>' : ""}${p.uv ? '<span class="tag uv">doğrulanmadı</span>' : ""}<span class="small muted">${esc(p.src || "")}</span></div>${kids}${bitsHtml}</li>`;
 }
 // mastery durumu: hedefin seviyesine kadar eksik seviyeler, puan ve XP
