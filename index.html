@@ -88,6 +88,63 @@ th{color:var(--muted);font-weight:600;font-size:12.5px}
 .tlist .trow{display:flex;gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line);flex-wrap:wrap}
 .tlist .trow .nm{flex:1;min-width:160px}
 @media (max-width:600px){ body{font-size:14px} .timer{min-width:0;flex:1} main{padding:12px 12px 60px} }
+/* renk anlamları: yeşil bitti/yetiyor · amber kısmen · kırmızı sadece engel · mor kapı · pembe koleksiyon */
+:root{--gate:#a78bfa;--coll:#f08bb4}
+nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} nav::-webkit-scrollbar{display:none}
+nav button{white-space:nowrap;flex:0 0 auto}
+.acc{color:var(--accent)} .gatec{color:var(--gate)} .collc{color:var(--coll)}
+.tag.gate{border-color:#4b3a7a;color:var(--gate)} .tag.coll{border-color:#7a3a5a;color:var(--coll)} .tag.share{border-color:#24456e;color:#9cc4ff}
+a.tag{text-decoration:none}
+details.card>summary{cursor:pointer}
+.vhead{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin:2px 0 10px}
+.vhead h2{margin:0;font-size:20px;color:var(--text)}
+.help{font-size:12.5px;color:var(--muted)} .help>summary{cursor:pointer;display:inline-block;border:1px solid var(--line);border-radius:999px;padding:0 8px}
+.help[open]{flex-basis:100%} .help div{margin-top:6px}
+/* Hedefler: genel liste */
+.tov{display:grid;grid-template-columns:minmax(170px,230px) 1fr minmax(130px,170px);gap:6px 18px;padding:12px 2px;border-top:1px solid var(--line);color:inherit;text-decoration:none}
+.tov:first-child{border-top:none}
+.tov:hover .tname{color:var(--accent)}
+.tname{font-weight:700;font-size:15.5px}
+.segs{display:flex;gap:3px;height:11px;margin:4px 0 6px}
+.segs i{flex:1;min-width:6px;background:var(--panel2);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.segs i b{display:block;height:100%;background:#b8913f}
+.segs i.done{background:var(--ok);border-color:var(--ok)}
+.tside{text-align:right}
+.big{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.kalan{font-size:13px;line-height:1.55}
+.warnchips{margin-top:4px}
+/* hedef sayfası */
+.back{display:inline-block;margin:2px 0 8px;font-size:13.5px}
+.dhead h2{font-size:22px;margin:0;color:var(--text)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin:12px 0 4px}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.stat .lbl{font-size:12px;color:var(--muted)}
+.prt{border-top:1px solid var(--line);padding:8px 0}
+.prt:first-of-type{border-top:none}
+.prt>summary{cursor:pointer;list-style:none;display:grid;grid-template-columns:1fr minmax(90px,140px) 44px;gap:4px 12px;align-items:center}
+.prt>summary::-webkit-details-marker{display:none}
+.prt>summary .pn::before{content:"▸ ";color:var(--muted)} .prt[open]>summary .pn::before{content:"▾ "}
+.prt>summary .why{grid-column:1/-1;font-size:12.5px;color:var(--muted)}
+.prt .tree{margin-left:14px}
+.minibar{height:7px;background:var(--panel2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.minibar>i{display:block;height:100%;background:#b8913f} .minibar.gate>i{background:var(--gate)}
+.pctc{font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.grph{margin:14px 0 4px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.grph h3{margin:0;font-size:14.5px}
+table.st td.num,table.st th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.inf{display:inline} .inf>summary{display:inline;cursor:pointer;list-style:none} .inf>summary::-webkit-details-marker{display:none}
+.inf[open]>summary{display:none}
+.more>summary{cursor:pointer;color:var(--accent2);font-size:13px;margin-top:6px}
+@media (max-width:700px){
+  .tov{grid-template-columns:1fr;gap:4px}
+  .tside{text-align:left;display:flex;gap:10px;align-items:baseline}
+  table.st thead{display:none}
+  table.st tr{display:block;border-top:1px solid var(--line);padding:6px 0}
+  table.st td{display:inline-block;border:none;padding:1px 10px 1px 0}
+  table.st td:first-child{display:block}
+  table.st td[data-l]::before{content:attr(data-l) " ";color:var(--muted)}
+  table.st td.num{text-align:left}
+}
 </style>
 </head>
 <body>
@@ -1930,11 +1987,12 @@ for (const [n, sk] of Object.entries(PART_SKINS)) if (DATA.parts[n]) DATA.parts[
     </div>
   </div>
   <nav id="nav">
-    <button data-tab="today" class="on">Bugün</button>
-    <button data-tab="recs">Şimdiden başla</button>
-    <button data-tab="targets">Hedefler</button>
-    <button data-tab="hunter">Achievement avcısı</button>
-    <button data-tab="settings">Ayarlar</button>
+    <button data-go="bugun" class="on">Bugün</button>
+    <button data-go="hedefler">Hedefler</button>
+    <button data-go="malzemeler">Malzemeler</button>
+    <button data-go="plan">Plan</button>
+    <button data-go="koleksiyonlar">Koleksiyonlar</button>
+    <button data-go="ayarlar">Ayarlar</button>
   </nav>
 </header>
 
@@ -1957,17 +2015,22 @@ for (const [n, sk] of Object.entries(PART_SKINS)) if (DATA.parts[n]) DATA.parts[
     <div class="card"><h2>Mastery'ler: zorunlu ve hızlandıranlar</h2><div id="masteryBox" class="scroll"></div></div>
     <div class="card"><h2>Meslekler: craft için gerekenler</h2><div id="discBox" class="scroll"></div></div>
     <div class="card" id="modeWarnCard" style="display:none"><h2>Mod uyumsuzlukları</h2><div id="modeWarn"></div></div>
-    <div class="card"><h2>En uzun kapılar (kalan gün tahmini)</h2><div id="gateBox" class="scroll"></div></div>
-    <div class="card"><h2>Şimdiden başla</h2><ul class="tasks" id="recList"></ul></div>
-    <div class="card"><h2>Altınla kısalt: yapmak yerine farm edip al</h2><div id="goldBox" class="scroll"></div></div>
+    <div class="card"><h2>Şimdiden başla: uzun sürecek işler</h2><ul class="tasks" id="recList"></ul></div>
+  </section>
+
+  <section class="tab" id="tab-mats">
+    <div id="matView"></div>
     <div class="card"><h2>Mystic Clover planı</h2><div id="cloverBox" class="scroll"></div></div>
-    <div class="card"><h2>Birden fazla hedefe yarayan timegate'li malzemeler</h2><div id="sharedTg" class="scroll"></div></div>
+    <div class="card"><h2>Altınla kısalt: yapmak yerine farm edip al</h2><div id="goldBox" class="scroll"></div></div>
   </section>
 
   <section class="tab" id="tab-targets">
-    <div class="card small muted">İlerleme kaba bir tahmindir: sahip olduğun ara gift'ler ve malzemeler sayılır, her alt dal eşit ağırlıklıdır. Aynı malzeme birden fazla hedefte sayılabilir — çakışmalar aşağıda. Mystic Forge tarifleri wiki'den.</div>
-    <div id="targetList"></div>
-    <div class="card"><h2>Ortak malzemeler ve çakışmalar</h2><div class="small muted" style="margin-bottom:6px">Aktif hedeflerin toplam ihtiyacı (sahip olunanlar düşülmeden) ve sende olan. Kırmızı: toplam ihtiyaç elindekinden fazla.</div><div id="sharedBox" class="scroll"></div></div>
+    <div id="tgtView"></div>
+    <details class="card" id="tgtEdit">
+      <summary><b class="acc">Hedefleri düzenle</b> <span class="small muted">· aç/kapat, sıra, kopya, hazır al</span></summary>
+      <div class="small muted" style="margin-top:8px">Kapalı hedefler hesaplara girmez. Sıra önceliktir: elindeki malzeme hedeflere bu sırayla dağıtılır. "Hazır al" işaretli hedefler TP'den alınacak sayılır; tarifleri hesaplara girmez.</div>
+      <div class="tlist" id="tgtSettings"></div>
+    </details>
   </section>
 
   <section class="tab" id="tab-hunter">
@@ -1993,10 +2056,8 @@ for (const [n, sk] of Object.entries(PART_SKINS)) if (DATA.parts[n]) DATA.parts[
       <div class="row" id="modeBox" style="margin-top:8px;align-items:flex-start"></div>
     </div>
     <div class="card">
-      <h2>Hedefler</h2>
-      <div class="small muted">Aç/kapat, sırala, kopya sayısı. Kapalı hedefler hesaplara girmez. "Hazır al" işaretli hedefler TP'den alınacak sayılır: tarifleri clover, kapı ve ortak malzeme hesaplarına girmez.</div>
-      <div class="row small" style="margin:6px 0"><label>Saatlik altın varsayımı: <input type="number" id="gphInput" min="1" max="200" style="width:70px"> altın/saat</label><span class="muted">(varsayılan 15: Farming Community ölçümlerinde en iyi metaların eşiği)</span></div>
-      <div class="tlist" id="tgtSettings"></div>
+      <h2>Altın</h2>
+      <div class="row small"><label>Saatlik altın varsayımı: <input type="number" id="gphInput" min="1" max="200" style="width:70px"> altın/saat</label><span class="muted">(varsayılan 15: Farming Community ölçümlerinde en iyi metaların eşiği). Farm süreleri bununla hesaplanır. Hedefleri açıp kapatmak: Hedefler → Hedefleri düzenle.</span></div>
     </div>
     <div class="card">
       <h2>Yedek</h2>
@@ -2265,12 +2326,14 @@ function missingLeaves(name, qty, pool, out, depth = 0) {
   return out;
 }
 // eksik bütün parçalar (ara ürünler dahil): hangi parçayı kendin yapman gerekecek
-function neededParts(name, qty, pool, out, depth = 0) {
+// achs (isteğe bağlı): yolda kalan bitmemiş achievement/koleksiyon parçaları -> ilerleme oranı
+function neededParts(name, qty, pool, out, depth = 0, achs = null) {
   const p = P[name]; if (!p || depth > 20) return out;
   if (p.ach) {
     if (achFrac(p.ach) >= 1) return out;
-    for (const [c] of (p.in || [])) neededParts(c, 1, pool, out, depth + 1);
-    for (const [c, q] of bitKids(p)) neededParts(c, q, pool, out, depth + 1);
+    if (achs) achs[name] = achFrac(p.ach);
+    for (const [c] of (p.in || [])) neededParts(c, 1, pool, out, depth + 1, achs);
+    for (const [c, q] of bitKids(p)) neededParts(c, q, pool, out, depth + 1, achs);
     return out;
   }
   const have = Math.min(pool[name] != null ? pool[name] : (pool[name] = ownedOf(name)), qty);
@@ -2278,7 +2341,7 @@ function neededParts(name, qty, pool, out, depth = 0) {
   const rem = qty - have; if (rem <= 0) return out;
   out[name] = (out[name] || 0) + rem;
   const viaIn = rem - freeTake(name, p, rem, pool);
-  if (p.in) for (const [c, q] of p.in) neededParts(c, q * viaIn, pool, out, depth + 1);
+  if (p.in) for (const [c, q] of p.in) neededParts(c, q * viaIn, pool, out, depth + 1, achs);
   return out;
 }
 // brüt ihtiyaç (çakışma tablosu için)
@@ -2362,12 +2425,13 @@ function taskCtx() {
   const on = new Set(tgtPrefs().filter(x => x.enabled).map(x => x.t.key));
   // craft edilen açık hedeflerde hâlâ EKSİK olan parçalar: tek havuz, envanter hedeflere öncelik sırasıyla dağıtılır.
   // neededBy aynı hesaptan gelir: eksiğe katkısı olan her hedef (toplam ile etiket çelişmesin)
-  const needed = {}, pool = {}, neededBy = {};
+  const needed = {}, pool = {}, neededBy = {}, achBy = {};
   for (const tp of craftOnly(tgtPrefs().filter(x => x.enabled))) {
-    const mine = neededParts(tp.t.root, tp.count, pool, {});
+    const achs = {}, mine = neededParts(tp.t.root, tp.count, pool, {}, 0, achs);
     for (const [n, q] of Object.entries(mine)) { needed[n] = (needed[n] || 0) + q; (neededBy[n] = neededBy[n] || []).push(tp.t.name); }
+    for (const n of Object.keys(achs)) (achBy[n] = achBy[n] || []).push(tp.t.name);
   }
-  return { on, needed, neededBy };
+  return { on, needed, neededBy, achBy };
 }
 function trackLeft(ctx) {
   if (!snap) return [];
@@ -2499,15 +2563,6 @@ function renderRecs() {
   const bad = tps.filter(x => x.missing.length);
   $("#modeWarnCard").style.display = bad.length ? "" : "none";
   $("#modeWarn").innerHTML = bad.map(x => `<div class="small" style="margin:4px 0"><b>${esc(x.t.name)}</b> — ${missingText(x)}.${altsFor(x)}</div>`).join("");
-  const gates = [];
-  for (const tp of craftOnly(tps)) { const miss = snap ? neededParts(tp.t.root, tp.count, {}, {}) : null; for (const g of (tp.t.gates || [])) gates.push(Object.assign(gateDays(g, miss), { tname: tp.t.name })); }
-  gates.sort((a, b) => (b.days || 0) - (a.days || 0));
-  $("#gateBox").innerHTML = !snap ? '<div class="muted">API verisi yok — key gir ve Yenile.</div>' :
-    `<table><tr><th>Kapı</th><th>Hedef</th><th>Durum</th><th>~Gün</th></tr>${gates.map(g => `<tr>
-      <td>${esc(g.label)}${g.est ? ' <span class="tag uv">oran tahmini</span>' : ""}${g.note ? `<div class="small muted">${esc(g.note)}</div>` : ""}</td>
-      <td>${esc(g.tname)}</td><td>${g.steps ? "kalan " + fmt(g.rem) : "sende " + fmt(g.have) + " · kalan " + fmt(g.rem)}</td>
-      <td class="${g.days > 30 ? "warnc" : g.days === 0 ? "okc" : ""}"><b>${g.days == null ? "?" : g.days}</b></td></tr>`).join("")}</table>
-      <div class="small muted" style="margin-top:6px">Neden şimdi: bu kapılar günlük/haftalık sınırlı; kaçırılan her gün bitişi bir gün öteler. Gün = kalan ÷ günlük oran.</div>`;
   $("#recList").innerHTML = DATA.recs.filter(r => r.targets.some(k => byKey[k])).map(r => `<li><div>
     <div class="tt">${esc(r.title)}</div>
     <div>${r.targets.filter(k => byKey[k]).map(k => `<span class="tag srv">${esc(byKey[k].t.name)}</span>`).join("")}</div>
@@ -2547,19 +2602,11 @@ function renderRecs() {
       `<div class="small muted" style="margin:6px 0 4px">Her gün yapılan bir clover işi yok: bütün kaynaklar haftalık ya da sezonluk.</div>
       <table><tr><th>Kaynak</th><th>Adet</th><th>Bedel</th><th>Mod</th></tr>${DATA.cloverSources.map(c => `<tr class="${modeOn(c.req) ? "" : "muted"}"><td>${esc(c.who)}${modeOn(c.req) ? "" : " (modu kapalı)"}</td><td>${c.n ? c.n + " / " + c.per : esc(c.per)}</td><td class="small">${esc(c.cost)}</td><td class="small">${esc(c.mode)}</td></tr>`).join("")}</table>`;
   }
-  // birden fazla hedefe yarayan timegate'li parçalar
-  const use = {};
-  for (const tp of craftOnly(tps)) { const g = grossNeed(tp.t.root, tp.count, {}); for (const [n, q] of Object.entries(g)) if (P[n] && P[n].tg) (use[n] = use[n] || []).push([tp.t.name, q]); }
-  const rows = Object.entries(use).filter(([, l]) => l.length > 1).sort((a, b) => b[1].length - a[1].length);
-  $("#sharedTg").innerHTML = rows.length ? `<table><tr><th>Malzeme</th><th>Hedefler</th><th>Toplam</th><th>Sende</th></tr>${rows.map(([n, l]) => {
-    const tot = l.reduce((a, [, q]) => a + q, 0), have = ownedOf(n);
-    return `<tr><td><a href="${partWiki(n, P[n])}" target="_blank" rel="noopener">${esc(n)}</a><div class="small muted">${esc(P[n].src || "")}</div></td><td class="small">${l.map(([t, q]) => esc(t) + " ×" + fmt(q)).join("<br>")}</td><td>${fmt(tot)}</td><td class="${have >= tot ? "okc" : "warnc"}">${snap ? fmt(have) : "?"}</td></tr>`;
-  }).join("")}</table><div class="small muted" style="margin-top:6px">Neden şimdi: bunlar hem sınırlı hızda geliyor hem birden fazla hedefe gidiyor; erken biriktirmek her hedefi kısaltır.</div>` : '<div class="muted">Yok.</div>';
 }
 
 // =================== Render: Hedefler ===================
 // pool: neededParts ile aynı dağıtım; bir malzeme ağaçta ikinci kez geçince ilkinin aldığı düşülmüş hali görünür
-function nodeHtml(name, qty, depth, pool = {}) {
+function nodeHtml(name, qty, depth, pool = {}, bare = false) {
   const p = P[name]; if (!p) return `<li><span class="err">${esc(name)} (veri yok)</span></li>`;
   let cnt = "", rem = qty;
   if (p.ach) { const f = achFrac(p.ach), a = snap && snap.ach[p.ach]; rem = f >= 1 ? 0 : 1; cnt = `<span class="cnt ${f >= 1 ? "ok" : "no"}">${f >= 1 ? "tamam" : a ? a.cur + "/" + a.max : "başlanmadı"}</span>`; }
@@ -2575,7 +2622,8 @@ function nodeHtml(name, qty, depth, pool = {}) {
     ? `<ul>${p.in.map(([c, q]) => nodeHtml(c, p.ach ? 1 : q * viaIn, depth + 1, pool)).join("")}</ul>` : "";
   const bk = p.ach && depth < 20 && achFrac(p.ach) < 1 ? bitKids(p) : [];
   const bitsHtml = bk.length ? `<details class="how"><summary>Koleksiyon: ${bk.length} eksik parça</summary><ul>${bk.map(([c, q]) => nodeHtml(c, q, depth + 1, pool)).join("")}</ul></details>` : "";
-  return `<li><div class="node"><a href="${partWiki(name, p)}" target="_blank" rel="noopener">${esc(name)}</a>${p.ach ? '<span class="tag">achievement</span>' : ""}${cnt}${pr}${p.tg ? '<span class="tag tg">timegate</span>' : ""}${p.uv ? '<span class="tag uv">doğrulanmadı</span>' : ""}<span class="small muted">${esc(p.src || "")}</span></div>${kids}${bitsHtml}</li>`;
+  if (bare) return kids + bitsHtml;
+  return `<li><div class="node"><a href="${partWiki(name, p)}" target="_blank" rel="noopener">${esc(name)}</a>${p.ach ? '<span class="tag">achievement</span>' : ""}${cnt}${pr}${p.tg ? '<span class="tag gate">kapı</span>' : ""}${p.uv ? '<span class="tag uv">doğrulanmadı</span>' : ""}${srcOnce(p.src)}</div>${kids}${bitsHtml}</li>`;
 }
 // mastery durumu: hedefin seviyesine kadar eksik seviyeler, puan ve XP
 function masteryState(m) {
@@ -2650,37 +2698,262 @@ function altsFor(tp) {
   const alts = tgtPrefs().filter(x => x.t.key !== tp.t.key && x.t.sg && x.t.sg === tp.t.sg && !x.missing.length && !x.enabled);
   return alts.length ? " Aynı slotta açık modlarınla yapılabilen: " + alts.map(x => esc(x.t.name)).join(", ") + "." : " Aynı slotta açık modlarınla yapılabilen başka bir seçenek yok (kopya legendary sayılmaz).";
 }
+// --- notlar: İngilizce kaynak notları ekranda çevrilir (DATA'yı üreticiler yazar, elle değişmez); uzun not kısaltılır, bir sayfada bir kez yazılır
+const SRC_TR = [
+  [/^Salvage for unbound magic\.$/i, "Salvage et → Unbound Magic"],
+  [/^Crafted item salvage$/, "Craft edilmiş eşyaları salvage et"],
+  [/^Master craftsman vendor$/, "Master craftsman satıcısı"],
+  [/^Luck refine$/, "Luck birleştirerek"],
+  [/^Wallet$/, "Cüzdan"],
+  [/^Vendor: /, "Satıcı: "]
+];
+const trSrc = s => { s = String(s || ""); for (const [re, t] of SRC_TR) s = s.replace(re, t); return s; };
+function noteHtml(s, max = 90) {
+  s = trSrc(s); if (!s) return "";
+  if (s.length <= max) return `<span class="small muted">${esc(s)}</span>`;
+  const cut = s.slice(0, max - 15).replace(/\s+\S*$/, "");
+  return `<details class="inf small muted"><summary>${esc(cut)}… <span class="acc">ⓘ</span></summary>${esc(s)}</details>`;
+}
+let srcSeen = null;   // hedef sayfası çizilirken: aynı not ikinci kez yazılmaz
+function srcOnce(s) {
+  s = trSrc(s); if (!s) return "";
+  if (srcSeen) { if (srcSeen.has(s)) return ""; srcSeen.add(s); }
+  return noteHtml(s);
+}
+// kapının malzemesi (adım ya da WvW rütbesi kapılarında yok) ve malzeme -> günlük oran, bütün hedeflerin kapılarından
+function gatePart(g) { return g.steps || g.wvwRank ? null : Object.keys(P).find(n => (g.cur && P[n].cur === g.cur) || (g.item && P[n].id === g.item)) || null; }
+const GATE_OF = {};
+for (const t of DATA.targets) for (const g of (t.gates || [])) { const n = gatePart(g); if (n && !GATE_OF[n] && g.perDay) GATE_OF[n] = g; }
+const unitPrice = n => { const p = P[n]; return p && p.id && prices.p[p.id] ? prices.p[p.id].s || 0 : 0; };
+const amt = (n, q) => P[n] && P[n].cur === 1 ? gold(q) : fmt(q);
+const isLeaf = n => !(P[n].in && P[n].in.length);
+const achTxt = name => { const a = snap && snap.ach[P[name].ach]; return a && a.done ? "tamam" : a && a.max ? a.cur + "/" + a.max : "başlanmadı"; };
+
+// --- hedefin hesapları: targetCalc + ana parçalar (aynı havuz sırası) + kendi eksikleri
+function tinfo(tp) {
+  const c = targetCalc(tp); if (c.buy) return c;
+  const root = P[tp.t.root], own = snap ? Math.min(ownedOf(tp.t.root), tp.count) : 0, rem = tp.count - own;
+  const ppool = {}, npool = {};
+  c.parts = rem <= 0 ? [] : (root.in || []).map(([name, q]) => {
+    const need = q * rem, np = {}, achs = {};
+    const f = snap ? Math.min(1, prog(name, need, ppool)) : 0;
+    if (snap) neededParts(name, need, npool, np, 0, achs);
+    // step: sadece en sondaki işçilik (ör. Obsidian parça craft'ı); "en geride" sayılmaz
+    const pp = P[name] || {}, step = !pp.id && !pp.cur && !pp.ach && isLeaf(name);
+    return { name, need, f, done: !!snap && f >= 1, np, achs, step };
+  });
+  c.achs = {};
+  c.np = snap ? neededParts(tp.t.root, tp.count, {}, {}, 0, c.achs) : {};
+  return c;
+}
+function partGate(pt) {
+  let g = null;
+  for (const [n, q] of Object.entries(pt.np)) { const x = GATE_OF[n]; if (!x || q <= 0) continue; const d = Math.ceil(q / x.perDay); if (!g || d > g.days) g = { n, days: d }; }
+  return g;
+}
+function partWhy(pt) {
+  if (!snap) return "";
+  const out = [], g = partGate(pt);
+  if (g) out.push(`<span class="gatec">kapı: ${esc(g.n)} ~${g.days} gün</span>`);
+  const ach = Object.keys(pt.achs);
+  if (ach.length) out.push(`<span class="collc">${ach.length === 1 ? "koleksiyon: " + esc(ach[0]) + " " + achTxt(ach[0]) : ach.length + " koleksiyon/achievement açık"}</span>`);
+  let cost = 0; for (const [n, q] of Object.entries(pt.np)) if (isLeaf(n)) cost += P[n].cur === 1 ? q : unitPrice(n) * q;
+  if (cost) out.push("eksiklerin TP'si ≈ " + gold(cost));
+  return out.join(" · ");
+}
+function warnChips(tp) {
+  const m = missingRequiredMasteries(tp.t.key).map(x => `<a class="tag bad" href="#plan" title="${esc(x.st.def.name)}: ${x.st.points} puan eksik">Mastery eksik: ${esc(x.st.def.levels[x.m.level].name)}</a>`);
+  if (tp.missing.length) m.push(`<a class="tag bad" href="#ayarlar" title="${missingText(tp)}">Mod tercihine uymuyor</a>`);
+  return m.length ? `<div class="warnchips">${m.join("")}</div>` : "";
+}
+const tgtTitle = tp => esc(tp.t.name) + (tp.t.key === "obsidian" ? ` <span class="acc small">${obsidianSlotsLeft().length} parça</span>` : tp.count > 1 ? " ×" + tp.count : "");
+
+// --- genel liste
+function tgtRowHtml([tp, c]) {
+  const t = tp.t, pct = c.done ? 100 : Math.round(c.pct * 100);
+  const segs = c.done || !c.parts.length ? `<div class="segs"><i class="${c.done ? "done" : ""}"></i></div>`
+    : `<div class="segs">${c.parts.map(pt => `<i class="${pt.done ? "done" : ""}" title="${esc(pt.name)}${pt.need > 1 ? " ×" + pt.need : ""}: ${pt.done ? "tamam" : "%" + Math.round(pt.f * 100)}">${pt.done ? "" : `<b style="width:${Math.round(pt.f * 100)}%"></b>`}</i>`).join("")}</div>`;
+  const k = [];
+  if (snap && !c.done) {
+    if (c.worst) k.push(`<span class="gatec">kapı: ${esc(c.worst.label)} · kalan ${fmt(c.worst.rem)}</span>`);
+    if (c.cost) k.push(`TP ≈ ${gold(c.cost)}${c.unpriced ? ` <span class="muted">+${c.unpriced} fiyatsız kalem</span>` : ""}`);
+    const na = Object.keys(c.achs).length; if (na) k.push(`<span class="collc">${na} koleksiyon/achievement açık</span>`);
+  }
+  const doneN = c.parts.filter(x => x.done).length, lag = c.parts.filter(x => !x.done && !x.step).sort((a, b) => a.f - b.f)[0];
+  const sub = snap && !c.done && lag ? `<div class="small muted">${doneN ? doneN + " ana parça tamam · " : ""}en geride: ${esc(lag.name)} %${Math.round(lag.f * 100)}</div>` : "";
+  const right = !snap ? '<div class="small muted">API verisi yok</div>' : c.done ? '<div class="big okc">Bitti ✓</div>'
+    : c.worst ? `<div class="big gatec">~${c.worst.days} gün</div><div class="small muted">en erken bitiş (kapı)</div>`
+    : '<div class="big">kapı yok</div><div class="small muted">altına ve çabaya bağlı</div>';
+  return `<div class="tov" data-href="#hedef/${t.key}" role="link" tabindex="0"><div><a class="tname" href="#hedef/${t.key}" style="color:inherit;text-decoration:none">${tgtTitle(tp)}</a>
+    <div class="small muted">${esc(t.slot)} · ${esc(t.mode)}</div>${warnChips(tp)}</div>
+    <div>${segs}<div class="kalan"><b>İlerleme %${snap ? pct : "?"}</b>${k.length ? " · Kalan: " + k.join(" · ") : ""}</div>${sub}</div>
+    <div class="tside">${right}</div></div>`;
+}
+function buyBoxHtml(list) {
+  if (!list.length) return "";
+  const total = list.reduce((a, [, c]) => a + (c.done ? 0 : c.cost), 0), coin = snap ? (snap.wallet[1] || 0) : 0;
+  const hrs = Math.max(0, Math.ceil((total - coin) / 10000 / gph()));
+  return `<div class="card"><div class="grph"><h3>TP'den satın alınacak <span class="muted small">${list.length} hedef</span></h3>
+    <span class="small">${snap ? `Cüzdan <b>${gold(coin)}</b> · gereken <b>${gold(total)}</b> · ${gph()} altın/saat ile ~<b>${fmt(hrs)} saat</b> farm` : ""}</span></div>
+    <table class="st"><thead><tr><th>Hedef</th><th class="num">TP fiyatı</th><th class="num">Tek başına farm</th></tr></thead><tbody>${list.map(([tp, c]) => `<tr>
+      <td>${esc(tp.t.name)}${tp.count > 1 ? " ×" + tp.count : ""} <span class="small muted">${esc(tp.t.slot)}</span></td>
+      <td class="num" data-l="TP:">${c.done ? '<span class="okc">Armory\'de ✓</span>' : c.tpPrice ? gold(c.cost) : '<span class="muted">fiyat yok</span>'}</td>
+      <td class="num" data-l="Farm:">${!c.done && c.cost ? "~" + fmt(Math.ceil(c.cost / 10000 / gph())) + " sa" : "—"}</td></tr>`).join("")}</tbody></table>
+    <div class="small muted" style="margin-top:6px">Cüzdan bütün hedefler için ortak. Craft ağacını görmek için Hedefleri düzenle'de "hazır al"ı kapat.</div></div>`;
+}
+const TGT_SORT = { order: "Benim sıram", days: "En uzun kapı", pct: "En az ilerleyen" };
+function renderTargetList() {
+  const rows = tgtPrefs().filter(x => x.enabled).map(tp => [tp, tinfo(tp)]);
+  const craft = rows.filter(([tp]) => !tp.buy), buy = rows.filter(([tp]) => tp.buy);
+  const sort = TGT_SORT[state.tgtSort] ? state.tgtSort : "order";
+  const daysOf = c => c.done ? -1 : c.worst ? c.worst.days : 0;
+  if (sort === "days") craft.sort((a, b) => daysOf(b[1]) - daysOf(a[1]));
+  if (sort === "pct") craft.sort((a, b) => (a[1].done ? 2 : a[1].pct) - (b[1].done ? 2 : b[1].pct));
+  return `<div class="vhead"><h2>Hedefler</h2><div class="row small">
+      <label>Sıra <select id="tgtSort">${Object.entries(TGT_SORT).map(([k, v]) => `<option value="${k}" ${k === sort ? "selected" : ""}>${v}</option>`).join("")}</select></label>
+      <button class="btn" id="tgtEditBtn">Hedefleri düzenle</button>
+      <details class="help"><summary>?</summary><div>Her kutu bir ana parça: yeşil tamam, altın rengi ne kadar dolduğu. İlerleme kaba bir tahmindir: sahip olduğun ara gift'ler ve malzemeler sayılır, her alt dal eşit ağırlıklıdır. "Kalan" o hedef tek başına yapılsa ne kaldığını gösterir (elindekilerin hepsi o hedefe sayılır); bütün hedeflerin toplamı Malzemeler'de. Mystic Forge tarifleri wiki'den.</div></details>
+    </div></div>
+    ${craft.length ? `<div class="card">${craft.map(tgtRowHtml).join("")}</div>` : '<div class="card muted">Craft edilecek açık hedef yok.</div>'}
+    ${buyBoxHtml(buy)}`;
+}
+
+// --- malzeme tabloları (hedef sayfası: o hedefin kendi eksikleri; Malzemeler: bütün hedefler)
+// list: [{ n, q, by }]; by = bu malzemeyi isteyen hedefler (Malzemeler) ya da paylaşan diğer hedefler (hedef sayfası)
+function matGroups(np) {
+  const g = { gate: [], tp: [], other: [] };
+  for (const [n, q] of Object.entries(np)) {
+    const p = P[n]; if (!p || q <= 0 || p.ach) continue;
+    if (p.tg) g.gate.push({ n, q });
+    else if (!isLeaf(n)) continue;
+    else if (p.cur !== 1 && unitPrice(n)) g.tp.push({ n, q });
+    else g.other.push({ n, q });
+  }
+  const days = x => GATE_OF[x.n] ? Math.ceil(x.q / GATE_OF[x.n].perDay) : -1;
+  g.gate.sort((a, b) => days(b) - days(a) || b.q - a.q);
+  g.tp.sort((a, b) => unitPrice(b.n) * b.q - unitPrice(a.n) * a.q);
+  g.other.sort((a, b) => (P[a.n].cur === 1) - (P[b.n].cur === 1) || a.n.localeCompare(b.n));
+  return g;
+}
+function byCell(x, mode) {
+  const by = x.by || [];
+  if (mode === "count") return `<td class="num" data-l="Hedef:"><span class="tag" title="${esc(by.join(", "))}">${by.length}</span></td>`;
+  return "";
+}
+function shareChip(x) {
+  return x.share ? ` <span class="tag share" title="Bütün hedefler için kalan ${amt(x.n, x.share.q)}: ${esc(x.share.by.join(", "))}">paylaşılıyor</span>` : "";
+}
+const matLink = n => `<a href="${partWiki(n, P[n])}" target="_blank" rel="noopener">${esc(n)}</a>`;
+function matTable(kind, list, mode, limit = 0) {
+  if (!list.length) return "";
+  const head = { gate: ["Kalan", "~Gün"], tp: ["Kalan", "Birim", "Toplam"], other: ["Kalan", "Nereden"] }[kind];
+  const maxD = Math.max(1, ...list.map(x => GATE_OF[x.n] ? Math.ceil(x.q / GATE_OF[x.n].perDay) : 0));
+  const row = x => {
+    const own = ownedOf(x.n);
+    let cells = `<td>${matLink(x.n)}${shareChip(x)}</td><td class="num" data-l="Elinde:">${amt(x.n, own)}</td><td class="num" data-l="Kalan:"><b>${amt(x.n, x.q)}</b></td>`;
+    if (kind === "gate") { const g = GATE_OF[x.n], d = g ? Math.ceil(x.q / g.perDay) : null;
+      cells += `<td data-l="~Gün:" style="min-width:120px">${d == null ? '<span class="small muted" title="Günlük oranı veride yok (ör. sandık seçimi ya da haftalık satıcı)">—</span>' : `<div class="row" style="flex-wrap:nowrap"><div class="minibar gate" style="flex:1"><i style="width:${Math.round(d / maxD * 100)}%"></i></div><b class="gatec" style="min-width:44px;text-align:right">~${d}</b></div>`}</td>`; }
+    if (kind === "tp") cells += `<td class="num" data-l="Birim:">${gold(unitPrice(x.n))}</td><td class="num" data-l="Toplam:"><b>${gold(unitPrice(x.n) * x.q)}</b></td>`;
+    if (kind === "other") cells += `<td data-l="">${noteHtml(P[x.n].src, 70)}</td>`;
+    return `<tr>${cells}${byCell(x, mode)}</tr>`;
+  };
+  const th = `<thead><tr><th>Malzeme</th><th class="num">Elinde</th>${head.map((h, i) => `<th class="${i === 0 || kind === "tp" ? "num" : ""}">${h}</th>`).join("")}${mode === "count" ? '<th class="num">Hedef</th>' : ""}</tr></thead>`;
+  const first = limit && list.length > limit + 3 ? list.slice(0, limit) : list, rest = list.slice(first.length);
+  return `<table class="st">${th}<tbody>${first.map(row).join("")}</tbody></table>` +
+    (rest.length ? `<details class="more"><summary>Tümünü göster (${list.length})</summary><table class="st"><tbody>${rest.map(row).join("")}</tbody></table></details>` : "");
+}
+function achTable(names, byOf, limit = 12) {
+  if (!names.length) return "";
+  const row = n => {
+    const miss = bitKids(P[n]).map(([c]) => c);
+    return `<tr><td>${matLink(n)}</td><td class="num collc" data-l="Durum:">${achTxt(n)}</td>
+      <td class="small" data-l="">${miss.length ? esc(miss.slice(0, 4).join(", ")) + (miss.length > 4 ? ` <span class="muted">+${miss.length - 4}</span>` : "") : '<span class="muted">' + noteHtml(P[n].src, 60) + "</span>"}</td>
+      ${byOf ? `<td class="num" data-l="Hedef:"><span class="tag" title="${esc((byOf[n] || []).join(", "))}">${(byOf[n] || []).length}</span></td>` : ""}</tr>`;
+  };
+  const first = names.length > limit + 3 ? names.slice(0, limit) : names, rest = names.slice(first.length);
+  return `<table class="st"><thead><tr><th>Koleksiyon / achievement</th><th class="num">Durum</th><th>Eksik parçalar</th>${byOf ? '<th class="num">Hedef</th>' : ""}</tr></thead><tbody>${first.map(row).join("")}</tbody></table>` +
+    (rest.length ? `<details class="more"><summary>Tümünü göster (${names.length})</summary><table class="st"><tbody>${rest.map(row).join("")}</tbody></table></details>` : "") +
+    `<div class="small muted" style="margin-top:4px">Adım adım, kolaydan zora: <a href="#koleksiyonlar">Koleksiyonlar</a>.</div>`;
+}
+function matSections(g, achNames, mode, byOf) {
+  const tpTotal = g.tp.reduce((a, x) => a + unitPrice(x.n) * x.q, 0);
+  const sec = (title, sub, body) => body ? `<div class="grph"><h3>${title}</h3><span class="small muted">${sub}</span></div>${body}` : "";
+  return sec('<span class="gatec">Kapılı</span>', "günlük/haftalık sınırlı: gün = kalan ÷ günlük en fazla", matTable("gate", g.gate, mode)) +
+    sec('<span class="collc">Koleksiyon ve achievement</span>', achNames.length + " açık", achTable(achNames, byOf)) +
+    sec("TP'den alınabilir", `${g.tp.length} malzeme · toplam ≈ <b>${gold(tpTotal)}</b>`, matTable("tp", g.tp, mode, 12)) +
+    sec("Satıcı, cüzdan ve diğer", g.other.length + " kalem", matTable("other", g.other, mode, 12));
+}
+
+// --- hedef sayfası
+function renderTargetDetail(key) {
+  const tp = tgtPrefs().find(x => x.t.key === key);
+  const back = '<a class="back" href="#hedefler">← Bütün hedefler</a>';
+  if (!tp || !tp.enabled) return `${back}<div class="card muted">Bu hedef açık değil. Hedefler → Hedefleri düzenle.</div>`;
+  const t = tp.t, c = tinfo(tp), pct = c.done ? 100 : Math.round(c.pct * 100);
+  const head = `${back}<div class="dhead"><h2>${tgtTitle(tp)}</h2><div class="small muted">${esc(t.slot)} · ${esc(t.mode)}</div><div>${modeBadges(tp)}</div>${warnChips(tp)}</div>`;
+  if (c.buy) return head + buyBoxHtml([[tp, c]]);
+  const ctx = taskCtx();
+  const stats = `<div class="stats">
+    <div class="stat"><div class="lbl">İlerleme (tahmin)</div><div class="big">%${snap ? pct : "?"}</div><div class="bar"><i style="width:${pct}%"></i></div></div>
+    <div class="stat"><div class="lbl">En erken bitiş</div>${!snap ? "?" : c.done ? '<div class="big okc">Bitti ✓</div>' : c.worst ? `<div class="big gatec">~${c.worst.days} gün</div><div class="small">kapı: ${esc(c.worst.label)}</div>` : '<div class="big">kapı yok</div><div class="small muted">altına ve çabaya bağlı</div>'}</div>
+    <div class="stat"><div class="lbl">Eksiklerin TP maliyeti</div><div class="big">${snap ? "≈ " + gold(c.cost) : "?"}</div>${c.unpriced ? `<div class="small muted">+${c.unpriced} satılamayan/fiyatsız kalem</div>` : ""}</div>
+    <div class="stat"><div class="lbl">Koleksiyon / achievement</div><div class="big collc">${snap ? Object.keys(c.achs).length + " açık" : "?"}</div>${c.armory ? `<div class="small okc">Armory'de ${c.armory}</div>` : ""}</div></div>`;
+  // ana parçalar: ağaçlar kök sırasıyla tek havuzdan (toplamlarla aynı dağıtım), ekranda en uzun kapı önce
+  srcSeen = new Set();
+  const tpool = {};
+  for (const pt of c.parts) pt.tree = nodeHtml(pt.name, pt.need, 1, tpool, true);
+  srcSeen = null;
+  const open = c.parts.filter(x => !x.done), done = c.parts.filter(x => x.done);
+  const gd = pt => { const g = snap && partGate(pt); return g ? g.days : 0; };
+  open.sort((a, b) => gd(b) - gd(a) || a.f - b.f);
+  const parts = `<div class="card"><div class="grph"><h3>Eksik ana parçalar</h3><span class="small muted">${open.length} / ${c.parts.length} · en uzun kapı önce · tıkla: içindekiler</span></div>
+    ${open.map(pt => { const p = Math.round(pt.f * 100); return `<details class="prt"><summary><span class="pn"><b>${esc(pt.name)}</b>${pt.need > 1 ? ` <span class="muted">×${fmt(pt.need)}</span>` : ""}</span>
+      <div class="minibar"><i style="width:${p}%"></i></div><span class="pctc">%${p}</span><span class="why">${partWhy(pt) || noteHtml(P[pt.name] && P[pt.name].src, 120)}</span></summary>
+      <div class="tree">${pt.tree || '<div class="small muted">Alt parçası yok.</div>'}</div></details>`; }).join("") || '<div class="okc small">Eksik ana parça yok.</div>'}
+    ${done.length ? `<div class="small okc" style="margin-top:8px">Tamam: ${done.map(x => "✓ " + esc(x.name)).join(" · ")}</div>` : ""}</div>`;
+  // kalan malzemeler: bu hedefin kendi eksiği; başka hedefler de istiyorsa "paylaşılıyor" (bütün hedeflerin toplamıyla)
+  const g = matGroups(c.np);
+  for (const list of Object.values(g)) for (const x of list) { const by = ctx.neededBy[x.n] || []; if (by.some(nm => nm !== t.name)) x.share = { q: ctx.needed[x.n], by }; }
+  const mats = `<div class="card"><div class="grph"><h3>Kalan malzemeler</h3><span class="small muted">bu hedef tek başına: elindekilerin hepsi bu hedefe sayılır</span></div>
+    ${snap ? matSections(g, Object.keys(c.achs), "share") || '<div class="okc small">Eksik malzeme yok.</div>' : '<div class="muted small">API verisi yok — key gir ve Yenile.</div>'}</div>`;
+  const notes = `<details class="card"><summary><b class="acc">Notlar</b> <span class="small muted">· bu hedef nasıl yapılır, altın yolu</span></summary>
+    <div class="small" style="margin-top:8px">${esc(t.why)}</div><div class="small muted" style="margin-top:6px">Altın: ${esc(t.gold)}${c.tpPrice ? ` · TP'de hazır: <b>${gold(c.tpPrice)}</b>` : ""}</div>
+    ${tp.missing.length ? `<div class="small err" style="margin-top:6px">Mod tercihlerine uymuyor: ${missingText(tp)}.${altsFor(tp)}</div>` : ""}</details>`;
+  return head + stats + parts + mats + notes;
+}
 function renderTargets() {
-  const tps = tgtPrefs().filter(x => x.enabled);
-  $("#targetList").innerHTML = tps.map(tp => {
-    const t = tp.t, c = targetCalc(tp);
-    const pct = c.done ? 100 : Math.round(c.pct * 100);
-    const hrs = c.buy && c.cost ? Math.max(0, Math.ceil((c.cost - (c.coin || 0)) / 10000 / gph())) : 0;
-    const days = c.done ? "bitti" : c.buy ? (c.tpPrice ? `hazır alınacak · ~${hrs} saat farm` : "TP fiyatı yok") : c.worst ? `~${c.worst.days} gün (${esc(c.worst.label)})` : "timegate yok — altına/çabaya bağlı";
-    return `<details class="tgt"><summary><div class="tgthead"><div><div class="name">${esc(t.name)}${t.key === "obsidian" ? " — " + obsidianSlotsLeft().length + " parça" : tp.count > 1 ? " ×" + tp.count : ""}</div>
-      <div class="small muted">${esc(t.slot)} · ${esc(t.mode)}</div><div>${modeBadges(tp)}</div></div>
-      <div style="min-width:220px;flex:1;max-width:360px"><div class="bar"><i style="width:${pct}%"></i></div>
-      <div class="small"><b>%${snap ? pct : "?"}</b> · ${snap ? days : "API verisi yok"}${c.armory ? ` · <span class="okc">Armory'de ${c.armory}</span>` : ""}</div></div></div></summary>
-      ${missingRequiredMasteries(t.key).map(x => `<div class="small err" style="margin-top:8px">Zorunlu mastery açık değil: ${esc(x.st.def.levels[x.m.level].name)} (${esc(x.st.def.name)}) — ${x.st.points} puan eksik. Şimdiden başla → Mastery'ler.</div>`).join("")}
-      ${tp.missing.length ? `<div class="small err" style="margin-top:8px">Mod tercihlerine uymuyor: ${missingText(tp)}.${altsFor(tp)}</div>` : ""}
-      <div class="small" style="margin-top:8px">${esc(t.why)}</div>
-      <div class="small muted">Altın: ${esc(t.gold)}${c.tpPrice ? ` · TP'de hazır: <b>${gold(c.tpPrice)}</b>` : ""}${snap && !c.done ? ` · Eksiklerin TP maliyeti ≈ <b>${gold(c.cost)}</b>${c.unpriced ? ` (+${c.unpriced} satılamayan/fiyatsız kalem)` : ""}` : ""}</div>
-      ${c.gates.length ? `<div class="small" style="margin-top:4px">${c.gates.map(g => `${esc(g.label)}: kalan ${fmt(g.rem)} → ~${g.days == null ? "?" : g.days} gün`).join(" · ")}</div>` : ""}
-      ${c.buy ? `<div class="small" style="margin-top:6px">TP'den hazır alınacak: <b>${c.tpPrice ? gold(c.cost) : "fiyat yok"}</b> · cüzdanında ${snap ? gold(c.coin) : "?"} · ${gph()} altın/saat ile ~<b>${hrs} saat</b> farm. Cüzdan bütün hedefler için ortak — yüzde sadece fikir verir. Craft ağacını görmek için Ayarlar'da "hazır al"ı kapat.</div>`
-        : `<ul class="tree">${nodeHtml(t.root, tp.count, 0)}</ul>`}</details>`;
-  }).join("") || '<div class="card muted">Aktif hedef yok.</div>';
-  // ortak malzemeler
-  const use = {};
-  for (const tp of craftOnly(tps)) { const g = grossNeed(tp.t.root, tp.count, {}); delete g[tp.t.root]; for (const [n, q] of Object.entries(g)) (use[n] = use[n] || []).push([tp.t.name, q]); }
-  // sıra: timegate'li → ara gift'ler → taban malzemeler; her grupta hedef sayısına göre
-  const grp = n => P[n].tg ? 0 : P[n].in ? 1 : 2;
-  const rows = Object.entries(use).filter(([n, l]) => l.length > 1 && !P[n].ach).sort((a, b) => grp(a[0]) - grp(b[0]) || b[1].length - a[1].length || b[1].reduce((x, [, q]) => x + q, 0) - a[1].reduce((x, [, q]) => x + q, 0));
-  const show = state.showAllShared ? rows : rows.slice(0, 25);
-  $("#sharedBox").innerHTML = `<table><tr><th>Malzeme</th><th>Hedef sayısı</th><th>Hedefler</th><th>Toplam</th><th>Sende</th></tr>${show.map(([n, l]) => {
-    const tot = l.reduce((a, [, q]) => a + q, 0), h = ownedOf(n);
-    return `<tr><td><a href="${partWiki(n, P[n])}" target="_blank" rel="noopener">${esc(n)}</a></td><td>${l.length}</td><td class="small">${l.map(([t, q]) => esc(t) + " ×" + fmt(q)).join("<br>")}</td><td>${fmt(tot)}</td><td class="${!snap ? "" : h >= tot ? "okc" : "err"}">${snap ? fmt(h) : "?"}</td></tr>`;
-  }).join("")}</table>${rows.length > 25 ? `<button class="btn" id="sharedMore" style="margin-top:8px">${state.showAllShared ? "Daha az göster" : "Tümünü göster (" + rows.length + ")"}</button>` : ""}`;
-  const m = $("#sharedMore"); if (m) m.onclick = () => { state.showAllShared = !state.showAllShared; saveState(); renderTargets(); };
+  const el = $("#tgtView"); if (!el) return;
+  const key = view.target;
+  el.innerHTML = key ? renderTargetDetail(key) : renderTargetList();
+  $("#tgtEdit").style.display = key ? "none" : "";
+  const s = $("#tgtSort"); if (s) s.onchange = () => { state.tgtSort = s.value; saveState(); renderTargets(); };
+  const b = $("#tgtEditBtn"); if (b) b.onclick = () => { const d = $("#tgtEdit"); d.open = true; d.scrollIntoView({ behavior: "smooth", block: "start" }); };
+}
+document.addEventListener("click", e => {
+  const row = e.target.closest && e.target.closest(".tov[data-href]");
+  if (!row || e.target.closest("a, button, select, input, summary")) return;
+  location.hash = row.dataset.href;
+});
+document.addEventListener("keydown", e => {
+  const row = e.target.closest && e.target.closest(".tov[data-href]");
+  if (row && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); location.hash = row.dataset.href; }
+});
+
+// =================== Render: Malzemeler ===================
+function renderMaterials() {
+  const el = $("#matView"); if (!el) return;
+  if (!snap) { el.innerHTML = '<div class="vhead"><h2>Malzemeler</h2></div><div class="card muted">API verisi yok — key gir ve Yenile.</div>'; return; }
+  const ctx = taskCtx(), only = !!state.matShared;
+  const np = {}; for (const [n, q] of Object.entries(ctx.needed)) if (!only || (ctx.neededBy[n] || []).length > 1) np[n] = q;
+  const g = matGroups(np);
+  for (const list of Object.values(g)) for (const x of list) x.by = ctx.neededBy[x.n] || [];
+  const achNames = Object.keys(ctx.achBy).filter(n => !only || ctx.achBy[n].length > 1);
+  el.innerHTML = `<div class="vhead"><h2>Malzemeler</h2><div class="row small">
+      <label><input type="checkbox" id="matShared" ${only ? "checked" : ""}> Sadece birden fazla hedefin istedikleri</label>
+      <details class="help"><summary>?</summary><div>Craft edilecek bütün açık hedefler için, elindekiler düşülünce kalan. Elindeki malzeme hedeflere öncelik sırasıyla dağıtılır (Hedefler → Hedefleri düzenle). Bir hedefin kendi sayfasındaki "kalan" o hedef tek başına yapılsa ne kalacağını gösterir; burada hepsi birlikte. TP'den hazır alınacak hedefler sayılmaz.</div></details>
+    </div></div>
+    <div class="card">${matSections(g, achNames, "count", ctx.achBy) || '<div class="okc small">Eksik malzeme yok.</div>'}</div>`;
+  const c = $("#matShared"); if (c) c.onchange = () => { state.matShared = c.checked; saveState(); renderMaterials(); };
 }
 
 // =================== Render: Achievement avcısı ===================
@@ -2966,14 +3239,27 @@ function renderStatus() {
   const t = new Date(snap.ts);
   setStatus(`Son güncelleme: ${t.toLocaleString("tr-TR", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" })}${snap.errors.length ? ' · <span class="err">' + snap.errors.length + " hata (Ayarlar)</span>" : ""}`);
 }
-function renderAll() { applyObsidian(); renderStatus(); renderToday(); renderRecs(); renderTargets(); renderSettings(); if (Object.keys(stat.ach).length) renderHunter(); }
+function renderAll() { applyObsidian(); renderStatus(); renderToday(); renderRecs(); renderTargets(); renderMaterials(); renderSettings(); if (Object.keys(stat.ach).length) renderHunter(); }
 
+// sayfa adresi: #bugun, #hedefler, #hedef/<anahtar>, #malzemeler, #plan, #koleksiyonlar, #ayarlar (geri tuşu ve yer imi çalışsın)
+const TABS = { bugun: "today", hedefler: "targets", malzemeler: "mats", plan: "recs", koleksiyonlar: "hunter", ayarlar: "settings" };
+const view = { tab: "bugun", target: null };
+function route() {
+  const [a, b] = decodeURIComponent(location.hash.slice(1)).split("/");
+  const tab = a === "hedef" ? "hedefler" : TABS[a] ? a : "bugun", target = a === "hedef" ? b || null : null;
+  const moved = tab !== view.tab || target !== view.target;
+  view.tab = tab; view.target = target;
+  document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x.dataset.go === tab));
+  document.querySelectorAll("section.tab").forEach(s => s.classList.toggle("on", s.id === "tab-" + TABS[tab]));
+  if (tab === "hedefler") renderTargets();
+  if (tab === "koleksiyonlar" && hunterList().some(h => !stat.ach[h.ach])) loadHunter();
+  if (moved) window.scrollTo(0, 0);
+}
 $("#nav").addEventListener("click", e => {
-  const b = e.target.closest("button[data-tab]"); if (!b) return;
-  document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("on", x === b));
-  document.querySelectorAll("section.tab").forEach(s => s.classList.toggle("on", s.id === "tab-" + b.dataset.tab));
-  if (b.dataset.tab === "hunter" && hunterList().some(h => !stat.ach[h.ach])) loadHunter();
+  const b = e.target.closest("button[data-go]"); if (!b) return;
+  location.hash = "#" + b.dataset.go;
 });
+window.addEventListener("hashchange", route);
 $("#refreshBtn").onclick = () => refresh();
 $("#hunterLoad").onclick = () => loadHunter();
 function buildHunterFilter() {
@@ -2990,6 +3276,7 @@ $("#hunterNoStory").onchange = e => { state.hunterNoStory = e.target.checked; sa
 $("#dataAsOf").textContent = DATA.meta.asOf;
 
 renderAll();
+route();
 tick(); setInterval(tick, 1000);
 // açılışta: veri yoksa ya da 10 dakikadan eskiyse otomatik yenile
 if (apiKey && (!snap || Date.now() - snap.ts > 600000)) refresh();
