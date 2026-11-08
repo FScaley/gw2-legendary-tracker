@@ -4,11 +4,12 @@ A single-page Guild Wars 2 legendary planner (UI in Turkish, item names in Engli
 
 **Open it:** https://fscaley.github.io/gw2-legendary-tracker/
 
-- **Bugün (Today):** daily and weekly tasks grouped by where you do them, with step-by-step "how", reset countdowns and the next start of timed events. Tasks the GW2 API can see tick themselves.
-- **Şimdiden başla (Start now):** the longest timegates, a Mystic Clover plan, and what is faster to buy with gold than to do.
-- **Hedefler (Targets):** component trees for each legendary with what you own, progress, days left and trading post cost.
-- **Achievement avcısı (Achievement hunter):** the missing parts of the collections and mastery achievements behind each legendary, easiest first.
-- **Ayarlar (Settings):** API key, targets on/off, order, buy-finished toggle, JSON backup.
+- **Bugün (Today):** daily and weekly tasks grouped by where you do them, with step-by-step "how", reset countdowns and the next timed events. Tasks the GW2 API can see tick themselves.
+- **Hedefler (Targets):** one row per legendary: a bar segment per top-level part, progress, what is left (longest gate, trading post cost, open collections) and the earliest finish. Each target has its own page with the missing parts (each opens its sub-tree) and its remaining materials. Targets are switched on, ordered and set to "buy finished" here.
+- **Malzemeler (Materials):** what all targets together still need, inventory handed out in priority order: gated materials with days, collections, trading post items with prices, vendor and wallet items; plus the Mystic Clover plan and what is faster to buy with gold than to do.
+- **Plan:** masteries and crafting disciplines the targets need, mode mismatches, long jobs worth starting now.
+- **Koleksiyonlar (Collections):** the missing parts of the collections and mastery achievements behind each legendary, easiest first.
+- **Ayarlar (Settings):** API key, game modes, gold per hour, JSON backup.
 
 ## Privacy
 

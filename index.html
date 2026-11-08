@@ -40,7 +40,7 @@ ul.tasks{list-style:none;margin:0;padding:0}
 ul.tasks li{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-top:1px solid var(--line)}
 ul.tasks li:first-child{border-top:none}
 ul.tasks li.done .tt{text-decoration:line-through;color:var(--muted)}
-ul.tasks li.k-tg{border-left:3px solid var(--accent);padding-left:8px}
+ul.tasks li.k-tg{border-left:3px solid var(--gate);padding-left:8px}
 ul.tasks li.k-bn{border-left:3px solid #c46a2a;padding-left:8px}
 ul.tasks li.k-n{border-left:3px solid var(--line);padding-left:8px}
 .grp{margin:14px 0 4px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
@@ -726,9 +726,9 @@ const DATA = {
   // sg: slot grubu (aynı gruptaki hedefler birbirinin alternatifi). need: şart koşulan oyun modları ve ne kadar.
   // count: kaç kopya. gates: kalan gün tahmini. perDay değerleri tahmindir (est: true).
   targets: [
-    { key: "obsidian", sg: "armor", need: [{ m: "open", kind: "grind", why: "Seçtiğin parça sayısına göre hesaplanır (Ayarlar → Hedefler → parçalar). En uzun kapı Rift Essence: parça başı 12 Amalgamated Rift Essence (3.000 Fine + 1.200 Masterwork + 600 Rare). Ön koşul: SotO mastery Obsidian Armor Crafting; Convergence Mastery essence'ı ikiye katlar. Arcanum koleksiyonlarının skinleri ağaçta \"Koleksiyon: eksik parça\" altında." }], name: "Obsidian Armor (heavy)", root: "Obsidian Heavy Set", count: 1, slot: "Armor", mode: "Açık dünya (SotO), solo + meta",
+    { key: "obsidian", sg: "armor", need: [{ m: "open", kind: "grind", why: "Seçtiğin parça sayısına göre hesaplanır (Hedefler → Hedefleri düzenle → parçalar). En uzun kapı Rift Essence: parça başı 12 Amalgamated Rift Essence (3.000 Fine + 1.200 Masterwork + 600 Rare). Ön koşul: SotO mastery Obsidian Armor Crafting; Convergence Mastery essence'ı ikiye katlar. Arcanum koleksiyonlarının skinleri ağaçta \"Koleksiyon: eksik parça\" altında." }], name: "Obsidian Armor (heavy)", root: "Obsidian Heavy Set", count: 1, slot: "Armor", mode: "Açık dünya (SotO), solo + meta",
       gold: "Parça başı: Gift of Condensed Might ya da Magic + Gift of Research + 9 Mystic Clover + Gift of Craftsmanship; ayrıca Astral Ward ve Oneiros-Spun skinleri",
-      why: "Seçtiğin parça sayısına göre hesaplanır (Ayarlar → Hedefler → parçalar). En uzun kapı Rift Essence: parça başı 12 Amalgamated Rift Essence (3.000 Fine + 1.200 Masterwork + 600 Rare). Ön koşul: SotO mastery Obsidian Armor Crafting; Convergence Mastery essence'ı ikiye katlar. Arcanum koleksiyonlarının skinleri ağaçta \"Koleksiyon: eksik parça\" altında.",
+      why: "Seçtiğin parça sayısına göre hesaplanır (Hedefler → Hedefleri düzenle → parçalar). En uzun kapı Rift Essence: parça başı 12 Amalgamated Rift Essence (3.000 Fine + 1.200 Masterwork + 600 Rare). Ön koşul: SotO mastery Obsidian Armor Crafting; Convergence Mastery essence'ı ikiye katlar. Arcanum koleksiyonlarının skinleri ağaçta \"Koleksiyon: eksik parça\" altında.",
       gates: [
         { label: "Fine Rift Essence", cur: 78, need: 21000, perDay: 525, est: true, note: "2 Convergence günlük sandık + haftalık Extraction + birkaç run; araştırma tahmini" },
         { label: "Masterwork Rift Essence", cur: 80, need: 8400, perDay: 210, est: true },
@@ -2003,9 +2003,9 @@ for (const [n, sk] of Object.entries(PART_SKINS)) if (DATA.parts[n]) DATA.parts[
         <div class="timer"><div class="muted small">Günlük reset (00:00 UTC / 03:00 TR)</div><b id="tDaily">--:--:--</b></div>
         <div class="timer"><div class="muted small">Haftalık reset (Pzt 07:30 UTC / 10:30 TR)</div><b id="tWeekly">--</b></div>
       </div>
-      <div class="legend" style="margin-top:8px">İşler gideceğin yere göre gruplu. Sol çizgi:<i style="background:var(--accent)"></i>timegate (kaçarsa geri gelmez)<i style="background:#c46a2a"></i>darboğaz<i style="background:var(--line)"></i>opsiyonel. "API" yazanlar kendiliğinden tiklenir. Saatler senin saatinle.</div>
+      <div id="upcoming" class="small" style="margin-top:10px"></div>
+      <div class="legend" style="margin-top:8px">İşler gideceğin yere göre gruplu. Sol çizgi:<i style="background:var(--gate)"></i>kapı (kaçan gün geri gelmez)<i style="background:#c46a2a"></i>darboğaz<i style="background:var(--line)"></i>opsiyonel. "API" yazanlar kendiliğinden tiklenir. Saatler senin saatinle.</div>
     </div>
-    <div class="card"><h2>Yaklaşan metalar (3 saat)</h2><div id="upcoming" class="small"></div></div>
     <div class="card"><h2>Günlük</h2><div id="dailyList"></div></div>
     <div class="card"><h2>Haftalık</h2><div id="weeklyList"></div></div>
     <div class="card"><h2>Wizard's Vault (sezon)</h2><div id="vaultBox" class="scroll"></div></div>
@@ -2034,8 +2034,13 @@ for (const [n, sk] of Object.entries(PART_SKINS)) if (DATA.parts[n]) DATA.parts[
   </section>
 
   <section class="tab" id="tab-hunter">
-    <div class="card small muted">Sadece hâlâ gereken achievement'lar: bitenler ve parçası sende olanlar gösterilmez. Kartlar en az maddesi kalandan başlar. Mastery kartları (ör. "All or Nothing" Mastery) koleksiyonlardaki zırh skinlerini veriyor — her birinin yanında hikaye istemeyen tekrarlanabilir LS3/LS4 reward track yolu yazıyor. Eksik maddeler kolaydan zora sıralı. Zorluk: veri dosyasındaki etiket → senin seçimin → koleksiyon verisi (sende var / TP / satıcı / craft / drop) → açıklamadan otomatik tahmin (sırasıyla öncelikli). Hikaye achievement'ları (API'de "Story Instance" ya da "Journal") ayrıca işaretli; "wiki:" etiketleri achievement'ın wiki'de bağlı olduğu sayfanın türünden gelir (event, grup event, adventure, NPC, jumping puzzle, keşif), varsa wiki notu altında yazar; mastery kartları hikayesiz bitip bitmeyeceğini yazar. Otomatik etiketler "oto" işaretli ve doğrulanmamıştır; "?" kalanlara soldaki kutudan kendin zorluk ver.</div>
-    <div class="row" style="margin-bottom:10px"><label class="small">Hedef: <select id="hunterFilter"></select></label><label class="small"><input type="checkbox" id="hunterEasy"> Sadece kolaylar (zorluk 1-2)</label><label class="small"><input type="checkbox" id="hunterNoStory"> Hikaye achievement'larını gizle</label><button class="btn" id="hunterLoad">Listeyi yükle</button><span id="hunterStatus" class="small muted"></span></div>
+    <div class="vhead"><h2>Koleksiyonlar</h2><div class="row small">
+      <label>Hedef: <select id="hunterFilter"></select></label>
+      <label><input type="checkbox" id="hunterEasy"> Sadece kolaylar (zorluk 1-2)</label>
+      <label><input type="checkbox" id="hunterNoStory"> Hikaye achievement'larını gizle</label>
+      <button class="btn" id="hunterLoad">Yeniden yükle</button><span id="hunterStatus" class="small muted"></span>
+      <details class="help"><summary>?</summary><div>Sadece hâlâ gereken koleksiyon ve achievement'lar: bitenler ve parçası sende olanlar gösterilmez. Kartlar en az maddesi kalandan başlar; her kartta eksik maddeler kolaydan zora. Mastery kartları (ör. "All or Nothing" Mastery) koleksiyonlardaki zırh skinlerini veriyor; her birinin yanında hikaye istemeyen tekrarlanabilir LS3/LS4 reward track yolu yazıyor. Zorluk sırası: veri dosyasındaki etiket → senin seçimin (soldaki kutu) → koleksiyon verisi (sende var / TP / satıcı / craft / drop) → açıklamadan otomatik tahmin. Hikaye achievement'ları (API'de "Story Instance" ya da "Journal") ayrıca işaretli. "wiki:" etiketleri achievement'ın wiki'de bağlı olduğu sayfanın türünden gelir. "oto" etiketleri doğrulanmamış tahmindir; "?" kalanlara kendin zorluk ver.</div></details>
+    </div></div>
     <div id="hunterBox"></div>
   </section>
 
@@ -2272,7 +2277,7 @@ function applyObsidian() {
     ...(by("Gift of Mighty Prosperity") ? [["Gift of Mighty Prosperity", by("Gift of Mighty Prosperity")]] : []),
     ...left.map(x => [x.arcanum, 1]), ["Obsidian parça craft'ı", n]] : [];
   const chosen = DATA.obsidianSlots.filter(x => (state.obsSlots || {})[x.key] !== false).length;
-  root.src = `${chosen} parça seçili, ${n} tanesi yapılacak (${left.map(x => x.name).join(", ") || "hepsi sende"}). Her parça: Gift of Expertise + Gift of Stormy Skies + Prosperity (kask/omuz/göğüs Magical, eldiven/bacak/bot Mighty) + kendi Arcanum'u. Seçim: Ayarlar → Hedefler.`;
+  root.src = `${chosen} parça seçili, ${n} tanesi yapılacak (${left.map(x => x.name).join(", ") || "hepsi sende"}). Her parça: Gift of Expertise + Gift of Stormy Skies + Prosperity (kask/omuz/göğüs Magical, eldiven/bacak/bot Mighty) + kendi Arcanum'u. Seçim: Hedefler → Hedefleri düzenle.`;
 }
 // koleksiyonun henüz toplanmamış parçaları (achievement bitmişse hiçbiri)
 function bitKids(p) {
@@ -2463,13 +2468,13 @@ function renderUpcoming(now = new Date()) {
   }
   rows.sort((a, b) => a.st - b.st);
   let live = null;
-  el.innerHTML = rows.length ? `<table>${rows.map(r => {
+  for (const r of rows) if (r.live && !live) live = r;
+  const top = rows.filter(r => !r.done).slice(0, 4);
+  el.innerHTML = top.length ? `<b>Sıradaki saatli işler:</b> ${top.map(r => {
     const at = new Date(now.getTime() + Math.max(0, r.st) * 60000).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
-    if (r.live && !live) live = r;
-    const when = r.live ? `<b class="okc">ŞU AN · ${Math.ceil(r.sc.dur + r.st)} dk kaldı</b>` : `${at} <span class="muted">(${Math.round(r.st)} dk)</span>`;
-    const what = r.done ? `<span class="muted">tekrar: ${esc(r.t.repeat || "")}</span>` : `<b class="warnc">günlük sandık bekliyor</b>`;
-    return `<tr><td style="white-space:nowrap">${when}</td><td>${esc(r.t.title)}<div>${what}</div></td></tr>`;
-  }).join("")}</table>` : '<div class="muted">3 saat içinde saatli meta yok.</div>';
+    const when = r.live ? `<b class="okc">şu an (${Math.ceil(r.sc.dur + r.st)} dk kaldı)</b>` : `${at} <span class="muted">(${Math.round(r.st)} dk)</span>`;
+    return `${when} ${esc(r.t.title.split(" →")[0])}`;
+  }).join(" · ")}` : '<span class="muted">3 saat içinde günlük sandığı bekleyen saatli iş yok.</span>';
   document.title = live ? `● ${live.t.title.split(" →")[0]} şu an` : "Legendary Hedefler";
 }
 function isDone(t, bucket) {
@@ -2504,7 +2509,7 @@ function renderTaskList(el, tasks, bucket) {
     if (au && au.done) boxes = `<input type="checkbox" disabled checked title="API'den onaylandı">`;
     else for (let i = 0; i < cnt; i++) boxes += `<input type="checkbox" data-b="${bucket}" data-id="${esc(t.id)}" data-i="${i}" ${i < val ? "checked" : ""} title="${t.count === "chars" ? (i + 1) + ". karakter" : (i + 1) + ". kutu"}">`;
     const hid = bucket + ":" + t.id;
-    const api = t.auto ? ` · <span class="okc" title="API birkaç dakika geç güncellenebilir; o arada elle tikleyebilirsin">API${au && au.text ? " " + esc(au.text) : ""}${au && au.stale ? " (Yenile)" : au && au.done ? " ✓" : " bekliyor"}</span>` : "";
+    const api = t.auto ? ` · <span class="${au && au.done ? "okc" : "muted"}" title="API birkaç dakika geç güncellenebilir; o arada elle tikleyebilirsin">API${au && au.text ? " " + esc(au.text) : ""}${au && au.stale ? " (Yenile)" : au && au.done ? " ✓" : " bekliyor"}</span>` : "";
     return `<li class="k-${t.kind}${done ? " done" : ""}"><div class="chk">${boxes}</div><div style="flex:1">
       <div class="tt">${esc(t.title)}${t.sched ? `<span class="sched" data-sched="${t.sched}"></span>` : ""}</div>
       ${t.repeat ? `<div class="small ${done ? "okc" : "muted"}">${done ? "Günlük sandık alındı — tekrar turu yine değerli: " : "Tekrarlanabilir — günlük sandıktan sonraki her tur: "}${esc(t.repeat)}</div>` : ""}
@@ -2519,8 +2524,10 @@ function renderTaskList(el, tasks, bucket) {
     const list = rows.filter(r => r.t.group === g.id)
       .sort((a, b) => (a.done - b.done) || (KIND[a.t.kind] - KIND[b.t.kind]) || (a.soon - b.soon));
     if (!list.length) return "";
-    const left = list.filter(r => !r.done && r.t.kind !== "n").length;
-    return `<div class="grp"><h3>${esc(g.title)}</h3><span class="small ${left ? "warnc" : "okc"}">${left ? left + " iş kaldı" : "tamam"}</span></div>
+    const left = list.filter(r => !r.done && r.t.kind !== "n").length, opt = list.filter(r => !r.done && r.t.kind === "n").length;
+    const st = left ? `<span class="small warnc">${left} iş kaldı${opt ? ` <span class="muted">+${opt} opsiyonel</span>` : ""}</span>`
+      : opt ? `<span class="small"><span class="okc">gerekenler tamam</span> <span class="muted">· ${opt} opsiyonel</span></span>` : '<span class="small okc">tamam</span>';
+    return `<div class="grp"><h3>${esc(g.title)}</h3>${st}</div>
       ${g.note ? `<div class="small muted">${esc(g.note)}</div>` : ""}<ul class="tasks">${list.map(rowHtml).join("")}</ul>`;
   }).join("") || '<div class="muted">Liste boş.</div>';
   updateScheds();
@@ -3030,7 +3037,7 @@ async function loadHunter() {
   const st = $("#hunterStatus");
   st.innerHTML = '<span class="spinner"></span> Achievement verisi okunuyor…';
   try {
-    const sel = state.hunterFilter;
+    const sel = hunterSel();
     await ensureStatic("ach", hunterList().map(h => h.ach));
     // meta achievement'ların kategorisi (bir kez, önbellekte)
     if (!stat.catOf && hunterList().some(h => !DATA.hunter.some(o => o.ach === h.ach) && stat.ach[h.ach] && !stat.ach[h.ach].bits.length && stat.ach[h.ach].flags.includes("CategoryDisplay"))) {
@@ -3091,7 +3098,7 @@ function wikiDiff(r) {
   return r.info.k === "adventure" && /: Gold$/i.test(r.name) ? { d: 4, tag: "adventure altın" } : { d: k[0], tag: k[1] };
 }
 function renderHunter() {
-  const sel = state.hunterFilter, tname = Object.fromEntries(DATA.targets.map(t => [t.key, t.name]));
+  const sel = hunterSel(), tname = Object.fromEntries(DATA.targets.map(t => [t.key, t.name]));
   // en az kalan üstte, bitenler en altta
   const leftOf = h => { const d = stat.ach[h.ach], a = snap && snap.ach[h.ach]; if (!d) return 1e6; if (a && a.done) return 1e7; const n = d.tiers.length ? d.tiers[d.tiers.length - 1].count : (d.bits.length || 1); return n - (a ? a.cur : 0); };
   const list = hunterList().filter(h => !sel || h.target === sel).sort((x, y) => leftOf(x) - leftOf(y));
@@ -3139,14 +3146,14 @@ function renderHunter() {
       ${h.why ? `<div class="small" style="margin:2px 0">${esc(h.why)}${!modeOn("wvw") && !modeOn("pvp") && /reward track/i.test(h.why) ? ' <b class="warnc">WvW ve PvP kapalı: mastery yolunu seç.</b>' : ""}</div>` : ""}
       ${storyLine}
       ${def.req ? `<div class="small muted">${esc(def.req)}</div>` : ""}
-      ${done ? "" : `<ul class="hunt">${shown.map(rowLi).join("")}</ul>`}</div>`;
+      ${done ? "" : listMore(shown, rowLi, 10)}</div>`;
   });
   // en kolaylar: önce zorluk, sonra "sende var", sonra az maddesi kalan koleksiyon
   easy.sort((x, y) => x.d - y.d || ((y.pd && y.pd.tag === "sende var") - (x.pd && x.pd.tag === "sende var")) || x.left - y.left);
-  const top = easy.slice(0, 25);
+  const top = easy;
   $("#hunterBox").innerHTML = (list.some(h => stat.ach[h.ach]) ? `<div class="card"><h2>En kolay işler <span class="pill">${easy.length} madde zorluk 1-2</span></h2>
-      <div class="small muted">Bütün koleksiyonlardan. "sende var", "TP", "satın al", "craft" etiketleri koleksiyon verisinden gelir (API tarifleri + wiki satıcı verisi); "oto" etiketleri açıklamadan tahmindir.${easy.length > top.length ? ` İlk ${top.length} tanesi; hepsi için "Sadece kolaylar"ı işaretle.` : ""}</div>
-      ${top.length ? `<ul class="hunt">${top.map(rowLi).join("")}</ul>` : '<div class="small muted">Kolay madde yok.</div>'}</div>` : "") + cards.join("");
+      <div class="small muted">Bütün koleksiyonlardan. "sende var", "TP", "satın al", "craft" etiketleri koleksiyon verisinden gelir (API tarifleri + wiki satıcı verisi); "oto" etiketleri açıklamadan tahmindir.</div>
+      ${top.length ? listMore(top, rowLi, 10) : '<div class="small muted">Kolay madde yok.</div>'}</div>` : "") + cards.join("");
 }
 document.addEventListener("change", e => {
   const s = e.target; if (!s.matches || !s.matches("select[data-dk]")) return;
@@ -3264,11 +3271,22 @@ $("#refreshBtn").onclick = () => refresh();
 $("#hunterLoad").onclick = () => loadHunter();
 function buildHunterFilter() {
   const keys = [...new Set(hunterList().map(h => h.target))];
-  $("#hunterFilter").innerHTML = '<option value="">Tümü</option>' + keys.map(k => `<option value="${k}" ${state.hunterFilter === k ? "selected" : ""}>${esc((DATA.targets.find(t => t.key === k) || {}).name || k)}</option>`).join("");
+  const sel = hunterSel();
+  $("#hunterFilter").innerHTML = `<option value="*" ${sel ? "" : "selected"}>Tümü</option>` + keys.map(k => `<option value="${k}" ${sel === k ? "selected" : ""}>${esc((DATA.targets.find(t => t.key === k) || {}).name || k)}</option>`).join("");
 }
 buildHunterFilter();
-$("#hunterFilter").value = state.hunterFilter || "";
-$("#hunterFilter").onchange = e => { state.hunterFilter = e.target.value; saveState(); renderHunter(); };
+$("#hunterFilter").onchange = e => { state.hunterSel = e.target.value; saveState(); loadHunter(); };
+// seçili hedef: ilk açılışta listedeki ilk hedef (hepsi birden ~50.000 px); "*" = Tümü
+function hunterSel() {
+  const v = state.hunterSel; if (v === "*") return "";
+  const keys = [...new Set(hunterList().map(h => h.target))];
+  return v && keys.includes(v) ? v : keys[0] || "";
+}
+// uzun liste: ilk n madde, gerisi "Tümünü göster" altında
+function listMore(list, rowFn, n) {
+  const first = list.length > n + 3 ? list.slice(0, n) : list, rest = list.slice(first.length);
+  return `<ul class="hunt">${first.map(rowFn).join("")}</ul>` + (rest.length ? `<details class="more"><summary>Tümünü göster (${list.length})</summary><ul class="hunt">${rest.map(rowFn).join("")}</ul></details>` : "");
+}
 $("#hunterEasy").checked = !!state.hunterEasy;
 $("#hunterEasy").onchange = e => { state.hunterEasy = e.target.checked; saveState(); renderHunter(); };
 $("#hunterNoStory").checked = !!state.hunterNoStory;
