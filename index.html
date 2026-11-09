@@ -2842,7 +2842,7 @@ function tinfo(tp) {
   const pieces = new Set(); for (const a of Object.keys(c.achs)) for (const [x] of bitKids(P[a])) pieces.add(x);
   for (const n of Object.keys(c.np)) {
     if (!P[n] || P[n].ach || !isLeaf(n) || P[n].cur === 1 || unitPrice(n)) continue;
-    if (P[n].tg || GATE_OF[n]) c.unp.gate++; else if (pieces.has(n)) c.unp.piece++; else c.unp.other++;
+    if ((P[n].tg || GATE_OF[n]) && !GOLD_GATE.has(n)) c.unp.gate++; else if (pieces.has(n)) c.unp.piece++; else c.unp.other++;
   }
   // çubukta mor: en uzun kapının bulunduğu ana parça
   if (c.worst) { const wp = c.parts.filter(pt => !pt.done && (pt.np[c.worst.label] || 0) > 0).sort((a, b) => b.np[c.worst.label] - a.np[c.worst.label])[0]; if (wp) wp.gating = true; }
@@ -3014,15 +3014,24 @@ function achTable(names, byOf, limit = 12) {
     `<div class="small muted" style="margin-top:4px">Adım adım, kolaydan zora: <a href="#koleksiyonlar">Koleksiyonlar</a>.</div>`;
 }
 // uzun liste: ilk `limit` satır görünür, gerisi aynı tabloda gizli; düğme açar (kolonlar hizalı kalır)
-function limited(open, list, row, close, limit) {
-  const cut = limit && list.length > limit + 3 ? limit : list.length;
+// key: yeniden çizimde "Tümünü göster" açık kalsın (ör. zorluk seçince)
+const shownAll = new Set();
+function limited(open, list, row, close, limit, key = "") {
+  const cut = limit && list.length > limit + 3 && !(key && shownAll.has(key)) ? limit : list.length;
   const rows = list.map((x, i) => { const h = row(x); return i < cut ? h : h.replace(/^<(tr|li)/, '<$1 class="xr"'); }).join("");
-  return open + rows + close + (cut < list.length ? `<button class="btn more-btn" data-more>Tümünü göster (${list.length})</button>` : "");
+  return open + rows + close + (cut < list.length ? `<button class="btn more-btn" data-more="${esc(key)}">Tümünü göster (${list.length})</button>` : "");
 }
 document.addEventListener("click", e => {
   const b = e.target.closest && e.target.closest("[data-more]"); if (!b) return;
+  if (b.dataset.more) shownAll.add(b.dataset.more);
   const t = b.previousElementSibling; if (t) t.classList.add("all"); b.remove();
 });
+// açık "Kalan maddeler" kartları yeniden çizimde açık kalsın
+const openMore = new Set();
+document.addEventListener("toggle", e => {
+  const d = e.target; if (!d.dataset || !d.dataset.mk) return;
+  if (d.open) openMore.add(d.dataset.mk); else openMore.delete(d.dataset.mk);
+}, true);
 function matSections(g, achNames, mode, byOf) {
   const tpTotal = g.tp.reduce((a, x) => a + unitPrice(x.n) * x.q, 0);
   const sec = (title, sub, body) => body ? `<div class="grph"><h3>${title}</h3><span class="small muted">${sub}</span></div>${body}` : "";
@@ -3093,7 +3102,7 @@ function renderTargets() {
 }
 document.addEventListener("click", e => {
   const row = e.target.closest && e.target.closest(".tov[data-href]");
-  if (!row || e.target.closest("a, button, select, input, summary")) return;
+  if (!row || e.target.closest("a, button, select, input, summary, details")) return;
   location.hash = row.dataset.href;
 });
 document.addEventListener("keydown", e => {
@@ -3102,6 +3111,13 @@ document.addEventListener("keydown", e => {
 });
 
 // =================== Render: Malzemeler ===================
+// craft hedeflerinin Coin ihtiyacı cüzdan düşülmeden (cüzdan, farm süresinde bir kez düşülür)
+function grossCoinNeed() {
+  if (!snap) return 0;
+  const w = snap.wallet[1];
+  try { snap.wallet[1] = 0; const ctx = taskCtx(); return Object.entries(ctx.needed).filter(([n]) => P[n] && P[n].cur === 1 && isLeaf(n)).reduce((a, [, q]) => a + q, 0); }
+  finally { snap.wallet[1] = w; }
+}
 function renderMaterials() {
   const el = $("#matView"); if (!el) return;
   if (!snap) { el.innerHTML = '<div class="vhead"><h2>Malzemeler</h2></div><div class="card muted">API verisi yok — key gir ve Yenile.</div>'; return; }
@@ -3112,11 +3128,11 @@ function renderMaterials() {
   for (const list of Object.values(g)) for (const x of list) x.by = ctx.neededBy[x.n] || [];
   const achNames = Object.keys(ctx.achBy).filter(n => !only || ctx.achBy[n].length > 1);
   // toplam altın: bütün hedeflerin TP'de olan eksikleri + Coin + hazır alınacak legendary'ler
-  const all = matGroups(ctx.needed, allAchs), tpSum = all.tp.reduce((a, x) => a + unitPrice(x.n) * x.q, 0), coinNeed = Object.entries(ctx.needed).filter(([n]) => P[n] && P[n].cur === 1 && isLeaf(n)).reduce((a, [, q]) => a + q, 0);
-  const buyTps = tgtPrefs().filter(x => x.enabled && x.buy).map(tinfo).filter(c => !c.done), buySum = buyTps.reduce((a, c) => a + c.cost, 0);
+  const all = matGroups(ctx.needed, allAchs), tpSum = all.tp.reduce((a, x) => a + unitPrice(x.n) * x.q, 0), coinNeed = grossCoinNeed();
+  const buyTps = tgtPrefs().filter(x => x.enabled && x.buy).map(tinfo).filter(c => !c.done), buySum = buyTps.reduce((a, c) => a + c.cost, 0), noPrice = buyTps.filter(c => !c.tpPrice).length;
   const wallet = snap.wallet[1] || 0, total = tpSum + coinNeed + buySum, farmH = Math.max(0, Math.ceil((total - wallet) / 10000 / gph()));
   const sum = `<div class="stats">
-      <div class="stat"><div class="lbl">Toplam altın ihtiyacı</div><div class="big">≈ ${gold(total)}</div><div class="small muted">malzemeler ${gold(tpSum)}${coinNeed ? " + coin " + gold(coinNeed) : ""}${buySum ? " + hazır alınacaklar " + gold(buySum) : ""}</div></div>
+      <div class="stat"><div class="lbl">Toplam altın ihtiyacı</div><div class="big">≈ ${gold(total)}</div><div class="small muted">malzemeler ${gold(tpSum)}${coinNeed ? " + coin " + gold(coinNeed) : ""}${buySum ? " + hazır alınacaklar " + gold(buySum) : ""}${noPrice ? ` · ${noPrice} hazır alınacağın TP fiyatı yok, sayılmadı` : ""}</div></div>
       <div class="stat"><div class="lbl">Cüzdanında</div><div class="big">${gold(wallet)}</div></div>
       <div class="stat"><div class="lbl">Farm (cüzdan düşülünce)</div><div class="big">~${fmt(farmH)} sa</div><div class="small muted">${gph()} altın/saat (Ayarlar)</div></div></div>`;
   el.innerHTML = `<div class="vhead"><h2>Malzemeler</h2><div class="row small">
@@ -3297,7 +3313,7 @@ function renderHunter() {
     rows = rows.map(r => {
       const dataTag = DATA.hunterTags[r.key], man = state.diff[r.key], pd = partDiff(r.part, r.itemId, r.skinId), au = autoTags(r.name + " " + r.hint + " " + (P[r.part] && P[r.part].src || ""));
       const wd = wikiDiff(r);
-      const d = dataTag && dataTag.d || man || pd && pd.d || (r.story === "instance" ? 4 : r.story ? 3 : null) || wd && wd.d || au.d;
+      const d = man || dataTag && dataTag.d || pd && pd.d || (r.story === "instance" ? 4 : r.story ? 3 : null) || wd && wd.d || au.d;
       return Object.assign(r, { d, dataTag, man, pd, wd, au });
     }).sort((x, y) => (x.d || 9) - (y.d || 9));
     const left = Math.max(0, needN - haveN), done = a && a.done;
@@ -3314,14 +3330,14 @@ function renderHunter() {
       ${h.why ? `<div class="small" style="margin:2px 0">${esc(h.why)}${!modeOn("wvw") && !modeOn("pvp") && /reward track/i.test(h.why) ? ' <b class="warnc">WvW ve PvP kapalı: mastery yolunu seç.</b>' : ""}</div>` : ""}
       ${storyLine}
       ${def.req ? `<div class="small muted">${esc(def.req)}</div>` : ""}
-      ${done ? "" : `<details class="more" ${easyOnly ? "open" : ""}><summary>Kalan maddeler (${shown.length})</summary>${listMore(shown, rowLi, 10)}</details>`}</div>`;
+      ${done ? "" : `<details class="more" data-mk="${esc(h.key)}" ${easyOnly || openMore.has(h.key) ? "open" : ""}><summary>Kalan maddeler (${shown.length})</summary>${listMore(shown, rowLi, 10, "h:" + h.key)}</details>`}</div>`;
   });
   // en kolaylar: önce zorluk, sonra "sende var", sonra az maddesi kalan koleksiyon
   easy.sort((x, y) => x.d - y.d || ((y.pd && y.pd.tag === "sende var") - (x.pd && x.pd.tag === "sende var")) || x.left - y.left);
   const top = easy;
   $("#hunterBox").innerHTML = (list.some(h => stat.ach[h.ach]) ? `<div class="card"><h2>En kolay işler <span class="pill">${easy.length} madde zorluk 1-2</span></h2>
       <div class="small muted">Seçili hedefin bütün koleksiyonlarından, kolaydan zora. Aşağıdaki kartlar her koleksiyonun durumu; maddeleri "Kalan maddeler"in altında. "oto" etiketleri açıklamadan tahmindir.</div>
-      ${top.length ? listMore(top, rowLi, 10) : '<div class="small muted">Kolay madde yok.</div>'}</div>` : "") + cards.join("");
+      ${top.length ? listMore(top, rowLi, 10, "easy") : '<div class="small muted">Kolay madde yok.</div>'}</div>` : "") + cards.join("");
 }
 document.addEventListener("click", e => {
   const b = e.target.closest && e.target.closest("button[data-dk]"); if (!b) return;
@@ -3453,7 +3469,7 @@ function hunterSel() {
   return v && keys.includes(v) ? v : keys[0] || "";
 }
 // uzun liste: ilk n madde, gerisi "Tümünü göster" altında
-function listMore(list, rowFn, n) { return limited('<ul class="hunt lim">', list, rowFn, "</ul>", n); }
+function listMore(list, rowFn, n, key) { return limited('<ul class="hunt lim">', list, rowFn, "</ul>", n, key); }
 $("#hunterEasy").checked = !!state.hunterEasy;
 $("#hunterEasy").onchange = e => { state.hunterEasy = e.target.checked; saveState(); renderHunter(); };
 $("#hunterNoStory").checked = !!state.hunterNoStory;
