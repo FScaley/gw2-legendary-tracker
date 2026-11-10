@@ -2233,7 +2233,8 @@ async function refresh() {
   busy = true; $("#refreshBtn").disabled = true;
   setStatus('<span class="spinner"></span> API okunuyor…');
   const s = { ts: Date.now(), errors: [], owned: {}, wallet: {}, ach: {}, armory: {}, mapchests: null, crafting: null, worldbosses: null, wv: {}, scopes: [], name: "" };
-  const add = (id, n) => { if (id) s.owned[id] = (s.owned[id] || 0) + (n || 1); };
+  // malzeme deposu boş slotları da count: 0 ile döndürür; 0 sayılmaz (eskiden "|| 1" onları 1 sayıyordu)
+  const add = (id, n) => { if (id && n > 0) s.owned[id] = (s.owned[id] || 0) + n; };
   const job = async (label, fn) => { try { await fn(); } catch (e) { s.errors.push(label + ": " + e.message); } };
   await job("tokeninfo", async () => { const t = await api("/v2/tokeninfo", true); s.scopes = t.permissions || []; });
   const has = sc => s.scopes.includes(sc);
